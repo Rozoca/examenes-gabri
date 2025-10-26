@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Rincón de Prácticas de Gabri</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            /* Reutilizamos el fondo espacial que te gustó */
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            background: rgba(15, 12, 41, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            border: 2px solid #00ffff;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.8em;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+            margin-bottom: 20px;
+        }
+
+        .intro {
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: #eee;
+            margin-bottom: 40px;
+        }
+
+        .game-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .game-card {
+            background: rgba(48, 43, 99, 0.8);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 25px;
+            width: 300px;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .game-card h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: #ffff00;
+        }
+
+        .game-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #00ffff;
+        }
+
+        .game-card p {
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            min-height: 80px; /* Para que las tarjetas tengan altura similar */
+        }
+
+        .btn {
+            display: block;
+            background: linear-gradient(135deg, #00ffff, #00ff00);
+            color: black;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+        }
+
+        footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #aaa;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>¡El Rincón de Prácticas!</h1>
+        </header>
+        
+        <p class="intro">
+            ¡Hola! 👋 Esta es una página especial que he creado para ti.<br>
+            Aquí puedes entrenar, aprender y divertirte con los temas de 4º de Primaria.
+        </p>
+
+        <main class="game-list">
+
+            <div class="game-card">
+                <h2>🚀</h2>
+                <h3>Misión Espacial: Destino Luna</h3>
+                <p>¡Conviértete en astronauta! Resuelve 30 preguntas de mates y sociales para que tu cohete despegue y establezca una base lunar.</p>
+                <a href="mision_espacial_luna_final.html" class="btn">¡Comenzar Misión!</a>
+            </div>
+
+            <div class="game-card">
+                <h2>🔢</h2>
+                <h3>Aventura Matemática</h3>
+                <p>¡La Búsqueda del Tesoro! Demuestra lo que sabes de matemáticas para superar los retos y encontrar el tesoro escondido.</p>
+                <a href="gabri-math-adventure%20(4).html" class="btn">¡Buscar Tesoro!</a>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>Hecho por papá con 👨‍💻</p>
+        </footer>
+    </div>
+
+</body>
+</html>
