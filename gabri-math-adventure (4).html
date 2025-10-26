@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 La Búsqueda del Tesoro Matemático de Gabri</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background 0.5s ease;
+        }
+        
+        body.world-1 { background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); }
+        body.world-2 { background: linear-gradient(135deg, #475569 0%, #1e293b 100%); }
+        body.world-3 { background: linear-gradient(135deg, #34d399 0%, #059669 100%); }
+        body.world-4 { background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%); }
+        body.world-5 { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); }
+        body.world-6 { background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%); }
+        
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 24px;
+            text-align: center;
+            color: #7c3aed;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            text-shadow: 2px 2px 0px #fbbf24;
+        }
+        
+        .intro-screen, .game-screen, .final-screen {
+            display: none;
+        }
+        
+        .intro-screen.active, .game-screen.active, .final-screen.active {
+            display: block;
+        }
+        
+        .intro-text {
+            font-size: 18px;
+            line-height: 1.8;
+            margin: 30px 0;
+            text-align: center;
+            color: #334155;
+        }
+        
+        .start-button, .next-button, .restart-button {
+            display: block;
+            margin: 30px auto;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+        }
+        
+        .start-button:hover, .next-button:hover, .restart-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-radius: 15px;
+        }
+        
+        .hearts {
+            font-size: 24px;
+        }
+        
+        .progress-info {
+            font-weight: bold;
+            color: #475569;
+        }
+        
+        .world-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #7c3aed;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+        
+        .question-card {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 3px solid #e2e8f0;
+        }
+        
+        .question-text {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #1e293b;
+        }
+        
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .option {
+            padding: 15px 20px;
+            background: white;
+            border: 3px solid #cbd5e1;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 18px;
+        }
+        
+        .option:hover {
+            background: #f1f5f9;
+            border-color: #7c3aed;
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background: #ede9fe;
+            border-color: #7c3aed;
+        }
+        
+        .option.correct {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+        
+        .option.incorrect {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+        
+        .feedback {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback.correct {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .feedback.incorrect {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e2e8f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #7c3aed 0%, #a78bfa 100%);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .inventory {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .inventory-item {
+            padding: 10px 20px;
+            background: #fef3c7;
+            border: 3px solid #fbbf24;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .reward-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            z-index: 1000;
+            text-align: center;
+            max-width: 500px;
+            transition: transform 0.3s;
+        }
+        
+        .reward-popup.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .reward-icon {
+            font-size: 64px;
+            margin: 20px 0;
+        }
+        
+        .reward-text {
+            font-size: 20px;
+            color: #475569;
+            margin: 20px 0;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            z-index: 999;
+        }
+        
+        .overlay.show {
+            display: block;
+        }
+        
+        .final-stats {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .stat-line {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            margin: 15px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #fbbf24;
+            position: absolute;
+            animation: confetti-fall 3s linear;
+        }
+        
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .submit-button {
+            display: block;
+            margin: 20px auto;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .submit-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .submit-button:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 16px;
+            }
+            .game-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🎮 La Búsqueda del Tesoro Matemático de Gabri 🎮</h1>
+        
+        <!-- Intro Screen -->
+        <div class="intro-screen active">
+            <div class="intro-text">
+                <p>¡Hola Explorador Gabri!</p>
+                <p>El Mundo de los Números está en peligro. Solo resolviendo <strong>20 enigmas matemáticos</strong> podrás restaurar el equilibrio y desbloquear el <strong>Tesoro Legendario</strong>.</p>
+                <p>¿Estás listo para la aventura?</p>
+            </div>
+            <button class="start-button" id="start-btn">¡COMENZAR AVENTURA!</button>
+        </div>
+        
+        <!-- Game Screen -->
+        <div class="game-screen">
+            <div class="stats-bar">
+                <div class="hearts" id="hearts">❤️❤️❤️</div>
+                <div class="progress-info">
+                    <span id="current-question">1</span>/20 | Mundo <span id="current-world">1</span>/4
+                </div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+            
+            <div class="world-title" id="world-title">Pradera de los Números</div>
+            
+            <div class="inventory" id="inventory"></div>
+            
+            <div class="question-card">
+                <div class="question-text" id="question-text"></div>
+                <div class="options" id="options"></div>
+                <div class="feedback" id="feedback"></div>
+                <button class="submit-button" id="submit-button" disabled>Responder</button>
+                <button class="next-button" id="next-button" style="display: none;">Siguiente Pregunta</button>
+            </div>
+        </div>
+        
+        <!-- Final Screen -->
+        <div class="final-screen">
+            <div class="reward-icon">💎🏆💎</div>
+            <h2 style="color: #7c3aed; margin: 20px 0;">🎉 ¡¡FELICIDADES GABRI!! 🎉</h2>
+            <p style="font-size: 20px; margin: 20px 0;">Has completado TODOS los mundos y encontrado el <strong>Tesoro Legendario</strong>.</p>
+            <p style="font-size: 18px; color: #059669; font-weight: bold;">Eres oficialmente un MAESTRO MATEMÁTICO 🌟</p>
+            
+            <div class="final-stats">
+                <h3 style="text-align: center; margin-bottom: 20px;">📊 Tus Estadísticas</h3>
+                <div class="stat-line">
+                    <span>Preguntas correctas:</span>
+                    <span id="final-correct">0</span>
+                </div>
+                <div class="stat-line">
+                    <span>Precisión:</span>
+                    <span id="final-accuracy">0%</span>
+                </div>
+                <div class="stat-line">
+                    <span>Mundos conquistados:</span>
+                    <span>4/4 ✓</span>
+                </div>
+            </div>
+            
+            <button class="restart-button" id="restart-btn">🔄 Jugar de Nuevo</button>
+        </div>
+    </div>
+    
+    <!-- Reward Popup -->
+    <div class="overlay" id="overlay"></div>
+    <div class="reward-popup" id="reward-popup">
+        <div class="reward-icon" id="reward-icon"></div>
+        <h2 id="reward-title" style="color: #7c3aed;"></h2>
+        <p class="reward-text" id="reward-message"></p>
+        <button class="next-button" id="close-reward-btn">¡Continuar!</button>
+    </div>
+
+    <script>
+        // Game State
+        let currentQuestion = 0;
+        let hearts = 3;
+        let correctAnswers = 0;
+        let selectedOption = null;
+        let inventory = [];
+        
+        // Worlds configuration
+        const worlds = [
+            { name: "Pradera de los Números", class: "world-1" },
+            { name: "Caverna Misteriosa", class: "world-2" },
+            { name: "Bosque Multiplicador", class: "world-3" },
+            { name: "Torre del Tesoro Final", class: "world-4" }
+        ];
+        
+        // Rewards
+        const rewards = [
+            { icon: "🔑", name: "Llave de Diamante", message: "¡Primera misión cumplida! Has desbloqueado la Llave de Diamante. ¡El tesoro te espera!" },
+            { icon: "🗺️", name: "Mapa del Explorador", message: "¡Genial! Con el Mapa del Explorador nunca te perderás. ¡Sigue adelante, campeón!" },
+            { icon: "🔦", name: "Antorcha Eterna", message: "¡Impresionante! La Antorcha Eterna iluminará hasta los rincones más oscuros. ¡Nada te detendrá!" },
+            { icon: "💎", name: "¡TESORO LEGENDARIO!", message: "🎉🎉 Has conquistado todos los mundos. ¡Tu recompensa es todo el conocimiento que ahora tienes!" }
+        ];
+        
+        // Questions database (20 questions) - con respuestas correctas variadas
+        const questionsOriginal = [
+            // Mundo 1: Pradera de los Números (Sumas básicas)
+            { q: "En la pradera hay 234 flores rojas y 178 flores amarillas. ¿Cuántas flores hay en total?", answer: "412", wrong: ["402", "422", "512"] },
+            { q: "Un explorador recoge 156 monedas en la mañana y 89 monedas en la tarde. ¿Cuántas monedas tiene?", answer: "245", wrong: ["235", "255", "265"] },
+            { q: "¿Cuánto es 567 + 234?", answer: "801", wrong: ["791", "811", "821"] },
+            { q: "En el campo hay 425 mariposas. Llegan 288 más. ¿Cuántas mariposas hay ahora?", answer: "713", wrong: ["703", "723", "733"] },
+            { q: "Suma estos números: 189 + 356", answer: "545", wrong: ["535", "555", "565"] },
+            
+            // Mundo 2: Caverna Misteriosa (Restas y multiplicaciones básicas)
+            { q: "En la caverna había 456 cristales, pero se rompieron 178. ¿Cuántos quedan?", answer: "278", wrong: ["268", "288", "298"] },
+            { q: "Un explorador tenía 834 monedas y gastó 267. ¿Cuántas le quedan?", answer: "567", wrong: ["557", "577", "587"] },
+            { q: "¿Cuánto es 9 × 7?", answer: "63", wrong: ["62", "64", "65"] },
+            { q: "En el bosque hay 7 árboles. Cada árbol tiene 8 pájaros. ¿Cuántos pájaros hay?", answer: "56", wrong: ["54", "58", "60"] },
+            { q: "¿Cuánto es 642 - 285?", answer: "357", wrong: ["347", "367", "377"] },
+            
+            // Mundo 3: Bosque Multiplicador (Multiplicaciones y problemas)
+            { q: "¿Cuánto es 8 × 8?", answer: "64", wrong: ["62", "66", "68"] },
+            { q: "Multiplica: 12 × 5", answer: "60", wrong: ["55", "65", "70"] },
+            { q: "Un hechicero crea 6 grupos de 9 hongos mágicos. ¿Cuántos hongos hay?", answer: "54", wrong: ["52", "56", "58"] },
+            { q: "En el castillo hay 6 torres. En cada torre hay 8 ventanas. Si se rompen 12 ventanas, ¿cuántas quedan?", answer: "36", wrong: ["34", "38", "40"] },
+            { q: "Un caballero tiene 5 bolsas con 12 monedas cada una. Le da 18 monedas a otro caballero. ¿Cuántas le quedan?", answer: "42", wrong: ["40", "44", "46"] },
+            
+            // Mundo 4: Torre del Tesoro Final (Números romanos y desafíos mixtos)
+            { q: "¿Qué número representa XXV?", answer: "25", wrong: ["15", "20", "30"] },
+            { q: "¿Cómo se escribe 49 en números romanos?", answer: "XLIX", wrong: ["IL", "XXXXIX", "VL"] },
+            { q: "¿Qué número es LXVIII?", answer: "68", wrong: ["58", "63", "73"] },
+            { q: "Si 7 × 8 = 56, ¿cuánto es 56 + 34?", answer: "90", wrong: ["88", "92", "94"] },
+            { q: "Un dragón tiene 3 cabezas. Cada cabeza escupe 9 bolas de fuego. ¿Cuántas bolas de fuego escupe en total?", answer: "27", wrong: ["25", "29", "31"] }
+        ];
+        
+        // Shuffle options for each question
+        const questions = questionsOriginal.map(q => {
+            const allOptions = [q.answer, ...q.wrong];
+            // Shuffle array
+            for (let i = allOptions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [allOptions[i], allOptions[j]] = [allOptions[j], allOptions[i]];
+            }
+            return {
+                q: q.q,
+                options: allOptions,
+                correct: allOptions.indexOf(q.answer)
+            };
+        });
+        
+        // Event Listeners
+        document.getElementById('start-btn').addEventListener('click', startGame);
+        document.getElementById('submit-button').addEventListener('click', checkAnswer);
+        document.getElementById('next-button').addEventListener('click', nextQuestion);
+        document.getElementById('close-reward-btn').addEventListener('click', closeReward);
+        document.getElementById('restart-btn').addEventListener('click', () => location.reload());
+        
+        function startGame() {
+            document.querySelector('.intro-screen').classList.remove('active');
+            document.querySelector('.game-screen').classList.add('active');
+            loadQuestion();
+        }
+        
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            const worldIndex = Math.floor(currentQuestion / 5);
+            const world = worlds[worldIndex];
+            
+            // Update world background
+            document.body.className = world.class;
+            
+            // Update UI
+            document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('current-world').textContent = worldIndex + 1;
+            document.getElementById('world-title').textContent = world.name;
+            document.getElementById('question-text').textContent = question.q;
+            
+            // Update progress bar
+            const progress = ((currentQuestion) / 20) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            
+            // Load options
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.addEventListener('click', () => selectOption(index));
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            // Reset state
+            selectedOption = null;
+            document.getElementById('submit-button').disabled = true;
+            document.getElementById('submit-button').style.display = 'block';
+            document.getElementById('feedback').classList.remove('show');
+            document.getElementById('next-button').style.display = 'none';
+        }
+        
+        function selectOption(index) {
+            // Remove previous selection
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Select new option
+            document.querySelectorAll('.option')[index].classList.add('selected');
+            selectedOption = index;
+            document.getElementById('submit-button').disabled = false;
+        }
+        
+        function checkAnswer() {
+            if (selectedOption === null) return;
+            
+            const question = questions[currentQuestion];
+            const isCorrect = selectedOption === question.correct;
+            const feedback = document.getElementById('feedback');
+            const options = document.querySelectorAll('.option');
+            
+            // Disable all options
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+            
+            // Disable submit button
+            document.getElementById('submit-button').style.display = 'none';
+            
+            // Show feedback
+            if (isCorrect) {
+                correctAnswers++;
+                feedback.textContent = ['¡CORRECTO! +10 puntos', '¡Eres un crack!', '¡Perfecto!', '¡Sigue así, campeón!'][Math.floor(Math.random() * 4)];
+                feedback.className = 'feedback correct show';
+                options[selectedOption].classList.add('correct');
+            } else {
+                hearts -= 0.5;
+                updateHearts();
+                feedback.textContent = ['¡Ups! Revisa tu cálculo', '¡Casi! Inténtalo otra vez', '¡No te rindas, explorador!'][Math.floor(Math.random() * 3)];
+                feedback.className = 'feedback incorrect show';
+                options[selectedOption].classList.add('incorrect');
+                options[question.correct].classList.add('correct');
+                
+                if (hearts <= 0) {
+                    setTimeout(() => {
+                        alert('¡No te rindas! Los grandes exploradores siempre lo intentan de nuevo');
+                        location.reload();
+                    }, 1500);
+                    return;
+                }
+            }
+            
+            // Show next button
+            document.getElementById('next-button').style.display = 'block';
+        }
+        
+        function nextQuestion() {
+            currentQuestion++;
+            
+            // Check if world completed
+            if (currentQuestion % 5 === 0 && currentQuestion > 0) {
+                const worldIndex = (currentQuestion / 5) - 1;
+                showReward(worldIndex);
+                hearts = Math.min(3, hearts + 1);
+                updateHearts();
+            }
+            
+            // Check if game completed
+            if (currentQuestion >= 20) {
+                showFinalScreen();
+                return;
+            }
+            
+            loadQuestion();
+        }
+        
+        function updateHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            const fullHearts = Math.floor(hearts);
+            const hasHalf = hearts % 1 !== 0;
+            
+            let heartsHTML = '';
+            for (let i = 0; i < fullHearts; i++) {
+                heartsHTML += '❤️';
+            }
+            if (hasHalf) {
+                heartsHTML += '💔';
+            }
+            
+            heartsContainer.innerHTML = heartsHTML;
+        }
+        
+        function showReward(worldIndex) {
+            const reward = rewards[worldIndex];
+            
+            // Add to inventory
+            inventory.push(reward);
+            updateInventory();
+            
+            // Show popup
+            document.getElementById('reward-icon').textContent = reward.icon;
+            document.getElementById('reward-title').textContent = reward.name;
+            document.getElementById('reward-message').textContent = reward.message;
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('reward-popup').classList.add('show');
+            
+            // Confetti effect
+            createConfetti();
+        }
+        
+        function closeReward() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('reward-popup').classList.remove('show');
+        }
+        
+        function updateInventory() {
+            const inventoryContainer = document.getElementById('inventory');
+            inventoryContainer.innerHTML = '';
+            
+            inventory.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'inventory-item';
+                itemDiv.textContent = `${item.icon} ${item.name}`;
+                inventoryContainer.appendChild(itemDiv);
+            });
+        }
+        
+        function createConfetti() {
+            const colors = ['#fbbf24', '#7c3aed', '#10b981', '#ef4444', '#3b82f6'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 30);
+            }
+        }
+        
+        function showFinalScreen() {
+            document.querySelector('.game-screen').classList.remove('active');
+            document.querySelector('.final-screen').classList.add('active');
+            
+            const accuracy = Math.round((correctAnswers / 20) * 100);
+            document.getElementById('final-correct').textContent = correctAnswers + '/20';
+            document.getElementById('final-accuracy').textContent = accuracy + '%';
+            
+            createConfetti();
+        }
+    </script>
+</body>
+</html>
