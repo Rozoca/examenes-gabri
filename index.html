@@ -51,7 +51,7 @@
 
         .game-list {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: wrap; /* Esto permite que pasen a la siguiente fila */
             justify-content: center;
             gap: 30px;
         }
@@ -61,9 +61,11 @@
             border: 2px solid #00ffff;
             border-radius: 15px;
             padding: 25px;
-            width: 300px;
+            width: 300px; /* Ancho fijo para cada tarjeta */
             text-align: left;
             transition: all 0.3s ease;
+            display: flex; /* Usamos flex para alinear el botón abajo */
+            flex-direction: column; /* Contenido en columna */
         }
 
         .game-card:hover {
@@ -87,7 +89,7 @@
             font-size: 0.95em;
             line-height: 1.5;
             margin-bottom: 25px;
-            min-height: 80px; /* Para que las tarjetas tengan altura similar */
+            flex-grow: 1; /* Esto empuja el botón hacia abajo */
         }
 
         .btn {
@@ -104,6 +106,7 @@
             text-align: center;
             transition: all 0.3s;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            margin-top: auto; /* Se alinea al final */
         }
 
         .btn:hover {
@@ -145,6 +148,20 @@
                 <h3>Aventura Matemática</h3>
                 <p>¡La Búsqueda del Tesoro! Demuestra lo que sabes de matemáticas para superar los retos y encontrar el tesoro escondido.</p>
                 <a href="gabri-math-adventure%20(4).html" class="btn">¡Buscar Tesoro!</a>
+            </div>
+
+            <div class="game-card">
+                <h2>🗺️</h2>
+                <h3>Geografía: Límites de España</h3>
+                <p>Repasa los límites de España en este mapa interactivo. ¡Un reto de Ciencias Sociales para poner a prueba tu memoria!</p>
+                <a href="limites-espana-primaria.html" class="btn">¡Estudiar Mapa!</a>
+            </div>
+            
+            <div class="game-card">
+                <h2>🇬🇧</h2>
+                <h3>Inglés: Verbos Irregulares</h3>
+                <p>Practica los verbos irregulares más importantes. Completa la lista y prepárate para el examen de Inglés.</p>
+                <a href="irregular-verbs-lesson.html" class="btn">¡Practicar Inglés!</a>
             </div>
 
         </main>
