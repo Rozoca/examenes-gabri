@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Irregular Verbs Adventure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', 'Trebuchet MS', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #764ba2;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        
+        .explanation {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+        
+        .example-box {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .verb-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .verb-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+        
+        .verb-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .verb-table tr:hover {
+            background: #f0f4ff;
+        }
+        
+        .verb-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .exercise {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .question {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            font-size: 1em;
+            width: 200px;
+            margin: 0 5px;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .correct {
+            background: #d4edda !important;
+            border-color: #28a745 !important;
+        }
+        
+        .incorrect {
+            background: #f8d7da !important;
+            border-color: #dc3545 !important;
+        }
+        
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1.2em;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .feedback.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+        
+        .feedback.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.5em;
+            color: #667eea;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .matching-game {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .match-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        
+        .match-item:hover {
+            background: #e9ecef;
+            transform: scale(1.05);
+        }
+        
+        .match-item.selected {
+            border-color: #667eea;
+            background: #e7eaff;
+        }
+        
+        .match-item.matched {
+            background: #d4edda;
+            border-color: #28a745;
+            cursor: default;
+        }
+        
+        .emoji {
+            font-size: 2em;
+            margin-right: 10px;
+        }
+
+        .multichoice-option {
+            background: #f8f9fa;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .multichoice-option:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+
+        .multichoice-option.selected {
+            background: #e7eaff;
+            border-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌟 Irregular Verbs Adventure 🌟</h1>
+        <p class="subtitle">Let's learn about verbs in a fun way!</p>
+        
+        <!-- EXPLICACIÓN -->
+        <div class="section">
+            <h2>📚 ¿Qué son los verbos irregulares?</h2>
+            <div class="explanation">
+                <p><strong>Los verbos irregulares</strong> son verbos especiales que cambian su forma de manera diferente cuando hablamos del pasado.</p>
+                
+                <div class="example-box">
+                    <p><strong>Ejemplo con un verbo regular:</strong></p>
+                    <p>🎮 <strong>PLAY</strong> (jugar) → PLAYED → PLAYED</p>
+                    <p style="margin-top: 10px;">👉 Simplemente añadimos "-ed"</p>
+                </div>
+                
+                <div class="example-box">
+                    <p><strong>Ejemplo con un verbo irregular:</strong></p>
+                    <p>🏃 <strong>GO</strong> (ir) → WENT → GONE</p>
+                    <p style="margin-top: 10px;">👉 ¡Cambia completamente! Por eso son especiales</p>
+                </div>
+                
+                <p style="margin-top: 15px;"><strong>Tenemos 3 formas importantes:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>INFINITIVE</strong> (Infinitivo): La forma básica → "Today I..."</li>
+                    <li><strong>PAST SIMPLE</strong> (Pasado Simple): Lo que pasó ayer → "Yesterday I..."</li>
+                    <li><strong>PAST PARTICIPLE</strong> (Participio): Para "have" → "I have..."</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- TABLA DE VERBOS -->
+        <div class="section">
+            <h2>🎯 Our 10 Special Verbs</h2>
+            <table class="verb-table">
+                <thead>
+                    <tr>
+                        <th>INFINITIVE<br>(Today I...)</th>
+                        <th>PAST SIMPLE<br>(Yesterday I...)</th>
+                        <th>PAST PARTICIPLE<br>(I have...)</th>
+                        <th>Significado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>be</strong></td>
+                        <td>was / were</td>
+                        <td>been</td>
+                        <td>ser / estar</td>
+                    </tr>
+                    <tr>
+                        <td><strong>become</strong></td>
+                        <td>became</td>
+                        <td>become</td>
+                        <td>llegar a ser</td>
+                    </tr>
+                    <tr>
+                        <td><strong>begin</strong></td>
+                        <td>began</td>
+                        <td>begun</td>
+                        <td>empezar</td>
+                    </tr>
+                    <tr>
+                        <td><strong>break</strong></td>
+                        <td>broke</td>
+                        <td>broken</td>
+                        <td>romper</td>
+                    </tr>
+                    <tr>
+                        <td><strong>bring</strong></td>
+                        <td>brought</td>
+                        <td>brought</td>
+                        <td>traer</td>
+                    </tr>
+                    <tr>
+                        <td><strong>build</strong></td>
+                        <td>built</td>
+                        <td>built</td>
+                        <td>construir</td>
+                    </tr>
+                    <tr>
+                        <td><strong>buy</strong></td>
+                        <td>bought</td>
+                        <td>bought</td>
+                        <td>comprar</td>
+                    </tr>
+                    <tr>
+                        <td><strong>catch</strong></td>
+                        <td>caught</td>
+                        <td>caught</td>
+                        <td>coger</td>
+                    </tr>
+                    <tr>
+                        <td><strong>choose</strong></td>
+                        <td>chose</td>
+                        <td>chosen</td>
+                        <td>elegir</td>
+                    </tr>
+                    <tr>
+                        <td><strong>come</strong></td>
+                        <td>came</td>
+                        <td>come</td>
+                        <td>venir</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- EJERCICIO 1: COMPLETAR HUECOS -->
+        <div class="section">
+            <h2>✏️ Exercise 1: Fill in the blanks!</h2>
+            <div class="exercise">
+                <div class="question">
+                    <p>1. Yesterday I <input type="text" id="q1" placeholder="???"> (break) my toy.</p>
+                </div>
+                <div class="question">
+                    <p>2. Today I <input type="text" id="q2" placeholder="???"> (be) happy!</p>
+                </div>
+                <div class="question">
+                    <p>3. My mom has <input type="text" id="q3" placeholder="???"> (buy) a new car.</p>
+                </div>
+                <div class="question">
+                    <p>4. Last week, my class <input type="text" id="q4" placeholder="???"> (begin) a new project.</p>
+                </div>
+                <div class="question">
+                    <p>5. I have <input type="text" id="q5" placeholder="???"> (come) to school every day.</p>
+                </div>
+                <button onclick="checkExercise1()">Check Answers! 🎯</button>
+                <div id="feedback1"></div>
+            </div>
+        </div>
+        
+        <!-- EJERCICIO 2: MATCHING GAME -->
+        <div class="section">
+            <h2>🎮 Exercise 2: Matching Game!</h2>
+            <p style="margin-bottom: 15px;">Click on a verb in INFINITIVE and then its PAST SIMPLE form!</p>
+            <div class="exercise">
+                <div class="matching-game" id="matchingGame"></div>
+                <button onclick="resetMatching()">Reset Game 🔄</button>
+                <div id="feedback2"></div>
+            </div>
+        </div>
+        
+        <!-- EJERCICIO 3: MULTIPLE CHOICE -->
+        <div class="section">
+            <h2>🌟 Exercise 3: Choose the correct answer!</h2>
+            <div class="exercise">
+                <div class="question">
+                    <p><strong>1. Yesterday, I ___ a beautiful butterfly.</strong></p>
+                    <div class="multichoice-option" onclick="selectOption(this, 'catch', 1)">catch</div>
+                    <div class="multichoice-option" onclick="selectOption(this, 'caught', 1)">caught ✓</div>
+                    <div class="multichoice-option" onclick="selectOption(this, 'catched', 1)">catched</div>
+                </div>
+                
+                <div class="question">
+                    <p><strong>2. My dad has ___ a new house.</strong></p>
+                    <div class="multichoice-option" onclick="selectOption(this, 'build', 2)">build</div>
+                    <div class="multichoice-option" onclick="selectOption(this, 'built', 2)">built ✓</div>
+                    <div class="multichoice-option" onclick="selectOption(this, 'builded', 2)">builded</div>
+                </div>
+                
+                <div class="question">
+                    <p><strong>3. She has ___ a doctor.</strong></p>
+                    <div class="multichoice-option" onclick="selectOption(this, 'became', 3)">became</div>
+                    <div class="multichoice-option" onclick="selectOption(this, 'become', 3)">become ✓</div>
+                    <div class="multichoice-option" onclick="selectOption(this, 'becomed', 3)">becomed</div>
+                </div>
+                
+                <div class="question">
+                    <p><strong>4. Yesterday, they ___ me a present.</strong></p>
+                    <div class="multichoice-option" onclick="selectOption(this, 'bring', 4)">bring</div>
+                    <div class="multichoice-option" onclick="selectOption(this, 'bringed', 4)">bringed</div>
+                    <div class="multichoice-option" onclick="selectOption(this, 'brought', 4)">brought ✓</div>
+                </div>
+                
+                <button onclick="checkExercise3()">Check Answers! 🎯</button>
+                <div id="feedback3"></div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
+            <h2>🎉 Great job practicing! 🎉</h2>
+            <p style="font-size: 1.2em; margin-top: 10px;">Keep practicing these verbs every day!</p>
+            <p style="margin-top: 10px;">💪 Remember: Practice makes perfect!</p>
+        </div>
+    </div>
+    
+    <script>
+        // Ejercicio 1: Completar huecos
+        const answers1 = {
+            q1: 'broke',
+            q2: 'am',
+            q3: 'bought',
+            q4: 'began',
+            q5: 'come'
+        };
+        
+        function checkExercise1() {
+            let correct = 0;
+            let total = 5;
+            
+            for (let key in answers1) {
+                const input = document.getElementById(key);
+                const userAnswer = input.value.trim().toLowerCase();
+                
+                if (userAnswer === answers1[key]) {
+                    input.className = 'correct';
+                    correct++;
+                } else {
+                    input.className = 'incorrect';
+                }
+            }
+            
+            const feedback = document.getElementById('feedback1');
+            const percentage = (correct / total) * 100;
+            
+            if (percentage === 100) {
+                feedback.innerHTML = `<div class="feedback success"><span class="emoji">🎉</span>Perfect! You got all ${correct} answers right!<span class="emoji">🎉</span></div>`;
+            } else if (percentage >= 60) {
+                feedback.innerHTML = `<div class="feedback success"><span class="emoji">👍</span>Good job! You got ${correct} out of ${total} correct!<span class="emoji">👍</span></div>`;
+            } else {
+                feedback.innerHTML = `<div class="feedback error"><span class="emoji">💪</span>Keep trying! You got ${correct} out of ${total}. Review the table and try again!<span class="emoji">💪</span></div>`;
+            }
+        }
+        
+        // Ejercicio 2: Matching Game
+        const matchingPairs = {
+            'be': 'was/were',
+            'break': 'broke',
+            'bring': 'brought',
+            'buy': 'bought',
+            'catch': 'caught'
+        };
+        
+        let selectedCard = null;
+        let matchedPairs = 0;
+        
+        function initMatching() {
+            const game = document.getElementById('matchingGame');
+            game.innerHTML = '';
+            
+            const infinitives = Object.keys(matchingPairs);
+            const pasts = Object.values(matchingPairs);
+            
+            // Mezclar arrays
+            infinitives.sort(() => Math.random() - 0.5);
+            pasts.sort(() => Math.random() - 0.5);
+            
+            infinitives.forEach(verb => {
+                const div = document.createElement('div');
+                div.className = 'match-item';
+                div.textContent = verb.toUpperCase();
+                div.dataset.verb = verb;
+                div.dataset.type = 'infinitive';
+                div.onclick = () => selectCard(div);
+                game.appendChild(div);
+            });
+            
+            pasts.forEach(past => {
+                const div = document.createElement('div');
+                div.className = 'match-item';
+                div.textContent = past.toUpperCase();
+                div.dataset.past = past;
+                div.dataset.type = 'past';
+                div.onclick = () => selectCard(div);
+                game.appendChild(div);
+            });
+        }
+        
+        function selectCard(card) {
+            if (card.classList.contains('matched')) return;
+            
+            if (!selectedCard) {
+                selectedCard = card;
+                card.classList.add('selected');
+            } else {
+                if (selectedCard === card) {
+                    selectedCard.classList.remove('selected');
+                    selectedCard = null;
+                    return;
+                }
+                
+                const isMatch = checkMatch(selectedCard, card);
+                
+                if (isMatch) {
+                    selectedCard.classList.add('matched');
+                    card.classList.add('matched');
+                    selectedCard.classList.remove('selected');
+                    matchedPairs++;
+                    
+                    if (matchedPairs === 5) {
+                        document.getElementById('feedback2').innerHTML = 
+                            '<div class="feedback success"><span class="emoji">🏆</span>Congratulations! You matched all pairs!<span class="emoji">🏆</span></div>';
+                    }
+                } else {
+                    setTimeout(() => {
+                        selectedCard.classList.remove('selected');
+                    }, 500);
+                }
+                
+                selectedCard = null;
+            }
+        }
+        
+        function checkMatch(card1, card2) {
+            const verb1 = card1.dataset.verb;
+            const past1 = card1.dataset.past;
+            const verb2 = card2.dataset.verb;
+            const past2 = card2.dataset.past;
+            
+            if (verb1 && past2 && matchingPairs[verb1] === past2) return true;
+            if (verb2 && past1 && matchingPairs[verb2] === past1) return true;
+            
+            return false;
+        }
+        
+        function resetMatching() {
+            selectedCard = null;
+            matchedPairs = 0;
+            document.getElementById('feedback2').innerHTML = '';
+            initMatching();
+        }
+        
+        // Ejercicio 3: Multiple Choice
+        let selectedAnswers = {};
+        
+        function selectOption(element, answer, questionNum) {
+            const question = element.parentElement;
+            const options = question.querySelectorAll('.multichoice-option');
+            
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            selectedAnswers[questionNum] = answer;
+        }
+        
+        function checkExercise3() {
+            const correctAnswers = {
+                1: 'caught',
+                2: 'built',
+                3: 'become',
+                4: 'brought'
+            };
+            
+            let correct = 0;
+            
+            for (let q = 1; q <= 4; q++) {
+                if (selectedAnswers[q] === correctAnswers[q]) {
+                    correct++;
+                }
+            }
+            
+            const feedback = document.getElementById('feedback3');
+            const percentage = (correct / 4) * 100;
+            
+            if (percentage === 100) {
+                feedback.innerHTML = `<div class="feedback success"><span class="emoji">🌟</span>Amazing! Perfect score: ${correct}/4!<span class="emoji">🌟</span></div>`;
+            } else if (percentage >= 50) {
+                feedback.innerHTML = `<div class="feedback success"><span class="emoji">😊</span>Well done! You got ${correct} out of 4 correct!<span class="emoji">😊</span></div>`;
+            } else {
+                feedback.innerHTML = `<div class="feedback error"><span class="emoji">📚</span>You got ${correct} out of 4. Look at the table again and try once more!<span class="emoji">📚</span></div>`;
+            }
+        }
+        
+        // Inicializar matching game
+        initMatching();
+    </script>
+</body>
+</html>
