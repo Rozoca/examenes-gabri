@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Actividades Educativas</title>
+    <title>El Rincón de Prácticas de Gabri</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,6 @@
 
         body {
             font-family: Arial, sans-serif;
-            /* Reutilizamos el fondo espacial que te gustó */
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             color: white;
             padding: 20px;
@@ -51,7 +50,7 @@
 
         .game-list {
             display: flex;
-            flex-wrap: wrap; /* Esto permite que pasen a la siguiente fila */
+            flex-wrap: wrap;
             justify-content: center;
             gap: 30px;
         }
@@ -61,11 +60,11 @@
             border: 2px solid #00ffff;
             border-radius: 15px;
             padding: 25px;
-            width: 300px; /* Ancho fijo para cada tarjeta */
+            width: 300px;
             text-align: left;
             transition: all 0.3s ease;
-            display: flex; /* Usamos flex para alinear el botón abajo */
-            flex-direction: column; /* Contenido en columna */
+            display: flex;
+            flex-direction: column;
         }
 
         .game-card:hover {
@@ -80,4 +79,84 @@
         }
 
         .game-card h3 {
-            font-size:
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #00ffff;
+        }
+
+        .game-card p {
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .btn {
+            display: block;
+            background: linear-gradient(135deg, #00ffff, #00ff00);
+            color: black;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            margin-top: auto;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+        }
+
+        footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>¡El Rincón de Prácticas de Gabri!</h1>
+        </header>
+        
+        <p class="intro">
+            ¡Hola Gabri! 👋 Esta es tu página especial.<br>
+            Aquí puedes entrenar, aprender y divertirte con los temas de 4º de Primaria.
+        </p>
+
+        <main class="game-list">
+            <div class="game-card">
+                <h2>🚀</h2>
+                <h3>Misión Espacial: Destino Luna</h3>
+                <p>¡Conviértete en astronauta! Resuelve 30 preguntas de mates y sociales para que tu cohete despegue.</p>
+                <a href="mision_espacial_luna_final.html" class="btn">¡Comenzar Misión!</a>
+            </div>
+
+            <div class="game-card">
+                <h2>🌍</h2>
+                <h3>La Tierra y los Límites de España</h3>
+                <p>Repasa el Tema 2 de Ciencias Sociales con este examen interactivo sobre la Tierra y España.</p>
+                <a href="tema2_tierra_espana.html" class="btn">¡Hacer Examen!</a>
+            </div>
+
+            <div class="game-card">
+                <h2>🎮</h2>
+                <h3>Más Juegos Próximamente</h3>
+                <p>Papá está preparando más aventuras educativas para ti. ¡Estate atento!</p>
+                <a href="#" class="btn" style="opacity: 0.5;">Próximamente...</a>
+            </div>
+        </main>
+
+        <footer>
+            <p>Hecho con ❤️ por Papá</p>
+        </footer>
+    </div>
+</body>
+</html>
