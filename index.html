@@ -4,159 +4,327 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Rincón de Prácticas de Gabri</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Nunito', sans-serif;
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             color: white;
-            padding: 20px;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 30px 16px 60px;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 900px;
-            width: 100%;
-            margin: 0 auto;
-            background: rgba(15, 12, 41, 0.9);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
-            border: 2px solid #00ffff;
+        /* Floating stars background */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image:
+                radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 30% 40%, rgba(255,255,255,.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 55% 20%, rgba(255,255,255,.5) 0%, transparent 100%),
+                radial-gradient(1px 1px at 75% 60%, rgba(255,255,255,.3) 0%, transparent 100%),
+                radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,.6) 0%, transparent 100%),
+                radial-gradient(2px 2px at 20% 75%, rgba(0,255,255,.2) 0%, transparent 100%),
+                radial-gradient(2px 2px at 80% 35%, rgba(0,255,255,.15) 0%, transparent 100%);
+            pointer-events: none; z-index: 0;
+        }
+
+        .wrapper {
+            position: relative; z-index: 1;
+            max-width: 980px; margin: 0 auto;
+        }
+
+        /* === HEADER === */
+        header {
             text-align: center;
-        }
-
-        header h1 {
-            font-size: 2.8em;
-            color: #00ffff;
-            text-shadow: 0 0 20px #00ffff;
-            margin-bottom: 20px;
-        }
-
-        .intro {
-            font-size: 1.2em;
-            line-height: 1.6;
-            color: #eee;
-            margin-bottom: 40px;
-        }
-
-        .game-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-        }
-
-        .game-card {
-            background: rgba(48, 43, 99, 0.8);
+            padding: 36px 24px 28px;
+            background: rgba(15,12,41,0.85);
             border: 2px solid #00ffff;
-            border-radius: 15px;
-            padding: 25px;
-            width: 300px;
-            text-align: left;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
+            border-radius: 28px;
+            box-shadow: 0 0 40px rgba(0,255,255,.25), inset 0 0 40px rgba(0,255,255,.03);
+            margin-bottom: 36px;
+            position: relative;
+            overflow: hidden;
         }
-
-        .game-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 255, 255, 0.2);
+        header::before {
+            content: '✨ 🌟 ✨ 🌟 ✨ 🌟 ✨';
+            position: absolute; top: 8px; left: 0; right: 0;
+            text-align: center; font-size: 14px;
+            opacity: .25; letter-spacing: 8px;
         }
-
-        .game-card h2 {
-            font-size: 2em;
-            margin-bottom: 15px;
-            color: #ffff00;
+        header .avatar {
+            font-size: 3.5rem;
+            display: block;
+            margin-bottom: 6px;
+            animation: bounce 2s ease infinite;
         }
-
-        .game-card h3 {
-            font-size: 1.3em;
-            margin-bottom: 15px;
+        @keyframes bounce {
+            0%,100% { transform: translateY(0) rotate(-3deg); }
+            50%      { transform: translateY(-10px) rotate(3deg); }
+        }
+        header h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
             color: #00ffff;
+            text-shadow: 0 0 20px #00ffff, 0 0 40px rgba(0,255,255,.4);
+            letter-spacing: 1px;
+        }
+        header p {
+            color: rgba(255,255,255,.75);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        .score-row {
+            display: flex; justify-content: center; gap: 16px;
+            margin-top: 18px; flex-wrap: wrap;
+        }
+        .badge {
+            background: rgba(0,255,255,.1);
+            border: 1px solid rgba(0,255,255,.35);
+            border-radius: 50px;
+            padding: 6px 18px;
+            font-size: .82rem; font-weight: 700; color: #00ffff;
         }
 
-        .game-card p {
-            font-size: 0.95em;
-            line-height: 1.5;
-            margin-bottom: 25px;
+        /* === SECTION TITLE === */
+        .section-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.1rem;
+            color: rgba(255,255,255,.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+            padding-left: 4px;
+        }
+
+        /* === GRID === */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 22px;
+            margin-bottom: 32px;
+        }
+
+        /* === CARD === */
+        .card {
+            background: rgba(15,12,41,0.88);
+            border: 2px solid rgba(0,255,255,.35);
+            border-radius: 22px;
+            padding: 26px 22px 22px;
+            display: flex; flex-direction: column;
+            transition: all .3s cubic-bezier(.4,0,.2,1);
+            position: relative; overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: var(--accent, linear-gradient(90deg,#00ffff,#00ff88));
+            opacity: 0; transition: opacity .3s;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0,255,255,.7);
+            box-shadow: 0 12px 36px rgba(0,255,255,.2);
+        }
+        .card:hover::before { opacity: 1; }
+
+        .card-emoji {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .card-subject {
+            font-size: .72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--subject-color, #00ffff);
+            margin-bottom: 6px;
+            opacity: .8;
+        }
+        .card h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.25rem;
+            color: #fff;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        .card p {
+            font-size: .88rem;
+            line-height: 1.55;
+            color: rgba(255,255,255,.65);
             flex-grow: 1;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .card-tags {
+            display: flex; flex-wrap: wrap; gap: 6px;
+            margin-bottom: 16px;
+        }
+        .tag {
+            background: rgba(255,255,255,.07);
+            border: 1px solid rgba(255,255,255,.15);
+            border-radius: 50px;
+            padding: 3px 10px;
+            font-size: .7rem;
+            font-weight: 700;
+            color: rgba(255,255,255,.55);
         }
 
         .btn {
             display: block;
-            background: linear-gradient(135deg, #00ffff, #00ff00);
-            color: black;
-            border: none;
-            padding: 15px 20px;
-            font-size: 1.1em;
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            text-decoration: none;
+            padding: 13px 20px;
+            border-radius: 14px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.05rem;
             text-align: center;
-            transition: all 0.3s;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-            margin-top: auto;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all .25s;
+            border: none;
+        }
+        .btn-active {
+            background: linear-gradient(135deg, var(--btn1, #00ffff), var(--btn2, #00ff88));
+            color: #0f0c29;
+            box-shadow: 0 4px 16px rgba(0,255,255,.3);
+        }
+        .btn-active:hover {
+            transform: scale(1.04);
+            box-shadow: 0 6px 22px rgba(0,255,255,.5);
+        }
+        .btn-soon {
+            background: rgba(255,255,255,.06);
+            border: 2px dashed rgba(255,255,255,.2);
+            color: rgba(255,255,255,.35);
+            cursor: default;
         }
 
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
-        }
+        /* Card accent colors */
+        .card.space   { --accent: linear-gradient(90deg,#b44fff,#7b00ff); --subject-color:#b44fff; --btn1:#b44fff; --btn2:#7b00ff; }
+        .card.geo     { --accent: linear-gradient(90deg,#00e5ff,#0077ff); --subject-color:#00e5ff; --btn1:#00e5ff; --btn2:#0077ff; }
+        .card.math    { --accent: linear-gradient(90deg,#ffb703,#ff6b00); --subject-color:#ffb703; --btn1:#ffb703; --btn2:#ff6b00; }
+        .card.english { --accent: linear-gradient(90deg,#ff6bb5,#ff3c8e); --subject-color:#ff6bb5; --btn1:#ff6bb5; --btn2:#ff3c8e; }
+        .card.plants  { --accent: linear-gradient(90deg,#3dbf7d,#1d8a4e); --subject-color:#3dbf7d; --btn1:#3dbf7d; --btn2:#1d8a4e; }
+        .card.soon    { opacity: .55; }
 
+        /* === FOOTER === */
         footer {
-            margin-top: 40px;
-            font-size: 0.9em;
-            color: #aaa;
+            text-align: center;
+            margin-top: 16px;
+            font-size: .85rem;
+            color: rgba(255,255,255,.3);
+            font-weight: 600;
         }
+        footer span { color: rgba(255,0,100,.6); }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>¡El Rincón de Prácticas de Gabri!</h1>
-        </header>
-        
-        <p class="intro">
-            ¡Hola Gabri! 👋 Esta es tu página especial.<br>
-            Aquí puedes entrenar, aprender y divertirte con los temas de 4º de Primaria.
-        </p>
+<div class="wrapper">
 
-        <main class="game-list">
-            <div class="game-card">
-                <h2>🚀</h2>
-                <h3>Misión Espacial: Destino Luna</h3>
-                <p>¡Conviértete en astronauta! Resuelve 30 preguntas de mates y sociales para que tu cohete despegue.</p>
-                <a href="mision_espacial_luna_final.html" class="btn">¡Comenzar Misión!</a>
+    <header>
+        <span class="avatar">🎮</span>
+        <h1>¡El Rincón de Gabri!</h1>
+        <p>Tu zona de estudio para 4º de Primaria · ¡Practica y sube de nivel!</p>
+        <div class="score-row">
+            <div class="badge">📚 5 ejercicios disponibles</div>
+            <div class="badge">🏆 Hecho con ❤️ por Papá</div>
+        </div>
+    </header>
+
+    <div class="section-title">🚀 Tus ejercicios</div>
+
+    <div class="cards-grid">
+
+        <!-- PLANTS -->
+        <div class="card plants">
+            <span class="card-emoji">🌿</span>
+            <div class="card-subject">Ciencias Naturales · NEW</div>
+            <h2>Plants – Study Adventure</h2>
+            <p>3 módulos de teoría + 23 preguntas. Aprende partes de la planta, fotosíntesis, reproducción y polinización.</p>
+            <div class="card-tags">
+                <span class="tag">📖 Teoría interactiva</span>
+                <span class="tag">❓ 23 preguntas</span>
+                <span class="tag">✅ Checklist</span>
             </div>
+            <a href="plants-study-gabriel.html" class="btn btn-active">🌱 ¡Empezar!</a>
+        </div>
 
-            <div class="game-card">
-                <h2>🌍</h2>
-                <h3>La Tierra y los Límites de España</h3>
-                <p>Repasa el Tema 2 de Ciencias Sociales con este examen interactivo sobre la Tierra y España.</p>
-                <a href="tema2_tierra_espana.html" class="btn">¡Hacer Examen!</a>
+        <!-- SPACE -->
+        <div class="card space">
+            <span class="card-emoji">🚀</span>
+            <div class="card-subject">Mates · Sociales</div>
+            <h2>Misión Espacial: Destino Luna</h2>
+            <p>¡Conviértete en astronauta! Resuelve 30 preguntas de mates y sociales para que tu cohete despegue.</p>
+            <div class="card-tags">
+                <span class="tag">🔢 Matemáticas</span>
+                <span class="tag">🌍 Sociales</span>
+                <span class="tag">30 preguntas</span>
             </div>
+            <a href="mision_espacial_luna_final.html" class="btn btn-active">🚀 ¡Comenzar Misión!</a>
+        </div>
 
-            <div class="game-card">
-                <h2>🎮</h2>
-                <h3>Más Juegos Próximamente</h3>
-                <p>Papá está preparando más aventuras educativas para ti. ¡Estate atento!</p>
-                <a href="#" class="btn" style="opacity: 0.5;">Próximamente...</a>
+        <!-- GEO -->
+        <div class="card geo">
+            <span class="card-emoji">🌍</span>
+            <div class="card-subject">Ciencias Sociales</div>
+            <h2>La Tierra y los Límites de España</h2>
+            <p>Repasa el Tema 2 de Ciencias Sociales con este examen interactivo sobre la Tierra y España.</p>
+            <div class="card-tags">
+                <span class="tag">🗺️ Geografía</span>
+                <span class="tag">🇪🇸 España</span>
             </div>
-        </main>
+            <a href="limites-espana-primaria.html" class="btn btn-active">🌍 ¡Hacer Examen!</a>
+        </div>
 
-        <footer>
-            <p>Hecho con ❤️ por Papá</p>
-        </footer>
+        <!-- MATH -->
+        <div class="card math">
+            <span class="card-emoji">🎮</span>
+            <div class="card-subject">Matemáticas</div>
+            <h2>Gabri Math Adventure</h2>
+            <p>Aventura matemática con retos y puzzles numéricos para ejercitar el cálculo y la lógica.</p>
+            <div class="card-tags">
+                <span class="tag">🔢 Cálculo</span>
+                <span class="tag">🧩 Lógica</span>
+            </div>
+            <a href="gabri-math-adventure (4).html" class="btn btn-active">🎮 ¡A Jugar!</a>
+        </div>
+
+        <!-- ENGLISH -->
+        <div class="card english">
+            <span class="card-emoji">📝</span>
+            <div class="card-subject">English</div>
+            <h2>Irregular Verbs Lesson</h2>
+            <p>Practice irregular verbs in English with interactive exercises and fun challenges.</p>
+            <div class="card-tags">
+                <span class="tag">🇬🇧 English</span>
+                <span class="tag">📚 Verbos</span>
+            </div>
+            <a href="irregular-verbs-lesson.html" class="btn btn-active">📝 ¡Let's Go!</a>
+        </div>
+
+        <!-- COMING SOON -->
+        <div class="card soon">
+            <span class="card-emoji">⏳</span>
+            <div class="card-subject">Próximamente</div>
+            <h2>Más aventuras en camino...</h2>
+            <p>Papá está preparando nuevos ejercicios. ¡Estate atento!</p>
+            <div class="card-tags">
+                <span class="tag">🔜 Muy pronto</span>
+            </div>
+            <span class="btn btn-soon">Próximamente...</span>
+        </div>
+
     </div>
+
+    <footer>
+        <p>Hecho con <span>❤️</span> por Papá · Gabri 4º Primaria 2025-26</p>
+    </footer>
+
+</div>
 </body>
 </html>
