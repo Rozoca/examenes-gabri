@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌿 Plants – Gabriel's Study Adventure</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #2a9460;
+  --green2: #3dbf7d;
+  --green-pale: #eaf7f0;
+  --yellow: #f5c842;
+  --orange: #f28c38;
+  --red: #e05252;
+  --blue: #3a8fd9;
+  --cream: #fffdf4;
+  --dark: #1a3a28;
+  --muted: #6b8f7a;
+  --border: #c8e8d4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--cream);
+  color:var(--dark);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse at 5% 10%,rgba(42,148,96,.07) 0%,transparent 45%),
+    radial-gradient(ellipse at 95% 90%,rgba(61,191,125,.06) 0%,transparent 45%),
+    radial-gradient(ellipse at 50% 50%,rgba(245,200,66,.04) 0%,transparent 60%);
+  pointer-events:none;z-index:0;
+}
+
+/* ====== SCREENS ====== */
+.screen{
+  display:none;position:relative;z-index:1;
+  max-width:780px;margin:0 auto;padding:20px 16px 60px;
+  animation:fadeUp .4s ease;
+}
+.screen.active{display:block}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ====== WELCOME ====== */
+.welcome-card{
+  background:linear-gradient(145deg,#1d6b44,#2a9460);
+  border-radius:28px;
+  padding:40px 28px 36px;
+  text-align:center;
+  box-shadow:0 12px 40px rgba(42,148,96,.3);
+  position:relative;overflow:hidden;
+}
+.welcome-card::before{
+  content:'';
+  position:absolute;top:-40px;right:-40px;
+  width:180px;height:180px;
+  background:rgba(255,255,255,.06);
+  border-radius:50%;
+}
+.welcome-card::after{
+  content:'';
+  position:absolute;bottom:-50px;left:-30px;
+  width:140px;height:140px;
+  background:rgba(255,255,255,.05);
+  border-radius:50%;
+}
+.plant-anim{
+  font-size:5rem;
+  display:block;
+  animation:grow 2s ease infinite alternate;
+  margin-bottom:8px;
+}
+@keyframes grow{
+  from{transform:scale(1) rotate(-3deg)}
+  to{transform:scale(1.08) rotate(3deg)}
+}
+.welcome-card h1{
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(2rem,6vw,3rem);
+  color:#fff;letter-spacing:1px;
+  text-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+.welcome-card .subtitle{
+  color:rgba(255,255,255,.85);
+  font-size:1rem;font-weight:600;
+  margin:8px 0 28px;
+}
+.modules-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:12px;margin-bottom:28px;
+}
+.module-pill{
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:50px;
+  padding:8px 6px;
+  color:#fff;font-size:.82rem;font-weight:700;
+  text-align:center;
+}
+.btn-main{
+  background:var(--yellow);
+  color:#1a3a28;
+  border:none;border-radius:50px;
+  padding:16px 40px;
+  font-family:'Fredoka One',cursive;
+  font-size:1.3rem;
+  cursor:pointer;
+  box-shadow:0 6px 20px rgba(245,200,66,.4);
+  transition:all .2s;
+  display:inline-block;
+}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,200,66,.5)}
+
+/* ====== STEP INDICATOR ====== */
+.step-indicator{
+  display:flex;align-items:center;justify-content:center;
+  gap:6px;margin-bottom:24px;
+}
+.step-dot{
+  width:12px;height:12px;border-radius:50%;
+  background:#d0ead8;
+  transition:all .3s;
+}
+.step-dot.done{background:var(--green)}
+.step-dot.active{
+  background:var(--yellow);
+  width:28px;border-radius:10px;
+}
+.step-label{
+  text-align:center;
+  font-size:.8rem;font-weight:700;
+  color:var(--muted);
+  margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase;
+}
+
+/* ====== THEORY SECTIONS ====== */
+.theory-header{
+  background:linear-gradient(135deg,var(--green),#1d6b44);
+  border-radius:22px;
+  padding:28px 24px 22px;
+  text-align:center;
+  margin-bottom:24px;
+  box-shadow:0 6px 24px rgba(42,148,96,.2);
+}
+.theory-header .section-emoji{font-size:3.5rem;display:block;margin-bottom:8px}
+.theory-header h2{
+  font-family:'Fredoka One',cursive;
+  color:#fff;font-size:1.9rem;
+  text-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+.theory-header p{color:rgba(255,255,255,.85);font-size:.95rem;font-weight:600;margin-top:4px}
+
+.theory-intro{
+  background:#fff;border:2px solid var(--border);
+  border-radius:18px;padding:20px 22px;
+  margin-bottom:20px;font-size:1rem;
+  line-height:1.65;color:var(--dark);
+  box-shadow:0 2px 12px rgba(42,148,96,.07);
+}
+.theory-intro strong{color:var(--green)}
+
+/* === FLIP CARDS === */
+.cards-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+  gap:14px;
+  margin-bottom:22px;
+}
+.flip-card{
+  perspective:800px;
+  height:160px;cursor:pointer;
+}
+.flip-inner{
+  width:100%;height:100%;
+  transition:transform .5s cubic-bezier(.4,0,.2,1);
+  transform-style:preserve-3d;
+  position:relative;
+}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{
+  position:absolute;inset:0;
+  border-radius:18px;
+  backface-visibility:hidden;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:8px;
+  padding:16px;
+}
+.flip-front{
+  background:#fff;
+  border:2px solid var(--border);
+  box-shadow:0 3px 12px rgba(42,148,96,.1);
+}
+.flip-front .card-emoji{font-size:2.4rem}
+.flip-front .card-title{
+  font-family:'Fredoka One',cursive;
+  font-size:1rem;color:var(--green);text-align:center;
+}
+.flip-front .tap-hint{
+  font-size:.7rem;color:var(--muted);font-weight:600;
+}
+.flip-back{
+  background:linear-gradient(135deg,var(--green-pale),#d4f0e3);
+  border:2px solid var(--green);
+  transform:rotateY(180deg);
+  box-shadow:0 3px 12px rgba(42,148,96,.15);
+}
+.flip-back .fact-text{
+  font-size:.88rem;font-weight:700;
+  color:var(--dark);text-align:center;line-height:1.4;
+}
+.flip-back .fact-emoji{font-size:1.6rem}
+
+/* === CHECKLIST === */
+.checklist{
+  background:#fff;border:2px solid var(--border);
+  border-radius:18px;padding:20px 22px;
+  margin-bottom:22px;
+  box-shadow:0 2px 12px rgba(42,148,96,.07);
+}
+.checklist h3{
+  font-family:'Fredoka One',cursive;
+  color:var(--green);font-size:1.1rem;
+  margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+.check-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:8px 0;
+  border-bottom:1px dashed #e0f0e8;
+  cursor:pointer;
+  transition:background .2s;
+  border-radius:8px;
+}
+.check-item:last-child{border-bottom:none}
+.check-item .box{
+  width:22px;height:22px;border-radius:6px;
+  border:2px solid var(--green);
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;margin-top:1px;
+}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+.check-item.checked .box::after{content:'✓';color:#fff;font-size:.85rem;font-weight:900}
+.check-item .check-text{font-size:.92rem;font-weight:600;color:var(--dark);line-height:1.4}
+.check-item.checked .check-text{color:var(--muted);text-decoration:line-through}
+
+/* === VISUAL DIAGRAM === */
+.diagram-box{
+  background:#fff;border:2px solid var(--border);
+  border-radius:18px;padding:22px;
+  margin-bottom:22px;text-align:center;
+  box-shadow:0 2px 12px rgba(42,148,96,.07);
+}
+.diagram-box h3{
+  font-family:'Fredoka One',cursive;
+  color:var(--green);font-size:1.1rem;
+  margin-bottom:16px;
+}
+.plant-diagram{
+  display:inline-flex;flex-direction:column;align-items:center;
+  gap:0;position:relative;
+}
+.plant-part-row{
+  display:flex;align-items:center;gap:10px;
+  width:100%;justify-content:center;
+  padding:6px 0;
+}
+.part-label{
+  font-size:.8rem;font-weight:700;
+  background:var(--green-pale);
+  border:1px solid var(--green2);
+  border-radius:50px;
+  padding:4px 12px;color:var(--green);
+  min-width:80px;text-align:center;
+}
+.part-desc{
+  font-size:.78rem;font-weight:600;color:var(--muted);
+  max-width:160px;text-align:left;
+}
+
+/* === PHOTOSYNTHESIS VISUAL === */
+.photo-equation{
+  display:flex;align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;gap:8px;
+  margin:16px 0;
+}
+.photo-box{
+  background:var(--green-pale);
+  border:2px solid var(--green2);
+  border-radius:14px;
+  padding:10px 14px;
+  text-align:center;
+  min-width:80px;
+}
+.photo-box .pb-emoji{font-size:1.5rem}
+.photo-box .pb-label{font-size:.72rem;font-weight:700;color:var(--green)}
+.photo-arrow{font-size:1.4rem;color:var(--green)}
+.photo-plus{font-size:1.2rem;font-weight:900;color:var(--muted)}
+.photo-result{
+  background:linear-gradient(135deg,#d4f0e3,#a8e6c8);
+  border:2px solid var(--green);
+}
+
+/* === FLOWER ANATOMY === */
+.flower-parts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.flower-part{
+  border-radius:14px;padding:12px 14px;
+  display:flex;align-items:flex-start;gap:10px;
+}
+.flower-part.male{background:#fff8e6;border:2px solid #f5c842}
+.flower-part.female{background:#fce4f0;border:2px solid #e882b5}
+.flower-part.other{background:var(--green-pale);border:2px solid var(--green2)}
+.fp-icon{font-size:1.4rem;flex-shrink:0}
+.fp-content .fp-name{font-family:'Fredoka One',cursive;font-size:.95rem}
+.fp-content .fp-desc{font-size:.75rem;font-weight:600;color:var(--muted);margin-top:2px}
+
+/* === NAV BUTTONS === */
+.nav-row{
+  display:flex;gap:12px;margin-top:8px;
+}
+.btn-secondary{
+  flex:1;background:var(--green-pale);
+  border:2px solid var(--green);
+  border-radius:50px;padding:14px 20px;
+  font-family:'Fredoka One',cursive;
+  font-size:1.05rem;color:var(--green);
+  cursor:pointer;transition:all .2s;
+}
+.btn-secondary:hover{background:var(--green);color:#fff}
+.btn-primary{
+  flex:2;background:linear-gradient(135deg,var(--green2),var(--green));
+  border:none;border-radius:50px;padding:14px 24px;
+  font-family:'Fredoka One',cursive;
+  font-size:1.1rem;color:#fff;
+  cursor:pointer;
+  box-shadow:0 4px 16px rgba(42,148,96,.3);
+  transition:all .2s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(42,148,96,.4)}
+
+/* ====== QUIZ SECTION ====== */
+.quiz-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:12px;
+}
+.q-counter{
+  font-family:'Fredoka One',cursive;
+  font-size:1rem;color:var(--muted);
+}
+.score-badge{
+  background:var(--green-pale);
+  border:2px solid var(--green);
+  border-radius:50px;
+  padding:4px 14px;
+  font-family:'Fredoka One',cursive;
+  font-size:.95rem;color:var(--green);
+}
+.progress-wrap{
+  background:#d8edd9;border-radius:50px;
+  height:12px;overflow:hidden;margin-bottom:20px;
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.08);
+}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--green2),var(--green));
+  border-radius:50px;transition:width .5s cubic-bezier(.4,0,.2,1);
+}
+
+.q-card{
+  background:#fff;border:2px solid var(--border);
+  border-radius:22px;padding:26px 24px;
+  box-shadow:0 4px 20px rgba(42,148,96,.1);
+  animation:fadeUp .3s ease;
+}
+.q-badge{
+  display:inline-block;
+  background:var(--green-pale);border:1px solid var(--green2);
+  border-radius:50px;padding:3px 12px;
+  font-size:.72rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;color:var(--green);
+  margin-bottom:12px;
+}
+.q-text{
+  font-size:1.1rem;font-weight:700;
+  color:var(--dark);line-height:1.45;
+  margin-bottom:18px;
+}
+.options-grid{display:grid;gap:10px}
+.options-grid.two-col{grid-template-columns:1fr 1fr}
+.opt-btn{
+  background:#f7fdf9;border:2px solid #cdebd9;
+  border-radius:14px;padding:12px 16px;
+  font-family:'Nunito',sans-serif;font-size:.97rem;font-weight:700;
+  color:var(--dark);cursor:pointer;
+  display:flex;align-items:center;gap:10px;
+  text-align:left;transition:all .2s;
+}
+.opt-btn:hover:not(:disabled){
+  background:var(--green-pale);border-color:var(--green2);
+  transform:translateX(4px);
+}
+.opt-btn .ltr{
+  background:var(--green-pale);color:var(--green);
+  border-radius:50%;width:26px;height:26px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.82rem;font-weight:900;flex-shrink:0;
+  transition:all .2s;
+}
+.opt-btn.correct{background:#d4f5e3;border-color:var(--green);color:#1a5c38}
+.opt-btn.correct .ltr{background:var(--green);color:#fff}
+.opt-btn.wrong{background:#ffe5e5;border-color:var(--red);color:#7a1a1a}
+.opt-btn.wrong .ltr{background:var(--red);color:#fff}
+.opt-btn:disabled{cursor:default;transform:none}
+
+.q-feedback{
+  display:none;margin-top:14px;padding:14px 18px;
+  border-radius:14px;font-size:.92rem;font-weight:700;
+  animation:fadeUp .3s ease;
+}
+.q-feedback.show{display:flex;gap:10px;align-items:flex-start}
+.q-feedback.correct-fb{background:#d4f5e3;color:#1a5c38;border:1px solid #a8e6c4}
+.q-feedback.wrong-fb{background:#ffe5e5;color:#7a1a1a;border:1px solid #f5b8b8}
+.fb-icon{font-size:1.4rem;flex-shrink:0}
+
+.btn-next{
+  display:none;width:100%;margin-top:14px;
+  background:linear-gradient(135deg,var(--green2),var(--green));
+  border:none;border-radius:50px;padding:14px;
+  font-family:'Fredoka One',cursive;font-size:1.15rem;color:#fff;
+  cursor:pointer;
+  box-shadow:0 4px 16px rgba(42,148,96,.3);
+  transition:all .2s;
+}
+.btn-next.show{display:block;animation:fadeUp .3s ease}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(42,148,96,.4)}
+
+/* ====== RESULTS ====== */
+.result-card{
+  background:#fff;border:2px solid var(--border);
+  border-radius:24px;padding:36px 24px;
+  text-align:center;
+  box-shadow:0 8px 32px rgba(42,148,96,.12);
+  animation:fadeUp .4s ease;
+}
+.result-emoji{font-size:5rem;display:block;margin-bottom:8px}
+.result-title{
+  font-family:'Fredoka One',cursive;
+  font-size:2.2rem;color:var(--green);margin-bottom:6px;
+}
+.score-big{
+  font-family:'Fredoka One',cursive;
+  font-size:4.5rem;color:var(--dark);line-height:1;
+}
+.score-sub{font-size:1rem;color:var(--muted);font-weight:700;margin-bottom:10px}
+.stars{font-size:2.2rem;letter-spacing:4px;margin-bottom:24px}
+.wrong-review{text-align:left;margin-top:20px}
+.wrong-review h3{
+  font-size:.95rem;font-weight:700;color:var(--muted);
+  margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.wrong-item{
+  background:#fff5f5;border-left:4px solid var(--red);
+  border-radius:0 12px 12px 0;
+  padding:10px 14px;margin-bottom:8px;font-size:.85rem;
+}
+.wrong-item .wi-q{color:#888;margin-bottom:4px;font-size:.78rem}
+.wrong-item .wi-a strong{color:var(--green)}
+
+.btn-restart{
+  background:linear-gradient(135deg,var(--yellow),var(--orange));
+  border:none;border-radius:50px;
+  padding:16px 40px;margin-top:24px;
+  font-family:'Fredoka One',cursive;font-size:1.25rem;color:#fff;
+  cursor:pointer;
+  box-shadow:0 4px 16px rgba(242,140,56,.3);
+  transition:all .2s;
+}
+.btn-restart:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(242,140,56,.45)}
+
+/* challenge badge */
+.challenge-banner{
+  background:linear-gradient(135deg,#fff8e6,#fff3cc);
+  border:2px solid var(--yellow);
+  border-radius:14px;padding:12px 16px;
+  margin-bottom:16px;font-size:.85rem;font-weight:700;
+  color:#7a5a00;display:flex;align-items:center;gap:8px;
+}
+
+/* ====== RESPONSIVE ====== */
+@media(max-width:480px){
+  .modules-grid{grid-template-columns:1fr 1fr}
+  .cards-grid{grid-template-columns:1fr 1fr}
+  .flower-parts{grid-template-columns:1fr}
+  .flip-card{height:140px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== WELCOME ===================== -->
+<div class="screen active" id="screen-welcome">
+  <div class="welcome-card">
+    <span class="plant-anim">🌱</span>
+    <h1>Plants Study Adventure</h1>
+    <p class="subtitle">Learn → Revise → Ace your exam! · Gabriel's Edition 🐝</p>
+    <div class="modules-grid">
+      <div class="module-pill">📚 Theory 1<br><small>Plant Parts</small></div>
+      <div class="module-pill">☀️ Theory 2<br><small>Photosynthesis</small></div>
+      <div class="module-pill">🌸 Theory 3<br><small>Reproduction</small></div>
+      <div class="module-pill">❓ Quiz<br><small>23 Questions</small></div>
+      <div class="module-pill">✅ Checklist<br><small>Track progress</small></div>
+      <div class="module-pill">🏆 Results<br><small>See your score</small></div>
+    </div>
+    <button class="btn-main" onclick="goTo('screen-t1')">🚀 Start Learning!</button>
+  </div>
+</div>
+
+<!-- ===================== THEORY 1: PLANT PARTS ===================== -->
+<div class="screen" id="screen-t1">
+  <div class="step-label">📖 Theory Module 1 of 3</div>
+  <div class="step-indicator">
+    <div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+
+  <div class="theory-header">
+    <span class="section-emoji">🌳</span>
+    <h2>Parts of a Plant</h2>
+    <p>Tap each card to discover what it does!</p>
+  </div>
+
+  <div class="theory-intro">
+    Every plant has <strong>parts with special jobs</strong>. Together they help the plant survive, grow, and reproduce. 
+    The journey of water starts at the roots and travels all the way up to the leaves — like a drinking straw! 🌊
+  </div>
+
+  <div class="cards-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="card-emoji">🌿</div>
+          <div class="card-title">ROOT</div>
+          <div class="tap-hint">tap to learn ↺</div>
+        </div>
+        <div class="flip-back">
+          <div class="fact-emoji">💧</div>
+          <div class="fact-text">Absorbs water & minerals from soil. Anchors the plant firmly.</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="card-emoji">🪵</div>
+          <div class="card-title">STEM</div>
+          <div class="tap-hint">tap to learn ↺</div>
+        </div>
+        <div class="flip-back">
+          <div class="fact-emoji">🚿</div>
+          <div class="fact-text">Carries water & nutrients to leaves. Supports the plant upright.</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="card-emoji">🍃</div>
+          <div class="card-title">LEAF</div>
+          <div class="tap-hint">tap to learn ↺</div>
+        </div>
+        <div class="flip-back">
+          <div class="fact-emoji">☀️</div>
+          <div class="fact-text">Main place for photosynthesis. Contains green chlorophyll to capture sunlight.</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="card-emoji">🌸</div>
+          <div class="card-title">FLOWER</div>
+          <div class="tap-hint">tap to learn ↺</div>
+        </div>
+        <div class="flip-back">
+          <div class="fact-emoji">🐝</div>
+          <div class="fact-text">Colourful part that attracts pollinators. Where sexual reproduction happens.</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="card-emoji">🍎</div>
+          <div class="card-title">FRUIT</div>
+          <div class="tap-hint">tap to learn ↺</div>
+        </div>
+        <div class="flip-back">
+          <div class="fact-emoji">🌱</div>
+          <div class="fact-text">Contains the seeds. Grows from the ovary after fertilisation.</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="card-emoji">🫘</div>
+          <div class="card-title">SEED</div>
+          <div class="tap-hint">tap to learn ↺</div>
+        </div>
+        <div class="flip-back">
+          <div class="fact-emoji">✨</div>
+          <div class="fact-text">New life! Germination is when a seed starts to grow into a new plant.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="diagram-box">
+    <h3>💧 Water Journey: Root → Stem → Leaf</h3>
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;font-size:1.5rem">
+      🌿 <span style="font-size:.8rem;color:var(--muted);font-weight:700">ROOT<br>absorbs</span>
+      →
+      🪵 <span style="font-size:.8rem;color:var(--muted);font-weight:700">STEM<br>carries</span>
+      →
+      🍃 <span style="font-size:.8rem;color:var(--muted);font-weight:700">LEAF<br>uses it!</span>
+    </div>
+  </div>
+
+  <div class="checklist">
+    <h3>✅ Check what you know</h3>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">I can identify the ROOT as the part that absorbs water and minerals</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">I can explain that the STEM carries water and supports the plant</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">I know the LEAF is where photosynthesis happens</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">I know the FRUIT contains seeds</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">I can describe the journey of water from roots to leaves</div>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn-secondary" onclick="goTo('screen-welcome')">← Back</button>
+    <button class="btn-primary" onclick="goTo('screen-t2')">Next: Photosynthesis ☀️ →</button>
+  </div>
+</div>
+
+<!-- ===================== THEORY 2: PHOTOSYNTHESIS ===================== -->
+<div class="screen" id="screen-t2">
+  <div class="step-label">📖 Theory Module 2 of 3</div>
+  <div class="step-indicator">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+
+  <div class="theory-header">
+    <span class="section-emoji">☀️</span>
+    <h2>Photosynthesis</h2>
+    <p>How plants make their own food!</p>
+  </div>
+
+  <div class="theory-intro">
+    <strong>Photosynthesis</strong> is the amazing process plants use to make their own food. 
+    They capture sunlight using a green pigment called <strong>chlorophyll</strong> and transform 
+    simple ingredients into glucose (plant food) — and release <strong>oxygen</strong> for us to breathe! 🫁
+  </div>
+
+  <div class="diagram-box">
+    <h3>⚗️ The Photosynthesis Equation</h3>
+    <div class="photo-equation">
+      <div class="photo-box">
+        <div class="pb-emoji">☀️</div>
+        <div class="pb-label">Sunlight</div>
+      </div>
+      <div class="photo-plus">+</div>
+      <div class="photo-box">
+        <div class="pb-emoji">💧</div>
+        <div class="pb-label">Water (H₂O)</div>
+      </div>
+      <div class="photo-plus">+</div>
+      <div class="photo-box">
+        <div class="pb-emoji">💨</div>
+        <div class="pb-label">CO₂</div>
+      </div>
+      <div class="photo-arrow">→</div>
+      <div class="photo-box photo-result">
+        <div class="pb-emoji">🍬</div>
+        <div class="pb-label">Glucose</div>
+      </div>
+      <div class="photo-plus">+</div>
+      <div class="photo-box photo-result">
+        <div class="pb-emoji">🫧</div>
+        <div class="pb-label">Oxygen (O₂)</div>
+      </div>
+    </div>
+    <div style="font-size:.8rem;color:var(--muted);font-weight:700;margin-top:8px">
+      🌿 Chlorophyll captures the sunlight in the leaves
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="card-emoji">🍃</div>
+          <div class="card-title">CHLOROPHYLL</div>
+          <div class="tap-hint">tap to learn ↺</div>
+        </div>
+        <div class="flip-back">
+          <div class="fact-emoji">🟢</div>
+          <div class="fact-text">Green pigment in leaves. Captures sunlight to power photosynthesis.</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="card-emoji">💨</div>
+          <div class="card-title">CO₂ IN</div>
+          <div class="tap-hint">tap to learn ↺</div>
+        </div>
+        <div class="flip-back">
+          <div class="fact-emoji">🫁</div>
+          <div class="fact-text">Plants absorb Carbon Dioxide from the air through tiny holes in leaves called stomata.</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="card-emoji">🫧</div>
+          <div class="card-title">O₂ OUT</div>
+          <div class="tap-hint">tap to learn ↺</div>
+        </div>
+        <div class="flip-back">
+          <div class="fact-emoji">😮‍💨</div>
+          <div class="fact-text">Plants release Oxygen — exactly what animals need to breathe. Plants are our heroes!</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="card-emoji">🌱</div>
+          <div class="card-title">GERMINATION</div>
+          <div class="tap-hint">tap to learn ↺</div>
+        </div>
+        <div class="flip-back">
+          <div class="fact-emoji">🌧️</div>
+          <div class="fact-text">When a seed starts to sprout and grow. It needs water, warmth and sometimes light.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="challenge-banner">
+    ⭐ Challenge: Can you explain WHY photosynthesis is important for both plants AND animals?
+  </div>
+
+  <div class="checklist">
+    <h3>✅ Check what you know</h3>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">Photosynthesis is how plants make their own food</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">3 ingredients: Sunlight + Water + Carbon Dioxide (CO₂)</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">Products: Glucose (food) + Oxygen (O₂)</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">Chlorophyll is the green pigment that absorbs sunlight</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">Germination = when a seed starts to grow into a new plant</div>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn-secondary" onclick="goTo('screen-t1')">← Back</button>
+    <button class="btn-primary" onclick="goTo('screen-t3')">Next: Reproduction & Flowers 🌸 →</button>
+  </div>
+</div>
+
+<!-- ===================== THEORY 3: REPRODUCTION & FLOWER ===================== -->
+<div class="screen" id="screen-t3">
+  <div class="step-label">📖 Theory Module 3 of 3</div>
+  <div class="step-indicator">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+  </div>
+
+  <div class="theory-header">
+    <span class="section-emoji">🌸</span>
+    <h2>Reproduction & Pollination</h2>
+    <p>How plants create new plants!</p>
+  </div>
+
+  <div class="theory-intro">
+    Plants reproduce in two ways: <strong>Sexual</strong> (needs flowers and pollen) and 
+    <strong>Asexual</strong> (no flowers needed — grows from roots, tubers, or cuttings). 
+    <strong>Pollination</strong> is the transfer of pollen from the stamen to the stigma — bees 🐝 and wind 🌬️ help make it happen!
+  </div>
+
+  <!-- SEXUAL VS ASEXUAL -->
+  <div class="diagram-box">
+    <h3>🔄 Sexual vs Asexual Reproduction</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+      <div style="background:#eaf7f0;border:2px solid var(--green2);border-radius:14px;padding:14px;text-align:center">
+        <div style="font-size:1.8rem">🌸</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:var(--green);margin:4px 0">SEXUAL</div>
+        <div style="font-size:.8rem;font-weight:600;color:var(--muted)">Needs flowers & pollen</div>
+        <div style="font-size:.75rem;margin-top:8px;color:var(--dark);font-weight:700">
+          🌻 Sunflower<br>🌼 Camomile<br>🌳 Apple Tree
+        </div>
+      </div>
+      <div style="background:#fff8e6;border:2px solid var(--yellow);border-radius:14px;padding:14px;text-align:center">
+        <div style="font-size:1.8rem">🥔</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:#b8860b;margin:4px 0">ASEXUAL</div>
+        <div style="font-size:.8rem;font-weight:600;color:var(--muted)">No flowers needed!</div>
+        <div style="font-size:.75rem;margin-top:8px;color:var(--dark);font-weight:700">
+          🥔 Potatoes<br>🍉 Watermelon<br>🌵 Cactus
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARTS OF FLOWER -->
+  <div class="diagram-box">
+    <h3>🌺 Parts of the Flower</h3>
+    <div class="flower-parts">
+      <div class="flower-part male">
+        <div class="fp-icon">♂️</div>
+        <div class="fp-content">
+          <div class="fp-name">STAMEN (male)</div>
+          <div class="fp-desc">
+            <strong>Anther</strong>: makes pollen<br>
+            <strong>Filament</strong>: holds the anther up
+          </div>
+        </div>
+      </div>
+      <div class="flower-part female">
+        <div class="fp-icon">♀️</div>
+        <div class="fp-content">
+          <div class="fp-name">CARPEL (female)</div>
+          <div class="fp-desc">
+            <strong>Stigma</strong>: receives pollen<br>
+            <strong>Style</strong>: connects stigma to ovary<br>
+            <strong>Ovary</strong>: where seeds form
+          </div>
+        </div>
+      </div>
+      <div class="flower-part other">
+        <div class="fp-icon">🌸</div>
+        <div class="fp-content">
+          <div class="fp-name">PETALS</div>
+          <div class="fp-desc">Colourful — attract insects and pollinators. Do NOT produce pollen.</div>
+        </div>
+      </div>
+      <div class="flower-part other">
+        <div class="fp-icon">🟢</div>
+        <div class="fp-content">
+          <div class="fp-name">SEPALS</div>
+          <div class="fp-desc">Small green leaves that protect the flower before it opens. Do NOT produce pollen.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POLLINATION JOURNEY -->
+  <div class="diagram-box">
+    <h3>🐝 How Pollination Works</h3>
+    <div style="display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;font-size:.85rem;font-weight:700">
+      <span style="background:var(--green-pale);border:1px solid var(--green2);border-radius:8px;padding:6px 10px">🌸 Pollen made<br>in anther</span>
+      <span>→</span>
+      <span style="background:var(--green-pale);border:1px solid var(--green2);border-radius:8px;padding:6px 10px">🐝 Bee (or wind)<br>carries pollen</span>
+      <span>→</span>
+      <span style="background:var(--green-pale);border:1px solid var(--green2);border-radius:8px;padding:6px 10px">🎯 Lands on<br>stigma</span>
+      <span>→</span>
+      <span style="background:#d4f5e3;border:1px solid var(--green);border-radius:8px;padding:6px 10px">🌱 Fertilisation<br>→ seeds!</span>
+    </div>
+  </div>
+
+  <div class="checklist">
+    <h3>✅ Check what you know</h3>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">Flowering plants use SEXUAL reproduction (need pollen)</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">Non-flowering plants use ASEXUAL reproduction (no flowers)</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">STAMEN = male part (anther makes pollen, filament holds it)</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">CARPEL = female part (stigma receives pollen, ovary makes seeds)</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">PETALS attract insects with bright colours — don't produce pollen</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">SEPALS protect the flower before it opens</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">FERTILISATION = pollen meets egg → seed is formed</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('checked')">
+      <div class="box"></div>
+      <div class="check-text">I can describe how pollination helps plants produce seeds</div>
+    </div>
+  </div>
+
+  <div class="challenge-banner">
+    ⭐ Challenge: Can you explain the full journey from pollen to seed to fruit?
+  </div>
+
+  <div class="nav-row">
+    <button class="btn-secondary" onclick="goTo('screen-t2')">← Back</button>
+    <button class="btn-primary" onclick="startQuiz()">🎯 Start the Quiz! →</button>
+  </div>
+</div>
+
+<!-- ===================== QUIZ ===================== -->
+<div class="screen" id="screen-quiz">
+  <div class="step-label">❓ Quiz Time – 23 Questions</div>
+  <div class="step-indicator">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+  </div>
+
+  <div class="quiz-topbar">
+    <div class="q-counter" id="qCounter">1 / 23</div>
+    <div class="score-badge">⭐ <span id="liveScore">0</span> correct</div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-fill" id="quizProgress" style="width:0%"></div>
+  </div>
+
+  <div id="quizArea"></div>
+</div>
+
+<!-- ===================== RESULTS ===================== -->
+<div class="screen" id="screen-results">
+  <div class="result-card" id="resultCard"></div>
+</div>
+
+<script>
+// ===== NAVIGATION =====
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ===== QUIZ DATA =====
+const questions = [
+  // Parts of a Plant
+  {cat:'🌳 Parts of a Plant',emoji:'🌿',
+   text:'Which part of the plant absorbs water and minerals from the soil?',
+   opts:['Stem','Leaves','Root','Flower'],ans:2,
+   exp:'The ROOT absorbs water and minerals from the soil and anchors the plant.'},
+  {cat:'🌳 Parts of a Plant',emoji:'🪵',
+   text:'Which part carries water and nutrients from roots up to the leaves?',
+   opts:['Root','Stem','Fruit','Petal'],ans:1,
+   exp:'The STEM works like a straw — it carries water and nutrients upward and supports the plant.'},
+  {cat:'🌳 Parts of a Plant',emoji:'🍃',
+   text:'Where does photosynthesis mainly take place?',
+   opts:['In the roots','In the seeds','In the fruit','In the leaves'],ans:3,
+   exp:'The LEAVES are the main site of photosynthesis, thanks to the chlorophyll inside.'},
+  {cat:'🌳 Parts of a Plant',emoji:'🍎',
+   text:'What part of the plant contains the seeds?',
+   opts:['Stem','Root','Fruit','Leaf'],ans:2,
+   exp:'The FRUIT contains seeds. After fertilisation, the ovary grows into the fruit.'},
+
+  // Photosynthesis
+  {cat:'☀️ Photosynthesis',emoji:'🌞',
+   text:'Through photosynthesis, what do plants produce for themselves?',
+   opts:['Water','Soil nutrients','Their own food (glucose)','Pollen'],ans:2,
+   exp:'Plants use sunlight, water and CO₂ to make GLUCOSE (food) through photosynthesis.'},
+  {cat:'☀️ Photosynthesis',emoji:'🍃',
+   text:'What green substance in leaves captures sunlight for photosynthesis?',
+   opts:['Germination','Pollen','Carbon dioxide','Chlorophyll'],ans:3,
+   exp:'CHLOROPHYLL is the green pigment that captures sunlight energy.'},
+  {cat:'☀️ Photosynthesis',emoji:'💨',
+   text:'What gas do plants ABSORB from the air during photosynthesis?',
+   opts:['Oxygen (O₂)','Nitrogen','Carbon Dioxide (CO₂)','Helium'],ans:2,
+   exp:'Plants take in CARBON DIOXIDE (CO₂) from the air and convert it into glucose.'},
+  {cat:'☀️ Photosynthesis',emoji:'🫧',
+   text:'What gas do plants RELEASE during photosynthesis?',
+   opts:['CO₂','Nitrogen','Steam','Oxygen (O₂)'],ans:3,
+   exp:'Plants release OXYGEN (O₂) — the gas we all need to breathe!'},
+  {cat:'☀️ Photosynthesis',emoji:'⚗️',
+   text:'What are the THREE things plants need for photosynthesis?',
+   opts:[
+     'Only water',
+     'Sunlight, Water and Carbon Dioxide',
+     'Oxygen, soil and heat',
+     'Pollen, leaves and fruit'
+   ],ans:1,
+   exp:'SUNLIGHT + WATER + CO₂ = photosynthesis. All three are essential!'},
+
+  // Reproduction
+  {cat:'🔄 Reproduction',emoji:'🌸',
+   text:'Sexual reproduction in plants requires...',
+   opts:['Only roots and water','No sunlight at all','Flowers and pollen','Underground bulbs only'],ans:2,
+   exp:'SEXUAL reproduction needs FLOWERS. Pollen must move from stamen to stigma.'},
+  {cat:'🔄 Reproduction',emoji:'🥔',
+   text:'Potatoes can grow new plants from their tubers without flowers. This is called...',
+   opts:['Sexual reproduction','Pollination','Photosynthesis','Asexual reproduction'],ans:3,
+   exp:'Potatoes use ASEXUAL reproduction — no flowers or pollen needed!'},
+  {cat:'🔄 Reproduction',emoji:'🌼',
+   text:'Camomile (manzanilla) has flowers. Which type of reproduction does it use?',
+   opts:['Asexual reproduction','Sexual reproduction','Germination only','Photosynthesis'],ans:1,
+   exp:'Camomile has FLOWERS, so it reproduces SEXUALLY using pollen.'},
+  {cat:'🔄 Reproduction',emoji:'🌱',
+   text:'What is GERMINATION?',
+   opts:[
+     'When a plant makes food from sunlight',
+     'When pollen lands on a stigma',
+     'When a seed starts to sprout and grow',
+     'When petals fall off'
+   ],ans:2,
+   exp:'GERMINATION is when a seed begins to sprout and grow into a new plant!'},
+  {cat:'🔄 Reproduction',emoji:'💐',
+   text:'After fertilisation, what does the ovary grow into?',
+   opts:['A leaf','A root','Another flower','A fruit'],ans:3,
+   exp:'The OVARY grows into the FRUIT after fertilisation, containing the seeds inside.'},
+
+  // Pollination
+  {cat:'🐝 Pollination',emoji:'🐝',
+   text:'POLLINATION is the transfer of pollen from the stamen to the...',
+   opts:['Root','Petal','Stigma','Sepal'],ans:2,
+   exp:'Pollination = pollen travels from the STAMEN (male) to the STIGMA (female).'},
+  {cat:'🐝 Pollination',emoji:'🌬️',
+   text:'Besides bees, what else helps carry pollen between flowers?',
+   opts:['Rain only','Earthworms','Wind','Roots'],ans:2,
+   exp:'WIND is a powerful pollinator too — especially for grasses and many trees.'},
+
+  // Parts of the Flower
+  {cat:'🌺 Parts of the Flower',emoji:'♂️',
+   text:'The ANTHER and FILAMENT together make up the...',
+   opts:['Carpel','Stigma','Ovary','Stamen'],ans:3,
+   exp:'STAMEN = anther (makes pollen) + filament (holds the anther up). It is the male part.'},
+  {cat:'🌺 Parts of the Flower',emoji:'♀️',
+   text:'The STIGMA, STYLE and OVARY together make up the...',
+   opts:['Stamen','Petals','Carpel','Sepals'],ans:2,
+   exp:'CARPEL = stigma + style + ovary. It is the female reproductive part of the flower.'},
+  {cat:'🌺 Parts of the Flower',emoji:'🌸',
+   text:'Which part of the flower attracts insects with bright colours?',
+   opts:['Sepals','Stamens','Petals','Roots'],ans:2,
+   exp:'PETALS are colourful to attract bees and other pollinators. They do NOT produce pollen.'},
+  {cat:'🌺 Parts of the Flower',emoji:'🟢',
+   text:'Small green leaves that protect the flower BEFORE it opens are called...',
+   opts:['Petals','Stigma','Anthers','Sepals'],ans:3,
+   exp:'SEPALS are the small green leaves protecting the flower bud before it blooms.'},
+  {cat:'🌺 Parts of the Flower',emoji:'🔬',
+   text:'Pollen is produced in which part of the flower?',
+   opts:['Ovary','Stigma','Petal','Anther'],ans:3,
+   exp:'The ANTHER is the part of the stamen that produces pollen.'},
+
+  // Vocabulary & Importance
+  {cat:'📚 Vocabulary',emoji:'🌍',
+   text:'FERTILISATION in plants happens when...',
+   opts:[
+     'A leaf falls off the plant',
+     'Water reaches the roots',
+     'Pollen joins with an egg cell to form a seed',
+     'A seed is planted in soil'
+   ],ans:2,
+   exp:'FERTILISATION = pollen + egg cell → seed. This is the start of a new plant!'},
+  {cat:'📚 Plants & Life',emoji:'🌏',
+   text:'Why are plants important for animals and humans?',
+   opts:[
+     'They only look pretty in gardens',
+     'They make it rain',
+     'They produce oxygen, provide food and shelter',
+     'They are not really important'
+   ],ans:2,
+   exp:'Plants are ESSENTIAL: they produce the oxygen we breathe, the food we eat, and habitat for animals.'},
+];
+
+// ===== QUIZ STATE =====
+let qIdx=0, score=0, answered=false, wrongList=[];
+let shuffledQuestions=[];
+
+function shuffle(arr){return [...arr].sort(()=>Math.random()-.5)}
+
+function startQuiz(){
+  qIdx=0;score=0;answered=false;wrongList=[];
+  // shuffle questions and options
+  shuffledQuestions = shuffle(questions).map(q=>{
+    const n=q.opts.length;
+    const si=shuffle([...Array(n).keys()]);
+    return{...q,shuffledOpts:si.map(i=>q.opts[i]),shuffledAns:si.indexOf(q.ans)};
+  });
+  goTo('screen-quiz');
+  renderQ();
+}
+
+function renderQ(){
+  if(qIdx>=shuffledQuestions.length){showResults();return}
+  answered=false;
+  const q=shuffledQuestions[qIdx];
+  const total=shuffledQuestions.length;
+  const letters=['A','B','C','D'];
+  document.getElementById('qCounter').textContent=`${qIdx+1} / ${total}`;
+  document.getElementById('liveScore').textContent=score;
+  document.getElementById('quizProgress').style.width=`${(qIdx/total)*100}%`;
+
+  const twoCol=q.shuffledOpts.length===2;
+  const optsHtml=q.shuffledOpts.map((opt,i)=>`
+    <button class="opt-btn" onclick="pickAns(${i})" data-i="${i}">
+      <span class="ltr">${letters[i]}</span>${opt}
+    </button>`).join('');
+
+  document.getElementById('quizArea').innerHTML=`
+    <div class="q-card">
+      <span class="q-badge">${q.cat}</span>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+        <span style="font-size:1.8rem">${q.emoji}</span>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="options-grid${twoCol?' two-col':''}">${optsHtml}</div>
+      <div class="q-feedback" id="qFb"></div>
+      <button class="btn-next" id="btnNext" onclick="nextQ()">
+        ${qIdx<shuffledQuestions.length-1?'Next Question →':'See Results 🎉'}
+      </button>
+    </div>`;
+}
+
+function pickAns(i){
+  if(answered)return;
+  answered=true;
+  const q=shuffledQuestions[qIdx];
+  const correct=q.shuffledAns;
+  document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
+  const fb=document.getElementById('qFb');
+  if(i===correct){
+    document.querySelectorAll('.opt-btn')[i].classList.add('correct');
+    fb.className='q-feedback show correct-fb';
+    fb.innerHTML=`<span class="fb-icon">🎉</span><span><strong>Correct!</strong> ${q.exp}</span>`;
+    score++;
+  } else {
+    document.querySelectorAll('.opt-btn')[i].classList.add('wrong');
+    document.querySelectorAll('.opt-btn')[correct].classList.add('correct');
+    fb.className='q-feedback show wrong-fb';
+    fb.innerHTML=`<span class="fb-icon">🤔</span><span><strong>Not quite!</strong> ${q.exp}</span>`;
+    wrongList.push({q:q.text,correct:q.opts[q.ans]});
+  }
+  document.getElementById('btnNext').classList.add('show');
+}
+
+function nextQ(){qIdx++;renderQ()}
+
+function showResults(){
+  document.getElementById('quizProgress').style.width='100%';
+  const total=shuffledQuestions.length;
+  const pct=Math.round((score/total)*100);
+  let em,title,stars,msg;
+  if(pct===100){em='🏆';title='PERFECT SCORE!';stars='⭐⭐⭐⭐⭐';msg='You are a Plant Expert!'}
+  else if(pct>=87){em='🌟';title='Excellent!';stars='⭐⭐⭐⭐';msg='Almost perfect — great job!'}
+  else if(pct>=70){em='🌿';title='Well done!';stars='⭐⭐⭐';msg='Solid work! Review the ones you missed.'}
+  else if(pct>=50){em='📚';title='Good effort!';stars='⭐⭐';msg='Re-read the theory and try again!'}
+  else{em='💪';title='Keep practising!';stars='⭐';msg='Go back through the theory — you can do it!'}
+
+  const wrongHtml=wrongList.length>0?`
+    <div class="wrong-review">
+      <h3>📝 Review these answers:</h3>
+      ${wrongList.map(w=>`
+        <div class="wrong-item">
+          <div class="wi-q">${w.q}</div>
+          <div class="wi-a"><strong>✅ ${w.correct}</strong></div>
+        </div>`).join('')}
+    </div>`:'<p style="color:var(--green);font-weight:700;margin-top:16px;font-size:1rem">🎯 You answered everything correctly!</p>';
+
+  document.getElementById('resultCard').innerHTML=`
+    <span class="result-emoji">${em}</span>
+    <div class="result-title">${title}</div>
+    <div class="score-big">${score}/${total}</div>
+    <div class="score-sub">${pct}% correct · ${msg}</div>
+    <div class="stars">${stars}</div>
+    ${wrongHtml}
+    <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;justify-content:center">
+      <button class="btn-restart" onclick="startQuiz()">🔄 Try Quiz Again</button>
+      <button class="btn-restart" style="background:linear-gradient(135deg,var(--green2),var(--green))" onclick="goTo('screen-t1')">📚 Review Theory</button>
+    </div>`;
+  goTo('screen-results');
+}
+</script>
+</body>
+</html>
