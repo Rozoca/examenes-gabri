@@ -18,7 +18,6 @@
             overflow-x: hidden;
         }
 
-        /* Floating stars background */
         body::before {
             content: '';
             position: fixed; inset: 0;
@@ -33,12 +32,8 @@
             pointer-events: none; z-index: 0;
         }
 
-        .wrapper {
-            position: relative; z-index: 1;
-            max-width: 980px; margin: 0 auto;
-        }
+        .wrapper { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; }
 
-        /* === HEADER === */
         header {
             text-align: center;
             padding: 36px 24px 28px;
@@ -57,9 +52,7 @@
             opacity: .25; letter-spacing: 8px;
         }
         header .avatar {
-            font-size: 3.5rem;
-            display: block;
-            margin-bottom: 6px;
+            font-size: 3.5rem; display: block; margin-bottom: 6px;
             animation: bounce 2s ease infinite;
         }
         @keyframes bounce {
@@ -73,153 +66,72 @@
             text-shadow: 0 0 20px #00ffff, 0 0 40px rgba(0,255,255,.4);
             letter-spacing: 1px;
         }
-        header p {
-            color: rgba(255,255,255,.75);
-            font-size: 1rem;
-            font-weight: 600;
-            margin-top: 8px;
-        }
-        .score-row {
-            display: flex; justify-content: center; gap: 16px;
-            margin-top: 18px; flex-wrap: wrap;
-        }
+        header p { color: rgba(255,255,255,.75); font-size: 1rem; font-weight: 600; margin-top: 8px; }
+        .score-row { display: flex; justify-content: center; gap: 16px; margin-top: 18px; flex-wrap: wrap; }
         .badge {
-            background: rgba(0,255,255,.1);
-            border: 1px solid rgba(0,255,255,.35);
-            border-radius: 50px;
-            padding: 6px 18px;
+            background: rgba(0,255,255,.1); border: 1px solid rgba(0,255,255,.35);
+            border-radius: 50px; padding: 6px 18px;
             font-size: .82rem; font-weight: 700; color: #00ffff;
         }
 
-        /* === SECTION TITLE === */
         .section-title {
-            font-family: 'Fredoka One', cursive;
-            font-size: 1.1rem;
-            color: rgba(255,255,255,.5);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 18px;
-            padding-left: 4px;
+            font-family: 'Fredoka One', cursive; font-size: 1.1rem;
+            color: rgba(255,255,255,.5); text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 18px; padding-left: 4px;
         }
 
-        /* === GRID === */
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 22px;
-            margin-bottom: 32px;
+            gap: 22px; margin-bottom: 32px;
         }
 
-        /* === CARD === */
         .card {
             background: rgba(15,12,41,0.88);
             border: 2px solid rgba(0,255,255,.35);
-            border-radius: 22px;
-            padding: 26px 22px 22px;
+            border-radius: 22px; padding: 26px 22px 22px;
             display: flex; flex-direction: column;
             transition: all .3s cubic-bezier(.4,0,.2,1);
             position: relative; overflow: hidden;
         }
         .card::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
             background: var(--accent, linear-gradient(90deg,#00ffff,#00ff88));
             opacity: 0; transition: opacity .3s;
         }
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(0,255,255,.7);
-            box-shadow: 0 12px 36px rgba(0,255,255,.2);
-        }
+        .card:hover { transform: translateY(-8px); border-color: rgba(0,255,255,.7); box-shadow: 0 12px 36px rgba(0,255,255,.2); }
         .card:hover::before { opacity: 1; }
 
-        .card-emoji {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            display: block;
-        }
-        .card-subject {
-            font-size: .72rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--subject-color, #00ffff);
-            margin-bottom: 6px;
-            opacity: .8;
-        }
-        .card h2 {
-            font-family: 'Fredoka One', cursive;
-            font-size: 1.25rem;
-            color: #fff;
-            margin-bottom: 10px;
-            line-height: 1.3;
-        }
-        .card p {
-            font-size: .88rem;
-            line-height: 1.55;
-            color: rgba(255,255,255,.65);
-            flex-grow: 1;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-        .card-tags {
-            display: flex; flex-wrap: wrap; gap: 6px;
-            margin-bottom: 16px;
-        }
-        .tag {
-            background: rgba(255,255,255,.07);
-            border: 1px solid rgba(255,255,255,.15);
-            border-radius: 50px;
-            padding: 3px 10px;
-            font-size: .7rem;
-            font-weight: 700;
-            color: rgba(255,255,255,.55);
-        }
+        .card-emoji { font-size: 2.8rem; margin-bottom: 10px; display: block; }
+        .card-subject { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--subject-color, #00ffff); margin-bottom: 6px; opacity: .8; }
+        .card h2 { font-family: 'Fredoka One', cursive; font-size: 1.25rem; color: #fff; margin-bottom: 10px; line-height: 1.3; }
+        .card p { font-size: .88rem; line-height: 1.55; color: rgba(255,255,255,.65); flex-grow: 1; margin-bottom: 20px; font-weight: 600; }
+        .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+        .tag { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15); border-radius: 50px; padding: 3px 10px; font-size: .7rem; font-weight: 700; color: rgba(255,255,255,.55); }
 
         .btn {
-            display: block;
-            padding: 13px 20px;
-            border-radius: 14px;
-            font-family: 'Fredoka One', cursive;
-            font-size: 1.05rem;
-            text-align: center;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all .25s;
-            border: none;
+            display: block; padding: 13px 20px; border-radius: 14px;
+            font-family: 'Fredoka One', cursive; font-size: 1.05rem;
+            text-align: center; text-decoration: none; cursor: pointer;
+            transition: all .25s; border: none;
         }
         .btn-active {
             background: linear-gradient(135deg, var(--btn1, #00ffff), var(--btn2, #00ff88));
-            color: #0f0c29;
-            box-shadow: 0 4px 16px rgba(0,255,255,.3);
+            color: #0f0c29; box-shadow: 0 4px 16px rgba(0,255,255,.3);
         }
-        .btn-active:hover {
-            transform: scale(1.04);
-            box-shadow: 0 6px 22px rgba(0,255,255,.5);
-        }
-        .btn-soon {
-            background: rgba(255,255,255,.06);
-            border: 2px dashed rgba(255,255,255,.2);
-            color: rgba(255,255,255,.35);
-            cursor: default;
-        }
+        .btn-active:hover { transform: scale(1.04); box-shadow: 0 6px 22px rgba(0,255,255,.5); }
+        .btn-soon { background: rgba(255,255,255,.06); border: 2px dashed rgba(255,255,255,.2); color: rgba(255,255,255,.35); cursor: default; }
 
         /* Card accent colors */
+        .card.plants  { --accent: linear-gradient(90deg,#3dbf7d,#1d8a4e); --subject-color:#3dbf7d; --btn1:#3dbf7d; --btn2:#1d8a4e; }
+        .card.roma    { --accent: linear-gradient(90deg,#f0b429,#c9922a); --subject-color:#f0b429; --btn1:#f0b429; --btn2:#8b1a1a; }
         .card.space   { --accent: linear-gradient(90deg,#b44fff,#7b00ff); --subject-color:#b44fff; --btn1:#b44fff; --btn2:#7b00ff; }
         .card.geo     { --accent: linear-gradient(90deg,#00e5ff,#0077ff); --subject-color:#00e5ff; --btn1:#00e5ff; --btn2:#0077ff; }
         .card.math    { --accent: linear-gradient(90deg,#ffb703,#ff6b00); --subject-color:#ffb703; --btn1:#ffb703; --btn2:#ff6b00; }
         .card.english { --accent: linear-gradient(90deg,#ff6bb5,#ff3c8e); --subject-color:#ff6bb5; --btn1:#ff6bb5; --btn2:#ff3c8e; }
-        .card.plants  { --accent: linear-gradient(90deg,#3dbf7d,#1d8a4e); --subject-color:#3dbf7d; --btn1:#3dbf7d; --btn2:#1d8a4e; }
         .card.soon    { opacity: .55; }
 
-        /* === FOOTER === */
-        footer {
-            text-align: center;
-            margin-top: 16px;
-            font-size: .85rem;
-            color: rgba(255,255,255,.3);
-            font-weight: 600;
-        }
+        footer { text-align: center; margin-top: 16px; font-size: .85rem; color: rgba(255,255,255,.3); font-weight: 600; }
         footer span { color: rgba(255,0,100,.6); }
     </style>
 </head>
@@ -231,7 +143,7 @@
         <h1>¡El Rincón de Gabri!</h1>
         <p>Tu zona de estudio para 4º de Primaria · ¡Practica y sube de nivel!</p>
         <div class="score-row">
-            <div class="badge">📚 5 ejercicios disponibles</div>
+            <div class="badge">📚 6 ejercicios disponibles</div>
             <div class="badge">🏆 Hecho con ❤️ por Papá</div>
         </div>
     </header>
@@ -243,15 +155,29 @@
         <!-- PLANTS -->
         <div class="card plants">
             <span class="card-emoji">🌿</span>
-            <div class="card-subject">Ciencias Naturales · NEW</div>
+            <div class="card-subject">Ciencias Naturales · English</div>
             <h2>Plants – Study Adventure</h2>
-            <p>3 módulos de teoría + 23 preguntas. Aprende partes de la planta, fotosíntesis, reproducción y polinización.</p>
+            <p>3 módulos de teoría + 23 preguntas en inglés. Partes de la planta, fotosíntesis, reproducción y polinización.</p>
             <div class="card-tags">
                 <span class="tag">📖 Teoría interactiva</span>
                 <span class="tag">❓ 23 preguntas</span>
                 <span class="tag">✅ Checklist</span>
             </div>
             <a href="plants-study-gabriel.html" class="btn btn-active">🌱 ¡Empezar!</a>
+        </div>
+
+        <!-- ROMA -->
+        <div class="card roma">
+            <span class="card-emoji">🏛️</span>
+            <div class="card-subject">Ciencias Sociales · NEW</div>
+            <h2>Roma – La Romanización de Hispania</h2>
+            <p>3 módulos de teoría + 20 preguntas. Conquista, sociedad romana, caída del Imperio y fin de la Edad Antigua.</p>
+            <div class="card-tags">
+                <span class="tag">⚔️ Conquista</span>
+                <span class="tag">🏺 Sociedad</span>
+                <span class="tag">❓ 20 preguntas</span>
+            </div>
+            <a href="roma-estudio-gabri.html" class="btn btn-active">🏛️ ¡Ave Caesar!</a>
         </div>
 
         <!-- SPACE -->
@@ -305,18 +231,6 @@
                 <span class="tag">📚 Verbos</span>
             </div>
             <a href="irregular-verbs-lesson.html" class="btn btn-active">📝 ¡Let's Go!</a>
-        </div>
-
-        <!-- COMING SOON -->
-        <div class="card soon">
-            <span class="card-emoji">⏳</span>
-            <div class="card-subject">Próximamente</div>
-            <h2>Más aventuras en camino...</h2>
-            <p>Papá está preparando nuevos ejercicios. ¡Estate atento!</p>
-            <div class="card-tags">
-                <span class="tag">🔜 Muy pronto</span>
-            </div>
-            <span class="btn btn-soon">Próximamente...</span>
         </div>
 
     </div>
