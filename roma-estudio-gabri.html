@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏛️ Roma – La Aventura de Gabri</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#c9922a;
+  --gold2:#f0b429;
+  --gold-pale:#fdf5e4;
+  --red:#8b1a1a;
+  --red2:#c0392b;
+  --stone:#e8dcc8;
+  --dark:#1a0f05;
+  --bg:#f5ede0;
+  --card:#fffdf8;
+  --muted:#7a6040;
+  --border:#d4b483;
+  --green:#2e7d32;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--bg);
+  color:var(--dark);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse at 5% 10%,rgba(201,146,42,.09) 0%,transparent 45%),
+    radial-gradient(ellipse at 95% 90%,rgba(139,26,26,.07) 0%,transparent 45%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9922a' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;
+}
+
+.screen{display:none;position:relative;z-index:1;max-width:800px;margin:0 auto;padding:20px 16px 60px;animation:fadeUp .4s ease}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* WELCOME */
+.welcome-card{
+  background:linear-gradient(145deg,#1a0f05,#4a1c08);
+  border-radius:28px;padding:40px 28px 36px;text-align:center;
+  box-shadow:0 12px 40px rgba(139,26,26,.4);
+  border:2px solid var(--gold);
+  position:relative;overflow:hidden;
+}
+.welcome-card::before{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:200px;height:200px;
+  background:rgba(201,146,42,.08);border-radius:50%;
+}
+.welcome-card::after{
+  content:'SPQR';
+  position:absolute;bottom:16px;right:24px;
+  font-family:'Fredoka One',cursive;
+  font-size:1.4rem;color:rgba(201,146,42,.15);
+  letter-spacing:4px;
+}
+.emperor-anim{font-size:5rem;display:block;animation:regal 3s ease infinite alternate;margin-bottom:8px}
+@keyframes regal{from{transform:scale(1)}to{transform:scale(1.06) rotate(2deg)}}
+.welcome-card h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,6vw,3rem);color:var(--gold2);text-shadow:0 2px 12px rgba(201,146,42,.4)}
+.welcome-card .subtitle{color:rgba(255,255,255,.75);font-size:1rem;font-weight:600;margin:8px 0 28px}
+.modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px}
+.module-pill{background:rgba(201,146,42,.15);border:1px solid rgba(201,146,42,.4);border-radius:50px;padding:8px 6px;color:var(--gold2);font-size:.8rem;font-weight:700;text-align:center}
+.btn-main{background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--dark);border:none;border-radius:50px;padding:16px 40px;font-family:'Fredoka One',cursive;font-size:1.3rem;cursor:pointer;box-shadow:0 6px 20px rgba(201,146,42,.4);transition:all .2s;display:inline-block}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(201,146,42,.55)}
+
+/* STEP INDICATOR */
+.step-indicator{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:24px}
+.step-dot{width:12px;height:12px;border-radius:50%;background:#ddd;transition:all .3s}
+.step-dot.done{background:var(--gold)}
+.step-dot.active{background:var(--red2);width:28px;border-radius:10px}
+.step-label{text-align:center;font-size:.8rem;font-weight:700;color:var(--muted);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
+
+/* THEORY HEADER */
+.theory-header{
+  background:linear-gradient(135deg,var(--red),#4a1c08);
+  border-radius:22px;padding:28px 24px 22px;text-align:center;
+  margin-bottom:24px;box-shadow:0 6px 24px rgba(139,26,26,.25);
+  border:2px solid var(--gold);
+}
+.theory-header .section-emoji{font-size:3.5rem;display:block;margin-bottom:8px}
+.theory-header h2{font-family:'Fredoka One',cursive;color:var(--gold2);font-size:1.9rem;text-shadow:0 2px 8px rgba(0,0,0,.3)}
+.theory-header p{color:rgba(255,255,255,.8);font-size:.95rem;font-weight:600;margin-top:4px}
+
+.theory-intro{
+  background:var(--card);border:2px solid var(--border);
+  border-radius:18px;padding:20px 22px;margin-bottom:20px;
+  font-size:1rem;line-height:1.65;color:var(--dark);
+  box-shadow:0 2px 12px rgba(201,146,42,.08);
+}
+.theory-intro strong{color:var(--red)}
+
+/* FLIP CARDS */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:22px}
+.flip-card{perspective:800px;height:160px;cursor:pointer}
+.flip-inner{width:100%;height:100%;transition:transform .5s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;position:relative}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:16px}
+.flip-front{background:var(--card);border:2px solid var(--border);box-shadow:0 3px 12px rgba(201,146,42,.1)}
+.flip-front .card-emoji{font-size:2.4rem}
+.flip-front .card-title{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--red);text-align:center}
+.flip-front .tap-hint{font-size:.7rem;color:var(--muted);font-weight:600}
+.flip-back{background:linear-gradient(135deg,var(--gold-pale),#f5e8cc);border:2px solid var(--gold);transform:rotateY(180deg);box-shadow:0 3px 12px rgba(201,146,42,.15)}
+.flip-back .fact-text{font-size:.86rem;font-weight:700;color:var(--dark);text-align:center;line-height:1.4}
+.flip-back .fact-emoji{font-size:1.6rem}
+
+/* TIMELINE */
+.timeline{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:20px 22px;margin-bottom:22px;box-shadow:0 2px 12px rgba(201,146,42,.08)}
+.timeline h3{font-family:'Fredoka One',cursive;color:var(--red);font-size:1.1rem;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.tl-item{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px;position:relative}
+.tl-item:not(:last-child)::after{content:'';position:absolute;left:19px;top:36px;width:2px;height:calc(100% - 4px);background:var(--border)}
+.tl-dot{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--gold));display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:900;color:var(--dark);flex-shrink:0;z-index:1;box-shadow:0 2px 8px rgba(201,146,42,.3);text-align:center;line-height:1.1}
+.tl-content .tl-title{font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--red)}
+.tl-content .tl-desc{font-size:.82rem;font-weight:600;color:var(--muted);margin-top:2px;line-height:1.4}
+
+/* INFO BOXES */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.info-box{border-radius:14px;padding:14px;display:flex;align-items:flex-start;gap:10px}
+.info-box.patricio{background:#fff8e6;border:2px solid var(--gold)}
+.info-box.plebeyo{background:#f0f7ff;border:2px solid #5b8dd9}
+.info-box.mujer{background:#fce4f0;border:2px solid #d45e9a}
+.info-box.esclavo{background:#f5f5f5;border:2px solid #999}
+.ib-icon{font-size:1.4rem;flex-shrink:0}
+.ib-title{font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--dark)}
+.ib-desc{font-size:.75rem;font-weight:600;color:var(--muted);margin-top:2px;line-height:1.4}
+
+/* CRISIS BOXES */
+.crisis-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.crisis-box{background:var(--card);border-radius:14px;padding:13px;border-left:4px solid var(--red);box-shadow:0 2px 8px rgba(139,26,26,.08)}
+.cb-title{font-family:'Fredoka One',cursive;font-size:.9rem;color:var(--red);margin-bottom:4px}
+.cb-desc{font-size:.78rem;font-weight:600;color:var(--muted);line-height:1.4}
+
+/* DIVIDE BOX */
+.divide-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.divide-box{border-radius:14px;padding:14px;text-align:center}
+.divide-box.occidente{background:linear-gradient(135deg,#fff0e6,#fdd8b8);border:2px solid #e07020}
+.divide-box.oriente{border:2px solid #3a8fd9;background:linear-gradient(135deg,#e6f0ff,#c0d8ff)}
+.db-year{font-family:'Fredoka One',cursive;font-size:1.4rem}
+.db-title{font-family:'Fredoka One',cursive;font-size:.95rem;margin:4px 0}
+.db-desc{font-size:.75rem;font-weight:600;color:var(--muted);line-height:1.4}
+
+/* CHECKLIST */
+.checklist{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:20px 22px;margin-bottom:22px;box-shadow:0 2px 12px rgba(201,146,42,.07)}
+.checklist h3{font-family:'Fredoka One',cursive;color:var(--red);font-size:1.1rem;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px dashed #e8dcc8;cursor:pointer;border-radius:8px}
+.check-item:last-child{border-bottom:none}
+.check-item .box{width:22px;height:22px;border-radius:6px;border:2px solid var(--gold);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+.check-item.checked .box{background:var(--gold);border-color:var(--gold)}
+.check-item.checked .box::after{content:'✓';color:#fff;font-size:.85rem;font-weight:900}
+.check-item .check-text{font-size:.9rem;font-weight:600;color:var(--dark);line-height:1.4}
+.check-item.checked .check-text{color:var(--muted);text-decoration:line-through}
+
+/* NAV */
+.nav-row{display:flex;gap:12px;margin-top:8px}
+.btn-secondary{flex:1;background:var(--gold-pale);border:2px solid var(--gold);border-radius:50px;padding:14px 20px;font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--gold);cursor:pointer;transition:all .2s}
+.btn-secondary:hover{background:var(--gold);color:#fff}
+.btn-primary{flex:2;background:linear-gradient(135deg,var(--red2),var(--red));border:none;border-radius:50px;padding:14px 24px;font-family:'Fredoka One',cursive;font-size:1.1rem;color:#fff;cursor:pointer;box-shadow:0 4px 16px rgba(139,26,26,.3);transition:all .2s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(139,26,26,.45)}
+
+/* CHALLENGE */
+.challenge-banner{background:linear-gradient(135deg,#fff8e6,#fff3cc);border:2px solid var(--gold2);border-radius:14px;padding:12px 16px;margin-bottom:16px;font-size:.85rem;font-weight:700;color:#7a5a00;display:flex;align-items:center;gap:8px}
+
+/* QUIZ */
+.quiz-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.q-counter{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--muted)}
+.score-badge{background:var(--gold-pale);border:2px solid var(--gold);border-radius:50px;padding:4px 14px;font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--gold)}
+.progress-wrap{background:#e8dcc8;border-radius:50px;height:12px;overflow:hidden;margin-bottom:20px;box-shadow:inset 0 2px 4px rgba(0,0,0,.08)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));border-radius:50px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+.q-card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:26px 24px;box-shadow:0 4px 20px rgba(201,146,42,.12);animation:fadeUp .3s ease}
+.q-badge{display:inline-block;background:var(--gold-pale);border:1px solid var(--gold2);border-radius:50px;padding:3px 12px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);margin-bottom:12px}
+.q-text{font-size:1.1rem;font-weight:700;color:var(--dark);line-height:1.45;margin-bottom:18px}
+.options-grid{display:grid;gap:10px}
+.options-grid.two-col{grid-template-columns:1fr 1fr}
+.opt-btn{background:#fdf9f2;border:2px solid #e8dcc8;border-radius:14px;padding:12px 16px;font-family:'Nunito',sans-serif;font-size:.97rem;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;gap:10px;text-align:left;transition:all .2s}
+.opt-btn:hover:not(:disabled){background:var(--gold-pale);border-color:var(--gold2);transform:translateX(4px)}
+.opt-btn .ltr{background:var(--gold-pale);color:var(--gold);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:900;flex-shrink:0;transition:all .2s}
+.opt-btn.correct{background:#d4f5e3;border-color:#2a9460;color:#1a5c38}
+.opt-btn.correct .ltr{background:#2a9460;color:#fff}
+.opt-btn.wrong{background:#ffe5e5;border-color:var(--red2);color:#7a1a1a}
+.opt-btn.wrong .ltr{background:var(--red2);color:#fff}
+.opt-btn:disabled{cursor:default;transform:none}
+
+.q-feedback{display:none;margin-top:14px;padding:14px 18px;border-radius:14px;font-size:.92rem;font-weight:700;animation:fadeUp .3s ease}
+.q-feedback.show{display:flex;gap:10px;align-items:flex-start}
+.q-feedback.correct-fb{background:#d4f5e3;color:#1a5c38;border:1px solid #a8e6c4}
+.q-feedback.wrong-fb{background:#ffe5e5;color:#7a1a1a;border:1px solid #f5b8b8}
+.fb-icon{font-size:1.4rem;flex-shrink:0}
+
+.btn-next{display:none;width:100%;margin-top:14px;background:linear-gradient(135deg,var(--gold2),var(--gold));border:none;border-radius:50px;padding:14px;font-family:'Fredoka One',cursive;font-size:1.15rem;color:var(--dark);cursor:pointer;box-shadow:0 4px 16px rgba(201,146,42,.3);transition:all .2s}
+.btn-next.show{display:block;animation:fadeUp .3s ease}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(201,146,42,.45)}
+
+/* RESULTS */
+.result-card{background:var(--card);border:2px solid var(--border);border-radius:24px;padding:36px 24px;text-align:center;box-shadow:0 8px 32px rgba(201,146,42,.15);animation:fadeUp .4s ease}
+.result-emoji{font-size:5rem;display:block;margin-bottom:8px}
+.result-title{font-family:'Fredoka One',cursive;font-size:2.2rem;color:var(--red);margin-bottom:6px}
+.score-big{font-family:'Fredoka One',cursive;font-size:4.5rem;color:var(--dark);line-height:1}
+.score-sub{font-size:1rem;color:var(--muted);font-weight:700;margin-bottom:10px}
+.stars{font-size:2.2rem;letter-spacing:4px;margin-bottom:24px}
+.wrong-review{text-align:left;margin-top:20px}
+.wrong-review h3{font-size:.95rem;font-weight:700;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.wrong-item{background:#fff5f5;border-left:4px solid var(--red2);border-radius:0 12px 12px 0;padding:10px 14px;margin-bottom:8px;font-size:.85rem}
+.wrong-item .wi-q{color:#888;margin-bottom:4px;font-size:.78rem}
+.wrong-item .wi-a strong{color:var(--green)}
+.btn-restart{background:linear-gradient(135deg,var(--gold2),var(--gold));border:none;border-radius:50px;padding:16px 40px;margin-top:10px;font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--dark);cursor:pointer;box-shadow:0 4px 16px rgba(201,146,42,.3);transition:all .2s}
+.btn-restart:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(201,146,42,.45)}
+
+@media(max-width:480px){
+  .modules-grid{grid-template-columns:1fr 1fr}
+  .cards-grid{grid-template-columns:1fr 1fr}
+  .info-grid,.crisis-grid,.divide-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- WELCOME -->
+<div class="screen active" id="screen-welcome">
+  <div class="welcome-card">
+    <span class="emperor-anim">🏛️</span>
+    <h1>Roma & la Romanización</h1>
+    <p class="subtitle">Aprende · Repasa · ¡Aprueba! · Ciencias Sociales 4º · Gabri Edition</p>
+    <div class="modules-grid">
+      <div class="module-pill">📖 Módulo 1<br><small>Conquista y Romanización</small></div>
+      <div class="module-pill">⚔️ Módulo 2<br><small>Sociedad Romana</small></div>
+      <div class="module-pill">💥 Módulo 3<br><small>Caída del Imperio</small></div>
+      <div class="module-pill">❓ Quiz<br><small>20 Preguntas</small></div>
+      <div class="module-pill">✅ Checklists<br><small>Progreso</small></div>
+      <div class="module-pill">🏆 Resultados<br><small>Tu puntuación</small></div>
+    </div>
+    <button class="btn-main" onclick="goTo('screen-t1')">⚔️ ¡Ave Caesar! ¡Comenzar!</button>
+  </div>
+</div>
+
+<!-- THEORY 1: CONQUISTA Y ROMANIZACIÓN -->
+<div class="screen" id="screen-t1">
+  <div class="step-label">📖 Módulo 1 de 3</div>
+  <div class="step-indicator">
+    <div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+  <div class="theory-header">
+    <span class="section-emoji">⚔️</span>
+    <h2>La Conquista y la Romanización</h2>
+    <p>¡Toca las tarjetas para descubrir los secretos de Roma!</p>
+  </div>
+  <div class="theory-intro">
+    Roma, después de conquistar la <strong>Península Itálica</strong>, quiso dominar la <strong>Península Ibérica</strong>.
+    Con sus poderosas legiones derrotó a los pueblos prerromanos. Una vez conquistados, les impuso
+    sus instituciones, leyes, costumbres y su idioma — el <strong>latín</strong>. Ese proceso se llama <strong>romanización</strong>.
+  </div>
+
+  <div class="cards-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">🏛️</div><div class="card-title">509 a.C.</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">⚖️</div><div class="fact-text">Roma dejó de ser gobernada por reyes y se convirtió en República.</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">🌊</div><div class="card-title">Mediterráneo</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">🗺️</div><div class="fact-text">La República romana conquistó todos los territorios alrededor del Mar Mediterráneo, incluyendo a los cartagineses.</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">🐘</div><div class="card-title">Aníbal</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">⚔️</div><div class="fact-text">En el siglo III a.C., Roma derrotó al general cartaginés Aníbal en Hispania, iniciando la conquista.</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">👑</div><div class="card-title">Octavio Augusto</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">🏆</div><div class="fact-text">El emperador Octavio Augusto conquistó TODA Hispania en el siglo I a.C.</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">🌍</div><div class="card-title">Romanización</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">📜</div><div class="fact-text">Proceso por el que los pueblos conquistados adoptaron el latín, las leyes, costumbres e instituciones romanas.</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">🏗️</div><div class="card-title">Ciudades Romanas</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">🏛️</div><div class="fact-text">Construyeron teatros, templos, termas, acueductos, puentes y calzadas. El foro era la plaza central.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <h3>📅 Línea del Tiempo de la Conquista</h3>
+    <div class="tl-item">
+      <div class="tl-dot">509<br>a.C.</div>
+      <div class="tl-content"><div class="tl-title">Roma se convierte en República</div><div class="tl-desc">Fin del gobierno de reyes. Comienza la expansión por el Mediterráneo.</div></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">s.III<br>a.C.</div>
+      <div class="tl-content"><div class="tl-title">Derrota de Aníbal en Hispania</div><div class="tl-desc">Inicio de la conquista de la Península Ibérica. Guerras Púnicas contra Cartago.</div></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">s.I<br>a.C.</div>
+      <div class="tl-content"><div class="tl-title">Octavio Augusto completa la conquista</div><div class="tl-desc">Hispania queda organizada en provincias a imagen de Roma.</div></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">476<br>d.C.</div>
+      <div class="tl-content"><div class="tl-title">Caída de Roma – Fin Edad Antigua</div><div class="tl-desc">Rómulo Augústulo, último emperador, es derrotado por los germánicos.</div></div>
+    </div>
+  </div>
+
+  <div class="challenge-banner">⭐ <em>Carthago delenda est!</em> → "¡Cartago debe ser destruida!" Tras 3 guerras y 100 años, Roma venció a Cartago. ¡Increíble persistencia!</div>
+
+  <div class="checklist">
+    <h3>✅ Comprueba lo que sabes</h3>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">Roma pasó de ser gobernada por reyes a República en el 509 a.C.</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">La conquista de Hispania empezó con la derrota de Aníbal (siglo III a.C.)</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">Octavio Augusto conquistó TODA Hispania en el siglo I a.C.</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">La ROMANIZACIÓN = adoptar latín, leyes, costumbres e instituciones romanas</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">Las ciudades romanas tenían: teatro, templo, termas, acueducto, foro</div></div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn-secondary" onclick="goTo('screen-welcome')">← Inicio</button>
+    <button class="btn-primary" onclick="goTo('screen-t2')">Módulo 2: Sociedad Romana ⚔️ →</button>
+  </div>
+</div>
+
+<!-- THEORY 2: SOCIEDAD ROMANA -->
+<div class="screen" id="screen-t2">
+  <div class="step-label">📖 Módulo 2 de 3</div>
+  <div class="step-indicator">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+  <div class="theory-header">
+    <span class="section-emoji">🏺</span>
+    <h2>¿Cómo vivían los Romanos?</h2>
+    <p>La sociedad romana tenía grandes desigualdades</p>
+  </div>
+  <div class="theory-intro">
+    En Roma existían <strong>fuertes desigualdades sociales</strong>. No todos tenían los mismos derechos.
+    Había tres grupos principales: los <strong>hombres libres</strong> (patricios y plebeyos), las <strong>mujeres</strong> con derechos limitados,
+    y los <strong>esclavos</strong> que no tenían ningún derecho.
+  </div>
+
+  <div class="info-grid">
+    <div class="info-box patricio">
+      <div class="ib-icon">👑</div>
+      <div><div class="ib-title">PATRICIOS</div><div class="ib-desc">Hombres libres ricos. Dueños de tierras y negocios. Pagaban pocos impuestos. Nobles y senadores.</div></div>
+    </div>
+    <div class="info-box plebeyo">
+      <div class="ib-icon">🧑‍🌾</div>
+      <div><div class="ib-title">PLEBEYOS</div><div class="ib-desc">La mayoría de la población. Hombres libres que trabajaban y pagaban impuestos. Artesanos, agricultores...</div></div>
+    </div>
+    <div class="info-box mujer">
+      <div class="ib-icon">👩</div>
+      <div><div class="ib-title">MUJERES</div><div class="ib-desc">Derechos limitados. No podían votar ni participar en política. Dependían de su padre o marido. Pero eran muy influyentes.</div></div>
+    </div>
+    <div class="info-box esclavo">
+      <div class="ib-icon">⛓️</div>
+      <div><div class="ib-title">ESCLAVOS</div><div class="ib-desc">Sin ningún derecho. Eran propiedad de sus amos. Hacían tareas domésticas y trabajaban el campo.</div></div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">🏟️</div><div class="card-title">Anfiteatro</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">🦁</div><div class="fact-text">Se celebraban juegos y luchas de gladiadores. ¡Los romanos amaban los espectáculos!</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">🛁</div><div class="card-title">Termas</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">💧</div><div class="fact-text">Lugar favorito de los romanos. Hacían baños y gimnasia. Era como un centro social.</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">🎭</div><div class="card-title">Teatro</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">😂</div><div class="fact-text">Lo que más les gustaba a los romanos eran las comedias. ¡Les encantaba reír!</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">💧</div><div class="card-title">Acueducto</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">🏗️</div><div class="fact-text">Servía para llevar agua a la ciudad. El Acueducto de Segovia es uno de los más famosos en España.</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">⛪</div><div class="card-title">Templo</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">🏛️</div><div class="fact-text">Guardaba la estatua de los dioses a los que estaba dedicado. Los romanos eran politeístas.</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">🏪</div><div class="card-title">Foro</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">🗣️</div><div class="fact-text">La plaza principal de la ciudad. Centro de comercio, política y vida social. Era el corazón de Roma.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="checklist">
+    <h3>✅ Comprueba lo que sabes</h3>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">Patricios = dueños de tierras, pocos impuestos, clase alta</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">Plebeyos = mayoría de la población, trabajaban y pagaban impuestos</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">Las mujeres no podían votar ni participar en política</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">Los esclavos no tenían derechos y eran propiedad de sus amos</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">El foro era la plaza principal donde se reunían los ciudadanos</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">Los soldados construían ciudades con dos calles principales que se cruzaban en el centro (donde iba el foro)</div></div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn-secondary" onclick="goTo('screen-t1')">← Atrás</button>
+    <button class="btn-primary" onclick="goTo('screen-t3')">Módulo 3: Caída del Imperio 💥 →</button>
+  </div>
+</div>
+
+<!-- THEORY 3: CAÍDA IMPERIO -->
+<div class="screen" id="screen-t3">
+  <div class="step-label">📖 Módulo 3 de 3</div>
+  <div class="step-indicator">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+  </div>
+  <div class="theory-header">
+    <span class="section-emoji">💥</span>
+    <h2>¿Por qué cayó el Imperio Romano?</h2>
+    <p>La gran crisis que acabó con el mayor imperio del mundo</p>
+  </div>
+  <div class="theory-intro">
+    Desde el <strong>siglo III d.C.</strong>, el Imperio dejó de expandirse y empezó una gran crisis.
+    Ya no llegaban riquezas ni esclavos. La caída fue un proceso lento causado por
+    <strong>cambios económicos, políticos, sociales y culturales</strong>.
+  </div>
+
+  <div class="crisis-grid">
+    <div class="crisis-box">
+      <div class="cb-title">💰 Cambios Económicos</div>
+      <div class="cb-desc">Al reducirse riquezas y esclavos, Roma subió los impuestos a los ciudadanos. La economía se deterioró.</div>
+    </div>
+    <div class="crisis-box">
+      <div class="cb-title">⚔️ Cambios Políticos</div>
+      <div class="cb-desc">Las fronteras quedaron desprotegidas y los pueblos germánicos del norte de Europa atacaron las ciudades romanas.</div>
+    </div>
+    <div class="crisis-box">
+      <div class="cb-title">🏚️ Cambios Sociales</div>
+      <div class="cb-desc">Muchas familias huyeron de las ciudades para escapar de impuestos e invasiones. La vida se trasladó al campo.</div>
+    </div>
+    <div class="crisis-box">
+      <div class="cb-title">✝️ Cambios Culturales</div>
+      <div class="cb-desc">En el siglo I, Jesús de Nazaret predicó el cristianismo, que negaba el politeísmo y las desigualdades romanas.</div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">✝️</div><div class="card-title">Teodosio</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">📜</div><div class="fact-text">Siglo IV: estableció el cristianismo como religión oficial de Roma. A su muerte dividió el Imperio entre sus hijos.</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">🏰</div><div class="card-title">División del Imperio</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">⚔️</div><div class="fact-text">Honorio → Imperio de Occidente. Arcadio → Imperio de Oriente. ¡Dos imperios de un solo!</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">💔</div><div class="card-title">476 d.C.</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">⚰️</div><div class="fact-text">Caída del Imperio de Occidente. Los germánicos vencieron a Rómulo Augústulo, último emperador (¡tenía 13 años!). Fin de la Edad Antigua.</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front"><div class="card-emoji">🦁</div><div class="card-title">Visigodos</div><div class="tap-hint">toca ↺</div></div>
+        <div class="flip-back"><div class="fact-emoji">🏰</div><div class="fact-text">Pueblo germánico que se quedó en Hispania tras la caída de Roma. ¡Comenzó la Edad Media!</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divide-grid">
+    <div class="divide-box occidente">
+      <div class="db-year" style="color:#e07020">⚡ Occidente</div>
+      <div class="db-title">Gobernado por Honorio</div>
+      <div class="db-desc">Cayó en el año <strong>476 d.C.</strong> ante los pueblos germánicos. Fin de la Edad Antigua. Último emperor: Rómulo Augústulo (13 años).</div>
+    </div>
+    <div class="divide-box oriente">
+      <div class="db-year" style="color:#3a8fd9">🌙 Oriente</div>
+      <div class="db-title">Gobernado por Arcadio</div>
+      <div class="db-desc">También llamado <strong>Imperio Bizantino</strong>. Resistió mil años más y cayó en <strong>1453</strong>. ¡Increíblemente resistente!</div>
+    </div>
+  </div>
+
+  <div class="challenge-banner">⭐ Reto: ¿Puedes explicar las 4 causas de la caída del Imperio Romano en orden? Económica → Política → Social → Cultural</div>
+
+  <div class="checklist">
+    <h3>✅ Comprueba lo que sabes</h3>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">La crisis empezó en el siglo III d.C. cuando el Imperio dejó de expandirse</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">4 causas: económica (impuestos), política (germánicos), social (huida al campo), cultural (cristianismo)</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">Teodosio (siglo IV) hizo el cristianismo religión oficial y dividió el Imperio</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">Honorio = Occidente · Arcadio = Oriente</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">476 d.C. = Caída de Occidente (Rómulo Augústulo, 13 años) = FIN DE LA EDAD ANTIGUA</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">El Imperio de Oriente (Bizancio) duró hasta 1453</div></div>
+    <div class="check-item" onclick="this.classList.toggle('checked')"><div class="box"></div><div class="check-text">Los visigodos se quedaron en Hispania tras la caída</div></div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn-secondary" onclick="goTo('screen-t2')">← Atrás</button>
+    <button class="btn-primary" onclick="startQuiz()">🎯 ¡Al Quiz! →</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="screen-quiz">
+  <div class="step-label">❓ Quiz – 20 Preguntas</div>
+  <div class="step-indicator">
+    <div class="step-dot done"></div><div class="step-dot done"></div>
+    <div class="step-dot done"></div><div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+  </div>
+  <div class="quiz-topbar">
+    <div class="q-counter" id="qCounter">1 / 20</div>
+    <div class="score-badge">⭐ <span id="liveScore">0</span> correctas</div>
+  </div>
+  <div class="progress-wrap"><div class="progress-fill" id="quizProgress" style="width:0%"></div></div>
+  <div id="quizArea"></div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="screen-results">
+  <div class="result-card" id="resultCard"></div>
+</div>
+
+<script>
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const questions=[
+  {cat:'⚔️ La Conquista',emoji:'🏛️',
+   text:'¿En qué año Roma dejó de ser gobernada por reyes y se convirtió en República?',
+   opts:['509 a.C.','476 d.C.','133 a.C.','27 a.C.'],ans:0,
+   exp:'En el 509 a.C. Roma se convirtió en República. ¡Casi 500 años antes del nacimiento de Cristo!'},
+  {cat:'⚔️ La Conquista',emoji:'🐘',
+   text:'¿A qué general cartaginés derrotó Roma para iniciar la conquista de Hispania?',
+   opts:['Julio César','Octavio Augusto','Aníbal','Teodosio'],ans:2,
+   exp:'Aníbal era el famoso general cartaginés. Roma lo derrotó en el siglo III a.C. en Hispania, iniciando la conquista.'},
+  {cat:'⚔️ La Conquista',emoji:'👑',
+   text:'¿Qué emperador romano conquistó TODA Hispania?',
+   opts:['Julio César','Rómulo Augústulo','Teodosio','Octavio Augusto'],ans:3,
+   exp:'Octavio Augusto completó la conquista de Hispania en el siglo I a.C. ¡El primer gran emperador romano!'},
+  {cat:'🌍 Romanización',emoji:'📜',
+   text:'¿Qué es la ROMANIZACIÓN?',
+   opts:[
+     'La construcción de acueductos',
+     'El proceso por el que los pueblos conquistados adoptaron el latín, leyes y costumbres romanas',
+     'La conquista militar de la Península Ibérica',
+     'El idioma de los romanos'
+   ],ans:1,
+   exp:'Romanización = adoptar el latín, las leyes, costumbres e instituciones romanas. ¡Así Roma transformó los pueblos conquistados!'},
+  {cat:'🌍 Romanización',emoji:'🗣️',
+   text:'¿Qué idioma impusieron los romanos a los pueblos conquistados?',
+   opts:['Griego','Inglés antiguo','Latín','Cartaginés'],ans:2,
+   exp:'El LATÍN era el idioma de Roma. De él vienen el español, italiano, francés, portugués y rumano. ¡Hablas latín sin saberlo!'},
+  {cat:'🏗️ Ciudades Romanas',emoji:'🏛️',
+   text:'¿Cómo se llamaba la plaza principal de las ciudades romanas donde los ciudadanos se reunían para hablar o comerciar?',
+   opts:['Templo','Termas','Anfiteatro','Foro'],ans:3,
+   exp:'El FORO era el corazón de la ciudad romana. Comercio, política y vida social. ¡Hoy todavía usamos la palabra "foro"!'},
+  {cat:'🏗️ Ciudades Romanas',emoji:'💧',
+   text:'¿Para qué servía el acueducto?',
+   opts:['Para celebrar juegos','Para llevar agua a la ciudad','Para guardar los dioses','Para el ejército'],ans:1,
+   exp:'El ACUEDUCTO llevaba agua a la ciudad. El de Segovia sigue en pie ¡2.000 años después! Una obra de ingeniería increíble.'},
+  {cat:'🏗️ Ciudades Romanas',emoji:'🎭',
+   text:'¿Qué se celebraba en el anfiteatro?',
+   opts:['Ceremonias religiosas','Mercados','Baños y gimnasia','Juegos y luchas de gladiadores'],ans:3,
+   exp:'En el ANFITEATRO se celebraban combates de gladiadores y juegos. El Coliseo de Roma es el más famoso.'},
+  {cat:'👥 Sociedad Romana',emoji:'👑',
+   text:'¿Quiénes eran los PATRICIOS en la sociedad romana?',
+   opts:[
+     'Esclavos que trabajaban el campo',
+     'La mayoría de la población que pagaba impuestos',
+     'Dueños de tierras y negocios que pagaban pocos impuestos',
+     'Soldados del ejército romano'
+   ],ans:2,
+   exp:'Los PATRICIOS eran la clase alta: nobles y senadores, dueños de tierras y negocios. ¡Vivían muy bien!'},
+  {cat:'👥 Sociedad Romana',emoji:'🧑‍🌾',
+   text:'¿Quiénes eran los PLEBEYOS?',
+   opts:[
+     'Los nobles con muchas tierras',
+     'La mayoría de la población: trabajaban y pagaban impuestos',
+     'Los esclavos sin derechos',
+     'Los sacerdotes de los templos'
+   ],ans:1,
+   exp:'Los PLEBEYOS eran la mayor parte de la población: artesanos, agricultores, comerciantes... Trabajaban y pagaban impuestos.'},
+  {cat:'👥 Sociedad Romana',emoji:'⛓️',
+   text:'¿Qué derechos tenían los ESCLAVOS en Roma?',
+   opts:[
+     'Los mismos que los patricios',
+     'Podían votar pero no comprar tierras',
+     'Ninguno — eran propiedad de sus amos',
+     'Podían ser senadores'
+   ],ans:2,
+   exp:'Los ESCLAVOS no tenían ningún derecho. Eran considerados propiedad de sus dueños. Una gran injusticia de la sociedad romana.'},
+  {cat:'👩 Mujeres en Roma',emoji:'👩',
+   text:'¿Podían las mujeres romanas votar o participar en política?',
+   opts:['Sí, tenían plenos derechos','Solo las patricias','No, tenían derechos muy limitados','Solo en Hispania'],ans:2,
+   exp:'Las mujeres romanas NO podían votar ni participar en política. Dependían de su padre o marido. Sin embargo, eran muy influyentes.'},
+  {cat:'💥 Caída del Imperio',emoji:'📉',
+   text:'¿Cuándo empezó la gran crisis del Imperio Romano?',
+   opts:['Siglo I a.C.','Siglo III d.C.','Siglo V d.C.','Siglo I d.C.'],ans:1,
+   exp:'La gran crisis comenzó en el SIGLO III d.C. Roma dejó de expandirse, dejó de recibir riquezas y esclavos...'},
+  {cat:'💥 Caída del Imperio',emoji:'💰',
+   text:'¿Qué hizo Roma cuando dejó de recibir riquezas y esclavos de sus conquistas?',
+   opts:[
+     'Redujo el ejército',
+     'Subió los impuestos a los ciudadanos',
+     'Pidió ayuda a los germánicos',
+     'Construyó más acueductos'
+   ],ans:1,
+   exp:'Roma SUBIÓ LOS IMPUESTOS para conseguir dinero. Esto empeoró mucho la situación económica y provocó que la gente huyera.'},
+  {cat:'💥 Caída del Imperio',emoji:'⚔️',
+   text:'¿Qué pueblos atacaron las ciudades romanas cuando las fronteras quedaron desprotegidas?',
+   opts:['Los cartagineses','Los griegos','Los egipcios','Los pueblos germánicos del norte de Europa'],ans:3,
+   exp:'Los PUEBLOS GERMÁNICOS del norte de Europa aprovecharon que las fronteras estaban desprotegidas para invadir Roma.'},
+  {cat:'✝️ Fin Edad Antigua',emoji:'✝️',
+   text:'¿Qué emperador estableció el cristianismo como religión oficial del Imperio Romano?',
+   opts:['Julio César','Octavio Augusto','Teodosio','Rómulo Augústulo'],ans:2,
+   exp:'TEODOSIO (siglo IV) estableció el cristianismo como religión oficial. Antes, los romanos eran politeístas.'},
+  {cat:'✝️ Fin Edad Antigua',emoji:'🏰',
+   text:'Cuando Teodosio murió, dividió el Imperio entre sus dos hijos. ¿Cómo se llamaban?',
+   opts:['Julio y César','Aníbal y Cartago','Arcadio y Honorio','Rómulo y Remo'],ans:2,
+   exp:'ARCADIO recibió el Imperio de Oriente y HONORIO el de Occidente. ¡Un Imperio partido en dos!'},
+  {cat:'✝️ Fin Edad Antigua',emoji:'💔',
+   text:'¿En qué año cayó el Imperio Romano de Occidente y terminó la Edad Antigua?',
+   opts:['509 a.C.','133 a.C.','476 d.C.','1453 d.C.'],ans:2,
+   exp:'El AÑO 476 d.C. es una fecha clave: caída del Imperio de Occidente = FIN DE LA EDAD ANTIGUA. ¡Hay que memorizarlo!'},
+  {cat:'✝️ Fin Edad Antigua',emoji:'👦',
+   text:'¿Quién fue el último emperador del Imperio Romano de Occidente?',
+   opts:['Teodosio','Aníbal','Octavio Augusto','Rómulo Augústulo'],ans:3,
+   exp:'RÓMULO AUGÚSTULO, el último emperador, ¡tenía solo 13 años cuando fue vencido por los germánicos en el 476 d.C.!'},
+  {cat:'✝️ Fin Edad Antigua',emoji:'🌙',
+   text:'¿Cuánto tiempo más sobrevivió el Imperio Romano de Oriente (Bizancio) después de la caída de Occidente?',
+   opts:['50 años más','100 años más','500 años más','Mil años más (hasta 1453)'],ans:3,
+   exp:'El Imperio de Oriente o IMPERIO BIZANTINO resistió MIL AÑOS más, hasta 1453. ¡Increíblemente resistente!'},
+];
+
+let qIdx=0,score=0,answered=false,wrongList=[];
+let shuffledQ=[];
+
+function shuffle(arr){return [...arr].sort(()=>Math.random()-.5)}
+
+function startQuiz(){
+  qIdx=0;score=0;answered=false;wrongList=[];
+  shuffledQ=shuffle(questions).map(q=>{
+    const n=q.opts.length;
+    const si=shuffle([...Array(n).keys()]);
+    return{...q,sOpts:si.map(i=>q.opts[i]),sAns:si.indexOf(q.ans)};
+  });
+  goTo('screen-quiz');
+  renderQ();
+}
+
+function renderQ(){
+  if(qIdx>=shuffledQ.length){showResults();return}
+  answered=false;
+  const q=shuffledQ[qIdx];
+  const total=shuffledQ.length;
+  const letters=['A','B','C','D'];
+  document.getElementById('qCounter').textContent=`${qIdx+1} / ${total}`;
+  document.getElementById('liveScore').textContent=score;
+  document.getElementById('quizProgress').style.width=`${(qIdx/total)*100}%`;
+  const twoCol=q.sOpts.length===2;
+  const optsHtml=q.sOpts.map((opt,i)=>`<button class="opt-btn" onclick="pickAns(${i})" data-i="${i}"><span class="ltr">${letters[i]}</span>${opt}</button>`).join('');
+  document.getElementById('quizArea').innerHTML=`
+    <div class="q-card">
+      <span class="q-badge">${q.cat}</span>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+        <span style="font-size:1.8rem">${q.emoji}</span>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="options-grid${twoCol?' two-col':''}">${optsHtml}</div>
+      <div class="q-feedback" id="qFb"></div>
+      <button class="btn-next" id="btnNext" onclick="nextQ()">${qIdx<shuffledQ.length-1?'Siguiente →':'Ver Resultados 🎉'}</button>
+    </div>`;
+}
+
+function pickAns(i){
+  if(answered)return;
+  answered=true;
+  const q=shuffledQ[qIdx];
+  const correct=q.sAns;
+  document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
+  const fb=document.getElementById('qFb');
+  if(i===correct){
+    document.querySelectorAll('.opt-btn')[i].classList.add('correct');
+    fb.className='q-feedback show correct-fb';
+    fb.innerHTML=`<span class="fb-icon">🎉</span><span><strong>¡Correcto!</strong> ${q.exp}</span>`;
+    score++;
+  } else {
+    document.querySelectorAll('.opt-btn')[i].classList.add('wrong');
+    document.querySelectorAll('.opt-btn')[correct].classList.add('correct');
+    fb.className='q-feedback show wrong-fb';
+    fb.innerHTML=`<span class="fb-icon">🤔</span><span><strong>¡Casi!</strong> ${q.exp}</span>`;
+    wrongList.push({q:q.text,correct:q.opts[q.ans]});
+  }
+  document.getElementById('btnNext').classList.add('show');
+}
+
+function nextQ(){qIdx++;renderQ()}
+
+function showResults(){
+  document.getElementById('quizProgress').style.width='100%';
+  const total=shuffledQ.length;
+  const pct=Math.round((score/total)*100);
+  let em,title,stars,msg;
+  if(pct===100){em='🏆';title='¡PUNTUACIÓN PERFECTA!';stars='⭐⭐⭐⭐⭐';msg='¡Eres un auténtico Emperador Romano!'}
+  else if(pct>=85){em='🥇';title='¡Excelente!';stars='⭐⭐⭐⭐';msg='¡Casi perfecto! Mereces ser Senador.'}
+  else if(pct>=70){em='⚔️';title='¡Bien hecho!';stars='⭐⭐⭐';msg='Buen trabajo. ¡Repasa un poco más!'}
+  else if(pct>=50){em='🛡️';title='¡Sigue intentándolo!';stars='⭐⭐';msg='Vuelve a leer la teoría y repite.'}
+  else{em='📚';title='¡A estudiar, legionario!';stars='⭐';msg='¡Ánimo! Lee los módulos y vuelve a intentarlo.'}
+  const wrongHtml=wrongList.length>0?`<div class="wrong-review"><h3>📝 Repasa estas respuestas:</h3>${wrongList.map(w=>`<div class="wrong-item"><div class="wi-q">${w.q}</div><div class="wi-a"><strong>✅ ${w.correct}</strong></div></div>`).join('')}</div>`:'<p style="color:#2e7d32;font-weight:700;margin-top:16px">🎯 ¡Todo correcto! ¡Eres increíble!</p>';
+  document.getElementById('resultCard').innerHTML=`
+    <span class="result-emoji">${em}</span>
+    <div class="result-title">${title}</div>
+    <div class="score-big">${score}/${total}</div>
+    <div class="score-sub">${pct}% correcto · ${msg}</div>
+    <div class="stars">${stars}</div>
+    ${wrongHtml}
+    <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;justify-content:center">
+      <button class="btn-restart" onclick="startQuiz()">🔄 Repetir Quiz</button>
+      <button class="btn-restart" style="background:linear-gradient(135deg,#8b1a1a,#4a1c08);color:var(--gold2)" onclick="goTo('screen-t1')">📖 Repasar Teoría</button>
+    </div>`;
+  goTo('screen-results');
+}
+</script>
+</body>
+</html>
