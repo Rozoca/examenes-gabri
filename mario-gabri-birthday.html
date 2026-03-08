@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎮 MAR10 Day — ¡Feliz Cumpleaños Gabri!</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --coin:#ffd700; --red:#e52222; --green:#2ea236; --blue:#5c94fc;
+  --dark:#0d0d0d; --block:#c84c11; --sky:#5c94fc;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;overflow-x:hidden;}
+body{font-family:'Press Start 2P',cursive;min-height:100vh;}
+
+/* ─── SCREENS ─── */
+.screen{display:none;min-height:100vh;position:relative;}
+.screen.active{display:flex;flex-direction:column;align-items:center;}
+
+/* ─── BG THEMES ─── */
+.bg-intro{background:linear-gradient(180deg,#000011 0%,#00005a 50%,#000088 100%);}
+.bg-sky{background:linear-gradient(180deg,#5c94fc 0%,#5c94fc 62%,#4db900 62%,#4db900 70%,#8b4513 70%);}
+.bg-water{background:linear-gradient(180deg,#001133 0%,#002288 55%,#003fcc 100%);}
+.bg-fire{background:linear-gradient(180deg,#110000 0%,#440000 45%,#aa1100 100%);}
+.bg-castle{background:radial-gradient(ellipse at 50% 0%,#3a0066 0%,#1a0033 40%,#000000 100%);}
+.bg-victory{background:radial-gradient(ellipse at 50% 20%,#002200 0%,#000000 70%);}
+
+/* ─── PIXEL DECO: Mario sprite (CSS) ─── */
+.deco-mario{
+  position:absolute;bottom:8%;left:4%;
+  width:32px;height:32px;
+  image-rendering:pixelated;
+  font-size:2.4rem;
+  animation:mario-walk 3s ease infinite;
+  filter:drop-shadow(3px 3px 0 #000);
+  z-index:0;pointer-events:none;
+}
+@keyframes mario-walk{
+  0%{transform:translateX(0) scaleX(1);}
+  45%{transform:translateX(60px) scaleX(1);}
+  50%{transform:translateX(60px) scaleX(-1);}
+  95%{transform:translateX(0) scaleX(-1);}
+  100%{transform:translateX(0) scaleX(1);}
+}
+.deco-bowser{
+  position:absolute;bottom:7%;right:3%;
+  font-size:2.8rem;
+  animation:bowser-idle 2s ease infinite alternate;
+  filter:drop-shadow(3px 3px 0 #000);
+  z-index:0;pointer-events:none;
+}
+@keyframes bowser-idle{
+  from{transform:scale(1) rotate(-3deg);}
+  to{transform:scale(1.08) rotate(3deg);}
+}
+.deco-star{
+  position:absolute;
+  font-size:1.5rem;
+  animation:star-spin 3s linear infinite;
+  pointer-events:none;z-index:0;
+}
+@keyframes star-spin{
+  0%{transform:rotate(0) scale(1);}50%{transform:rotate(180deg) scale(1.3);}100%{transform:rotate(360deg) scale(1);}
+}
+.deco-castle{
+  position:absolute;bottom:0;right:0;
+  font-size:clamp(4rem,15vw,9rem);
+  opacity:.12;pointer-events:none;z-index:0;
+  filter:drop-shadow(0 0 20px rgba(255,100,0,.4));
+}
+.deco-mushroom{
+  position:absolute;font-size:1.4rem;
+  animation:bob 2s ease infinite alternate;
+  pointer-events:none;z-index:0;
+}
+@keyframes bob{from{transform:translateY(0);}to{transform:translateY(-10px);}}
+
+/* ─── STAR PARTICLES ─── */
+.star-p{position:fixed;border-radius:50%;background:#fff;pointer-events:none;animation:twinkle 2s infinite;}
+@keyframes twinkle{0%,100%{opacity:.15;}50%{opacity:1;}}
+
+/* ─── INTRO ─── */
+#s-intro.active{justify-content:center;text-align:center;padding:28px 16px;}
+.intro-hat{
+  font-size:5rem;display:block;
+  animation:bounce-big 1.2s ease infinite;
+  filter:drop-shadow(4px 4px 0 #000);
+  position:relative;z-index:1;
+}
+@keyframes bounce-big{0%,100%{transform:translateY(0)rotate(-4deg);}50%{transform:translateY(-18px)rotate(4deg);}}
+.mar10-badge{
+  background:linear-gradient(135deg,#aa0000,#ee2222);
+  border:5px solid var(--coin);
+  padding:12px 28px;margin:10px auto;
+  font-size:clamp(.8rem,3.5vw,1.5rem);
+  color:var(--coin);text-shadow:3px 3px 0 #000;
+  box-shadow:6px 6px 0 #000;
+  display:inline-block;position:relative;z-index:1;
+}
+.intro-title{
+  font-size:clamp(1.1rem,4.5vw,2.4rem);
+  animation:rainbow 2.5s linear infinite;
+  text-shadow:4px 4px 0 rgba(0,0,0,.7);
+  line-height:1.6;margin:12px 0;position:relative;z-index:1;
+}
+@keyframes rainbow{
+  0%{color:#ff4444;}16%{color:#ff8800;}33%{color:#ffff00;}
+  50%{color:#00ff88;}66%{color:#00eeff;}83%{color:#cc88ff;}100%{color:#ff4444;}
+}
+.intro-sub{
+  font-size:clamp(.48rem,1.8vw,.72rem);
+  color:rgba(255,255,255,.85);
+  line-height:2.4;margin:8px 0;
+  text-shadow:2px 2px 0 #000;
+  position:relative;z-index:1;
+}
+.btn-press{
+  background:var(--green);border:5px solid var(--coin);
+  color:var(--coin);font-family:'Press Start 2P',cursive;
+  font-size:clamp(.65rem,2.5vw,1.05rem);
+  padding:18px 40px;cursor:pointer;margin-top:24px;
+  box-shadow:7px 7px 0 #000;animation:blink 1.8s ease infinite;
+  position:relative;z-index:1;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.btn-press:hover{transform:translate(3px,3px);box-shadow:4px 4px 0 #000;animation:none;}
+
+/* ─── MAP ─── */
+#s-map.active{padding:16px;justify-content:flex-start;}
+.map-hud{
+  display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
+  background:#000;border:4px solid var(--coin);
+  padding:10px 18px;width:100%;max-width:600px;
+  margin-bottom:14px;position:relative;z-index:1;
+}
+.hud-lbl{font-size:.45rem;color:#fff;}.hud-lbl .hv{color:var(--coin);}
+.map-heading{
+  font-size:clamp(.55rem,2.2vw,.85rem);
+  color:#fff;text-shadow:3px 3px 0 #000;
+  margin:6px 0 18px;text-align:center;
+  position:relative;z-index:1;
+}
+
+/* NON-LINEAR MAP */
+.map-svg-wrap{
+  width:100%;max-width:580px;position:relative;
+  min-height:380px;z-index:1;margin-bottom:8px;
+}
+.map-svg-wrap svg{width:100%;height:auto;}
+.map-node{cursor:pointer;}
+.map-node .node-bg{transition:all .2s;}
+.map-node.current .node-bg{animation:node-pulse .9s ease infinite;}
+@keyframes node-pulse{0%,100%{r:28}50%{r:32}}
+.map-node.locked{opacity:.4;cursor:default;}
+
+/* fun fact banner */
+.fun-banner{
+  background:rgba(0,0,0,.75);border:3px solid rgba(255,255,255,.25);
+  padding:16px 20px;width:100%;max-width:580px;
+  margin:12px 0;position:relative;z-index:1;
+}
+.fun-banner p{
+  font-size:clamp(.55rem,1.8vw,.72rem);
+  color:#ffffff;line-height:2.4;text-align:center;
+}
+.fun-banner strong{color:var(--coin);}
+.btn-map{
+  background:var(--green);border:4px solid var(--coin);
+  color:var(--coin);font-family:'Press Start 2P',cursive;
+  font-size:clamp(.55rem,2vw,.78rem);
+  padding:14px 28px;cursor:pointer;
+  box-shadow:5px 5px 0 #000;margin:8px 0;
+  position:relative;z-index:1;
+}
+.btn-map:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 #000;}
+.btn-map.red{background:#cc0000;}
+
+/* ─── PHASE START ─── */
+#s-phase-start.active{justify-content:center;padding:24px 14px;}
+.ph-card{
+  background:#000;border:6px solid var(--coin);
+  padding:32px 22px;max-width:480px;width:100%;
+  box-shadow:10px 10px 0 rgba(0,0,0,.5);
+  text-align:center;position:relative;z-index:1;
+}
+.ph-card h2{font-size:clamp(.72rem,3vw,1.35rem);color:var(--coin);text-shadow:3px 3px 0 #c84c00;margin-bottom:10px;}
+.ph-emoji{font-size:4.5rem;display:block;margin:10px 0;animation:bounce-big .9s ease infinite;}
+.ph-sub{font-size:.5rem;color:#aaa;margin-bottom:14px;}
+.ph-rules{
+  background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.18);
+  padding:12px;font-size:.42rem;color:#ccc;line-height:2.4;text-align:left;margin:10px 0;
+}
+.ph-rules span{color:var(--coin);}
+.ph-enemy{
+  display:flex;align-items:center;gap:12px;
+  background:#3d0000;border:2px solid #ff4444;
+  padding:12px;margin:10px 0;text-align:left;
+}
+.e-icon{font-size:2.2rem;flex-shrink:0;}
+.e-title{font-size:.48rem;color:#ff8888;margin-bottom:4px;}
+.e-desc{font-size:.4rem;color:#ffaaaa;line-height:1.9;}
+.btn-go{
+  background:var(--red);border:4px solid var(--coin);
+  color:var(--coin);font-family:'Press Start 2P',cursive;
+  font-size:clamp(.58rem,2vw,.82rem);
+  padding:14px 28px;cursor:pointer;
+  box-shadow:5px 5px 0 #000;margin-top:14px;width:100%;
+}
+.btn-go:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 #000;}
+
+/* ─── QUESTION ─── */
+#s-question.active{padding:12px 12px 30px;}
+.q-hud{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:6px;
+  width:100%;max-width:580px;
+  background:#000;border:4px solid var(--coin);
+  padding:8px 14px;margin-bottom:10px;
+}
+.qhi{font-size:.44rem;color:#fff;}.qhi .qv{color:var(--coin);}
+.lives-row{display:flex;gap:2px;}
+.lp{font-size:.85rem;transition:.3s;}.lp.dead{opacity:.15;transform:scale(.65);}
+/* wrong counter */
+.wrong-bar{
+  width:100%;max-width:580px;
+  background:#220000;border:2px solid #550000;
+  padding:6px 14px;margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.wrong-bar span{font-size:.4rem;color:#ff6666;}
+.wrong-pips{display:flex;gap:4px;}
+.wp{font-size:.85rem;}.wp.x{opacity:1;}.wp.o{opacity:.2;}
+
+.q-block-wrap{margin:8px 0;}
+.q-block{
+  width:64px;height:64px;background:var(--block);
+  border:4px solid #000;display:flex;align-items:center;justify-content:center;
+  font-size:1.7rem;font-weight:900;color:var(--coin);
+  box-shadow:4px 4px 0 #000,inset 2px 2px 0 rgba(255,255,255,.15);
+  animation:qbob .7s ease infinite;
+}
+@keyframes qbob{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+.q-block.hit{animation:blkhit .35s ease forwards;background:#f5d000;color:#000;}
+@keyframes blkhit{0%{transform:translateY(0);}40%{transform:translateY(-18px);}70%{transform:translateY(-8px);}100%{transform:translateY(0);}}
+
+.q-card{
+  background:#000;border:4px solid #fff;
+  padding:20px 16px;max-width:580px;width:100%;
+  box-shadow:6px 6px 0 rgba(0,0,0,.4);
+}
+.q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:5px;}
+.q-cat{font-size:.4rem;padding:4px 10px;border:2px solid var(--coin);}
+.q-num{font-size:.4rem;color:#666;}
+.q-text{font-size:clamp(.56rem,2.1vw,.82rem);color:#fff;line-height:1.9;margin-bottom:16px;}
+.opts{display:grid;gap:8px;}
+.opt{
+  background:#0a0a40;border:3px solid #5c94fc;color:#fff;
+  font-family:'Press Start 2P',cursive;
+  font-size:clamp(.42rem,1.5vw,.66rem);
+  padding:11px 13px;text-align:left;cursor:pointer;
+  display:flex;align-items:center;gap:9px;
+  box-shadow:3px 3px 0 #000;transition:.15s;
+}
+.opt:hover:not(:disabled){background:#111166;border-color:var(--coin);transform:translate(-2px,-2px);box-shadow:5px 5px 0 #000;}
+.opt .ol{
+  background:#5c94fc;color:#000;
+  min-width:26px;height:26px;display:flex;align-items:center;justify-content:center;
+  font-size:.52rem;border:2px solid #000;flex-shrink:0;
+}
+.opt.correct{background:#0a2a00;border-color:#00ff55;}
+.opt.correct .ol{background:#00ff55;color:#000;}
+.opt.wrong{background:#2a0000;border-color:#ff4444;animation:shake .4s ease;}
+.opt.wrong .ol{background:#ff4444;color:#fff;}
+.opt:disabled{cursor:default;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
+
+.q-fb{display:none;margin-top:12px;padding:12px 14px;border:3px solid;font-size:clamp(.42rem,1.4vw,.62rem);line-height:1.9;}
+.q-fb.show{display:flex;gap:9px;align-items:flex-start;}
+.q-fb.cfb{background:rgba(0,80,0,.4);border-color:#00ff55;color:#90ff90;}
+.q-fb.wfb{background:rgba(80,0,0,.4);border-color:#ff4444;color:#ff9090;}
+.fbico{font-size:1.3rem;flex-shrink:0;}
+.btn-next{
+  display:none;width:100%;margin-top:12px;
+  background:var(--red);border:4px solid var(--coin);
+  color:var(--coin);font-family:'Press Start 2P',cursive;
+  font-size:clamp(.52rem,1.9vw,.78rem);padding:13px;cursor:pointer;
+  box-shadow:5px 5px 0 #000;
+}
+.btn-next.show{display:block;animation:blink 1.5s ease infinite;}
+.btn-next:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 #000;animation:none;}
+
+/* coin pop */
+.coin-pop{position:fixed;pointer-events:none;font-size:1.6rem;z-index:9999;animation:cpop .9s ease forwards;}
+@keyframes cpop{0%{transform:translateY(0)scale(1);opacity:1;}100%{transform:translateY(-80px)scale(.3);opacity:0;}}
+
+/* ─── PHASE WIN ─── */
+#s-phase-win.active{justify-content:center;padding:24px 14px;}
+.pw-card{
+  background:#000;border:6px solid var(--coin);
+  padding:32px 22px;max-width:480px;width:100%;
+  box-shadow:10px 10px 0 rgba(0,0,0,.4);text-align:center;
+  position:relative;z-index:1;
+}
+.pw-title{font-size:clamp(.68rem,2.8vw,1.3rem);color:var(--coin);text-shadow:4px 4px 0 #c84c00;margin-bottom:10px;}
+.pw-stars{font-size:2.2rem;letter-spacing:6px;margin:12px 0;}
+.pw-detail{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.15);padding:12px;margin:12px 0;}
+.dr{display:flex;justify-content:space-between;font-size:.43rem;color:#bbb;margin:7px 0;}.dr .dv{color:var(--coin);}
+.reward-box{background:#0a0a00;border:3px solid var(--coin);padding:13px;margin:10px 0;display:flex;align-items:center;gap:12px;text-align:left;}
+.r-ico{font-size:2.2rem;flex-shrink:0;}
+.r-txt{font-size:.42rem;color:var(--coin);line-height:2.2;}
+
+/* ─── PHASE FAIL ─── */
+#s-phase-fail.active{justify-content:center;padding:24px;}
+.fail-card{background:#000;border:6px solid #ff4444;padding:32px 22px;max-width:420px;width:100%;box-shadow:10px 10px 0 rgba(150,0,0,.4);text-align:center;position:relative;z-index:1;}
+.fail-title{font-size:clamp(.7rem,3vw,1.3rem);color:#ff4444;text-shadow:3px 3px 0 #550000;margin-bottom:14px;animation:blink 1s ease infinite;}
+.fail-msg{font-size:.46rem;color:#ffaaaa;line-height:2.5;margin:12px 0;}
+
+/* ─── WORLD 4 SPECIAL ─── */
+.castle-deco-big{font-size:clamp(3rem,10vw,6rem);display:block;margin:10px 0;animation:castle-glow 2s ease infinite alternate;}
+@keyframes castle-glow{from{filter:drop-shadow(0 0 10px #ff4400);}to{filter:drop-shadow(0 0 30px #ffaa00);}}
+
+/* ─── VICTORY ─── */
+#s-victory.active{justify-content:center;padding:24px 14px;text-align:center;}
+.v-firework{position:fixed;pointer-events:none;font-size:2rem;animation:fw .8s ease forwards;z-index:9999;}
+@keyframes fw{0%{transform:scale(0);opacity:1;}100%{transform:scale(1.8);opacity:0;}}
+.v-title{font-size:clamp(.75rem,3vw,1.7rem);animation:rainbow 2s linear infinite;text-shadow:4px 4px 0 rgba(0,0,0,.6);margin-bottom:12px;}
+.v-card{background:#000;border:6px solid var(--coin);padding:32px 22px;max-width:520px;width:100%;box-shadow:12px 12px 0 rgba(200,100,0,.3);position:relative;z-index:1;}
+.f-stats{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.15);padding:14px;margin:12px 0;}
+.f-stars{font-size:2.4rem;margin:12px 0;letter-spacing:4px;}
+.f-msg{font-size:.5rem;color:#ccc;margin:12px 0;line-height:2.5;}
+.birthday-box{
+  background:linear-gradient(135deg,#2a0044,#4400aa);
+  border:4px solid var(--coin);padding:20px;margin:14px 0;
+}
+.birthday-box h3{font-size:clamp(.55rem,2vw,.9rem);color:var(--coin);margin-bottom:10px;animation:rainbow 1.5s linear infinite;}
+.birthday-box p{font-size:.44rem;color:#ffddff;line-height:2.5;}
+.birthday-box .bday-names{font-size:.46rem;color:#ffff99;margin-top:10px;line-height:2.8;}
+.wi{background:rgba(100,0,0,.3);border-left:3px solid #ff4444;padding:8px 12px;margin-bottom:7px;font-size:.38rem;line-height:2;}
+.wi .wq{color:#777;margin-bottom:3px;font-size:.36rem;}
+.wi .wa{color:#90ff90;}
+
+/* ─── MISC ─── */
+.pipe-row{display:flex;gap:20px;justify-content:center;margin:12px 0;opacity:.4;pointer-events:none;}
+.pipe{width:38px;height:52px;background:#2ea236;border:3px solid #000;position:relative;}
+.pipe::before{content:'';position:absolute;top:-8px;left:-6px;right:-6px;height:14px;background:#3db844;border:3px solid #000;}
+
+@media(max-width:480px){.map-svg-wrap{min-height:280px;}}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     INTRO
+══════════════════════════════════ -->
+<div class="screen bg-intro active" id="s-intro">
+  <!-- stars -->
+  <div id="star-field" style="position:fixed;inset:0;pointer-events:none;z-index:0;"></div>
+  <!-- decos -->
+  <span class="deco-star" style="top:12%;left:8%;">⭐</span>
+  <span class="deco-star" style="top:22%;right:10%;animation-delay:.8s;">✨</span>
+  <span class="deco-star" style="top:60%;left:5%;animation-delay:1.5s;">⭐</span>
+  <span class="deco-star" style="top:75%;right:7%;animation-delay:.4s;">✨</span>
+  <span class="deco-mario">🏃</span>
+  <span class="deco-bowser">🐉</span>
+  <div class="deco-castle" style="z-index:0;opacity:.1;">🏰</div>
+
+  <span class="intro-hat">🍄</span>
+  <div class="mar10-badge">⭐ MAR10 DAY ⭐</div>
+  <div class="intro-title">¡FELIZ CUMPLEAÑOS<br>GABRI! 🎂</div>
+
+  <div class="intro-sub">
+    ¡HOY CUMPLES 10 AÑOS! 🎉🎉🎉<br>
+    ¡Y ES EL DÍA DE MARIO BROS! 🍄<br>
+    <span style="color:var(--coin);">MAR + 10 = MAR10 = MARIO</span><br><br>
+    4 MUNDOS · 30 PREGUNTAS · ¡A RESCATAR A PEACH!
+  </div>
+
+  <div style="font-size:3rem;margin:6px 0;animation:bounce-big 1s ease infinite;">🎮</div>
+
+  <button class="btn-press" onclick="startGame()">► PRESS START ◄</button>
+
+  <div style="font-size:.38rem;color:rgba(255,255,255,.3);margin-top:22px;position:relative;z-index:1;">
+    HECHO CON ❤️ POR PAPÁ · GABRI 4º PRIMARIA 2025-26
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     MAP
+══════════════════════════════════ -->
+<div class="screen bg-sky" id="s-map">
+  <!-- decos -->
+  <span class="deco-mushroom" style="top:30%;left:2%;">🍄</span>
+  <span class="deco-mushroom" style="top:50%;right:2%;animation-delay:.6s;">🌟</span>
+  <span class="deco-mario" style="bottom:12%;left:3%;">🏃</span>
+  <span class="deco-bowser" style="bottom:10%;right:3%;font-size:2rem;">🐉</span>
+  <span class="deco-star" style="top:15%;right:5%;font-size:1.1rem;">⭐</span>
+
+  <div class="map-hud" style="position:relative;z-index:1;">
+    <div class="hud-lbl">VIDAS <span class="hv" id="mapLives">❤️❤️❤️</span></div>
+    <div class="hud-lbl">🪙 <span class="hv" id="mapCoins">0</span></div>
+    <div class="hud-lbl">★ <span class="hv" id="mapScore">0</span></div>
+    <div class="hud-lbl">MUNDO <span class="hv" id="mapWorld">1</span></div>
+  </div>
+  <div class="map-heading" id="mapMsg">¡EMPIEZA LA AVENTURA, GABRI!</div>
+
+  <!-- NON-LINEAR MAP SVG -->
+  <div class="map-svg-wrap" style="position:relative;z-index:1;">
+    <svg id="mapSvg" viewBox="0 0 560 360" xmlns="http://www.w3.org/2000/svg">
+      <!-- path lines -->
+      <path id="path01" d="" stroke="#ffd700" stroke-width="5" stroke-dasharray="12,7" fill="none" opacity=".6"/>
+      <path id="path12" d="" stroke="#ffd700" stroke-width="5" stroke-dasharray="12,7" fill="none" opacity=".6"/>
+      <path id="path23" d="" stroke="#ffd700" stroke-width="5" stroke-dasharray="12,7" fill="none" opacity=".6"/>
+      <!-- nodes drawn by JS -->
+    </svg>
+  </div>
+
+  <button class="btn-map" onclick="continueFromMap()">► CONTINUAR AL MUNDO <span id="mapContinueNum">1</span></button>
+
+  <div class="fun-banner" style="position:relative;z-index:1;">
+    <p>
+      <strong>⭐ ¿SABÍAS QUE…?</strong><br>
+      Mario apareció por primera vez en 1981 con el nombre <strong>JUMPMAN</strong> en el juego Donkey Kong.<br>
+      Su nombre viene de <strong>Mario Segale</strong>, un empresario que alquilaba oficinas a Nintendo.<br>
+      ¡El 10 de Marzo se llama <strong>MAR10 DAY</strong> porque MAR+10 = MARIO!
+    </p>
+  </div>
+  <div class="pipe-row"><div class="pipe"></div><div class="pipe"></div><div class="pipe"></div></div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     PHASE START
+══════════════════════════════════ -->
+<div class="screen" id="s-phase-start">
+  <div class="ph-card">
+    <h2 id="phTitle">MUNDO 1</h2>
+    <span class="ph-emoji" id="phEmoji">🍄</span>
+    <div class="ph-sub" id="phSub">Reino Champiñón</div>
+    <div class="ph-rules">
+      <span>📋 REGLAS:</span><br>
+      · Tienes <span>3 VIDAS</span> por mundo.<br>
+      · Cada fallo pierde una vida. 💔<br>
+      · Con <span>3 fallos</span> repetirás ESTE mundo.<br>
+      · ¡Sin vidas extra al empezar de nuevo!
+    </div>
+    <div class="ph-enemy" id="phEnemy"></div>
+    <button class="btn-go" onclick="beginPhase()">⚔️ ¡A JUGAR!</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     QUESTION
+══════════════════════════════════ -->
+<div class="screen" id="s-question">
+  <div class="q-hud">
+    <div class="qhi"><span id="hudWorld">1</span>-<span id="hudQ">1</span></div>
+    <div class="qhi lives-row" id="hudLives"></div>
+    <div class="qhi">🪙<span class="qv" id="hudCoins">0</span></div>
+    <div class="qhi">★<span class="qv" id="hudScore">0</span></div>
+  </div>
+  <div class="wrong-bar">
+    <span>FALLOS:</span>
+    <div class="wrong-pips" id="wrongPips"></div>
+  </div>
+  <div class="q-block-wrap">
+    <div class="q-block" id="qBlock">?</div>
+  </div>
+  <div class="q-card">
+    <div class="q-meta">
+      <div class="q-cat" id="qCat">🎮 MARIO</div>
+      <div class="q-num" id="qNum">P1/7</div>
+    </div>
+    <div class="q-text" id="qText"></div>
+    <div class="opts" id="qOpts"></div>
+    <div class="q-fb" id="qFb">
+      <span class="fbico" id="fbIco">🎉</span>
+      <span id="fbTxt"></span>
+    </div>
+    <button class="btn-next" id="btnNext" onclick="nextQuestion()">SIGUIENTE ►</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     PHASE WIN
+══════════════════════════════════ -->
+<div class="screen" id="s-phase-win">
+  <div class="pw-card">
+    <div class="pw-title" id="pwTitle">¡MUNDO COMPLETADO!</div>
+    <div class="pw-stars" id="pwStars">⭐⭐⭐</div>
+    <div class="pw-detail" id="pwDetail"></div>
+    <div class="reward-box">
+      <div class="r-ico" id="rIco">⭐</div>
+      <div class="r-txt" id="rTxt"></div>
+    </div>
+    <button class="btn-go" onclick="afterWin()" id="btnAfterWin">SIGUIENTE MUNDO ►</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     PHASE FAIL
+══════════════════════════════════ -->
+<div class="screen bg-castle" id="s-phase-fail">
+  <div class="fail-card">
+    <div class="fail-title">¡3 FALLOS!</div>
+    <div style="font-size:3.5rem;margin:12px 0;">💔💔💔</div>
+    <div class="fail-msg" id="failMsg">
+      ¡Tranquilo, Gabri!<br>
+      ¡Mario también pierde vidas!<br>
+      ¡Los héroes siempre lo intentan de nuevo!
+    </div>
+    <div style="font-size:.44rem;color:#ff8888;margin:10px 0;line-height:2.2;" id="failPhase">Volverás al inicio de ESTE MUNDO</div>
+    <button class="btn-go" onclick="retryPhase()">🔄 REPETIR ESTE MUNDO</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     VICTORY
+══════════════════════════════════ -->
+<div class="screen bg-victory" id="s-victory">
+  <span class="deco-star" style="top:5%;left:5%;font-size:2rem;">⭐</span>
+  <span class="deco-star" style="top:5%;right:5%;font-size:2rem;animation-delay:.5s;">⭐</span>
+  <span class="deco-mario" style="bottom:15%;left:4%;font-size:3rem;position:absolute;">🏃</span>
+
+  <div class="v-title" style="position:relative;z-index:1;margin-top:28px;">¡¡BOWSER DERROTADO!!</div>
+  <div style="font-size:4.5rem;position:relative;z-index:1;animation:bounce-big 1s ease infinite;">🏆</div>
+
+  <div class="v-card">
+    <div id="fStats"></div>
+    <div class="f-stars" id="fStars">⭐⭐⭐⭐⭐</div>
+    <div class="f-msg" id="fMsg"></div>
+
+    <!-- BIRTHDAY BOX -->
+    <div class="birthday-box">
+      <h3>🎂 ¡FELIZ CUMPLEAÑOS! 🎂</h3>
+      <p>
+        ¡Hoy <strong style="color:var(--coin);">10 de Marzo</strong> es un día muy especial!<br>
+        Es el <strong style="color:var(--coin);">MAR10 DAY</strong>, el día de Mario Bros… <br>
+        ¡Y el <strong style="color:#ff88ff;">CUMPLEAÑOS DE GABRI</strong>! 🎮🎂
+      </p>
+      <div class="bday-names">
+        🎂 ¡FELICIDADES A TODOS LOS QUE CUMPLEN EN <strong style="color:var(--coin);">MARZO</strong>! 🎂<br>
+        ¡Sois los más especiales! ¡Nacisteis en el mes de Mario! 🍄
+      </div>
+    </div>
+
+    <div id="fWrong" style="text-align:left;margin-top:10px;"></div>
+    <button class="btn-go" style="margin-top:16px;" onclick="startGame()">🔄 JUGAR DE NUEVO</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════ -->
+<script>
+/* ────────────────────────────────
+   STATE
+──────────────────────────────── */
+const G = {
+  phase: 0,        // current phase index (0-3)
+  qIdx: 0,         // question index within phase
+  wrongInPhase: 0, // wrong answers this attempt
+  coins: 0,
+  totalScore: 0,
+  phaseScores: [0,0,0,0],
+  wrongList: [],
+  answered: false,
+  curCorrect: 0, curExp: '', curCorrectTxt: ''
+};
+const MAX_WRONG = 3;
+
+/* ────────────────────────────────
+   PHASES
+──────────────────────────────── */
+const PHASES = [
+  {
+    name:'MUNDO 1', sub:'Reino Champiñón', emoji:'🍄',
+    bg:'bg-sky',
+    enemy:'🍄', eName:'GOOMBA',
+    eDesc:'¡Un Goomba bloquea el camino del Champiñón! Responde bien para aplastarlo con un salto.',
+    reward:{ico:'⭐',name:'¡SUPER ESTRELLA!',txt:'¡Has conseguido la Super Estrella! ¡Eres INVENCIBLE! ¡Brillas más que el sol!'}
+  },
+  {
+    name:'MUNDO 2', sub:'Mundo Acuático', emoji:'🌊',
+    bg:'bg-water',
+    enemy:'🐟', eName:'CHEEP CHEEP',
+    eDesc:'¡El pez Cheep Cheep viene nadando hacia ti! ¡Demuestra lo que sabes antes de que llegue!',
+    reward:{ico:'🌸',name:'¡FLOR DE FUEGO!',txt:'¡Has conseguido la Flor de Fuego! ¡Mario puede lanzar bolas de fuego! ¡Imparable!'}
+  },
+  {
+    name:'MUNDO 3', sub:'Volcán Prohibido', emoji:'🔥',
+    bg:'bg-fire',
+    enemy:'👻', eName:'BOO',
+    eDesc:'¡El fantasma Boo aparece cuando no lo miras! ¡Enfréntalo con tu conocimiento!',
+    reward:{ico:'🔑',name:'¡LLAVE DEL CASTILLO!',txt:'¡La Llave Dorada del Castillo de Bowser es tuya! ¡Ya puedes entrar a la batalla final!'}
+  },
+  {
+    name:'MUNDO 4 ★ ESPECIAL', sub:'Castillo de Bowser', emoji:'🏰',
+    bg:'bg-castle',
+    enemy:'🐉', eName:'BOWSER',
+    eDesc:'¡BOWSER el Rey Koopa está esperando en su trono! ¡Esta es la BATALLA FINAL! ¡La Princesa Peach y Gabri te necesitan!',
+    reward:{ico:'👸',name:'¡PEACH RESCATADA!',txt:'¡BOWSER HA SIDO DERROTADO! ¡La Princesa Peach está a salvo! ¡Eres el CAMPEÓN del Mushroom Kingdom!'}
+  }
+];
+
+/* ────────────────────────────────
+   MAP NODE POSITIONS (non-linear)
+──────────────────────────────── */
+const NODE_POS = [
+  {x:80,  y:280}, // W1 bottom-left
+  {x:240, y:160}, // W2 middle
+  {x:420, y:240}, // W3 right-mid
+  {x:300, y:60}   // W4 top-center (castle)
+];
+const NODE_EMOJIS = ['🍄','🌊','🔥','🏰'];
+const NODE_LABELS = ['MUNDO 1\nChampiñón','MUNDO 2\nAcuático','MUNDO 3\nVolcán','MUNDO 4\n¡BOWSER!'];
+
+/* ────────────────────────────────
+   QUESTIONS (30 total)
+──────────────────────────────── */
+const Qs = [
+  // ── MUNDO 1 (indices p:0) ─ 7 preguntas ──
+  {p:0,cat:'🎮 MARIO BROS',cc:'#e52222',
+   t:'¿Cómo se llamaba Mario la primera vez que apareció, en el año 1981?',
+   o:['Jumpman','Super Mario','Red Cap Guy','Plumber Boy'],a:0,
+   e:'¡Se llamaba JUMPMAN! Luchaba contra Donkey Kong para rescatar a Pauline. ¡Solo dos años después pasó a llamarse Mario!'},
+  {p:0,cat:'👸 PRINCESAS',cc:'#ff69b4',
+   t:'¿A qué princesa debe rescatar Mario de las garras de Bowser?',
+   o:['Princesa Peach','Princesa Zelda','Princesa Daisy','Princesa Rosalina'],a:0,
+   e:'¡La PRINCESA PEACH! Siempre es raptada por Bowser. Lleva corona y vestido rosa. ¡Es la princesa del Mushroom Kingdom!'},
+  {p:0,cat:'🦖 PERSONAJES',cc:'#2ea236',
+   t:'¿Cómo se llama el dinosaurio verde amigo de Mario que puede tragarse enemigos?',
+   o:['Yoshi','Rex','Dino','Koopa Verde'],a:0,
+   e:'¡YOSHI! El dinosaurio verde que aparece en Super Mario World (SNES, 1990). ¡Puede tragarse enemigos y poner huevos!'},
+  {p:0,cat:'🏛️ HISTORIA',cc:'#c9922a',
+   t:'¿En qué año cayó el Imperio Romano de Occidente y terminó la Edad Antigua?',
+   o:['476 d.C.','1453 d.C.','509 a.C.','1066 d.C.'],a:0,
+   e:'¡AÑO 476 d.C.! El último emperador fue Rómulo Augústulo, que solo tenía 13 años. ¡FIN DE LA EDAD ANTIGUA!'},
+  {p:0,cat:'🌍 GEOGRAFÍA',cc:'#0077ff',
+   t:'¿Qué mar baña la costa NORTE de España?',
+   o:['Mar Cantábrico','Mar Mediterráneo','Océano Atlántico','Mar del Norte'],a:0,
+   e:'¡El MAR CANTÁBRICO baña la costa norte de España! País Vasco, Cantabria, Asturias y Galicia lo tienen frente.'},
+  {p:0,cat:'🎮 NINTENDO',cc:'#e52222',
+   t:'¿Qué empresa japonesa creó a Mario? (Pista: fue fundada en 1889 haciendo cartas)',
+   o:['Nintendo','Sega','Sony PlayStation','Atari'],a:0,
+   e:'¡NINTENDO! Fundada en 1889 en Kyoto, Japón, haciendo barajas de cartas. ¡No fue hasta los años 70-80 que empezó los videojuegos!'},
+  {p:0,cat:'🍄 POWER-UPS',cc:'#2ea236',
+   t:'¿Cuántas monedas hay que recoger para ganar una VIDA EXTRA (1-UP) en Super Mario?',
+   o:['100 monedas','50 monedas','200 monedas','10 monedas'],a:0,
+   e:'¡100 MONEDAS = 1 vida extra! O también encontrando una seta verde con el número 1. ¡Por eso Mario las coge todas!'},
+
+  // ── MUNDO 2 (p:1) ─ 8 preguntas ──
+  {p:1,cat:'🐉 VILLANOS',cc:'#880000',
+   t:'¿Quién es el villano principal y Rey de los Koopa que siempre rapta a Peach?',
+   o:['Bowser','Donkey Kong','Wario','King Boo'],a:0,
+   e:'¡BOWSER el Rey Koopa! Enorme, con caparazón de pinchos, escupe fuego... ¡pero Mario siempre le derrota!'},
+  {p:1,cat:'🍄 POWER-UPS',cc:'#2ea236',
+   t:'¿Qué objeto especial hace CRECER a Mario de pequeño a grande?',
+   o:['Super Champiñón','Estrella Dorada','Flor de Fuego','Champiñón Verde'],a:0,
+   e:'¡El SUPER CHAMPIÑÓN (Super Mushroom)! Con él Mario crece, puede romper bloques de ladrillo y aguantar un golpe extra.'},
+  {p:1,cat:'🎮 MINECRAFT',cc:'#5ba839',
+   t:'¿Cómo se llama el enemigo VERDE que EXPLOTA en Minecraft cuando te acercas?',
+   o:['Creeper','Zombie','Esqueleto','Enderman'],a:0,
+   e:'¡El CREEPER! Dato curioso: ¡fue un bug al programar un cerdo! Salió girado y con error y le gustó tanto que lo dejaron en el juego.'},
+  {p:1,cat:'🔢 MATEMÁTICAS',cc:'#ff9800',
+   t:'Mario recoge 9 grupos de monedas con 8 monedas cada grupo. ¿Cuántas monedas en total?',
+   o:['72 monedas','63 monedas','81 monedas','69 monedas'],a:0,
+   e:'9 × 8 = 72. ¡72 MONEDAS! Ya solo le faltan 28 para llegar a 100 y ganar una vida extra. ¡A buscar más!'},
+  {p:1,cat:'🏛️ ROMA',cc:'#c9922a',
+   t:'¿Qué idioma impusieron los romanos a todos los pueblos que conquistaban?',
+   o:['Latín','Griego','Cartaginés','Germánico'],a:0,
+   e:'¡El LATÍN! De él vienen el español, italiano, francés, portugués y rumano. ¡Casi 1.000 millones de personas hablan idiomas que nacieron del latín!'},
+  {p:1,cat:'🐢 ENEMIGOS',cc:'#c84c11',
+   t:'¿Cómo se llaman los enemigos con forma de seta marrón que caminan en Super Mario?',
+   o:['Goombas','Koopa Troopas','Thwomps','Boos'],a:0,
+   e:'¡Los GOOMBAS! Son champiñones traidores del reino que se pasaron al bando de Bowser. ¡Se derrota pisándoles!'},
+  {p:1,cat:'🔢 NÚMEROS ROMANOS',cc:'#ff9800',
+   t:'¿Cómo se escribe el número 40 en números romanos?',
+   o:['XL','LX','XXXX','XC'],a:0,
+   e:'¡XL = 40! La X (10) antes de L (50) significa RESTA: 50 − 10 = 40. ¡En Roma también sabían matemáticas!'},
+  {p:1,cat:'🎮 POKÉMON',cc:'#f5a623',
+   t:'¿Cuál es el Pokémon amarillo más famoso del mundo, mascota de toda la saga?',
+   o:['Pikachu','Charizard','Mewtwo','Eevee'],a:0,
+   e:'¡PIKACHU! El Pokémon Ratón Eléctrico con mejillas rojas. ¡Pika pika! Es la mascota de Nintendo y de todos los Pokémon.'},
+
+  // ── MUNDO 3 (p:2) ─ 8 preguntas ──
+  {p:2,cat:'⭐ POWER-UPS',cc:'#ffd700',
+   t:'¿Qué efecto tiene la Estrella Dorada (Super Star) en Mario?',
+   o:['Te hace invencible','Te hace gigante','Te da una vida','Te hace volar'],a:0,
+   e:'¡Te hace INVENCIBLE! Puedes derrotar cualquier enemigo tocándolo. ¡Y suena esa música rapidísima que todo el mundo conoce!'},
+  {p:2,cat:'🗡️ ZELDA',cc:'#2ea236',
+   t:'¿Cómo se llama el HÉROE de The Legend of Zelda? (¡OJO, no es Zelda!)',
+   o:['Link','Zelda','Ganon','Impa'],a:0,
+   e:'¡LINK! Mucha gente cree que el héroe se llama Zelda, ¡pero no! Zelda es la PRINCESA. Link es el de las orejas élficas y el escudo.'},
+  {p:2,cat:'🌍 GEOGRAFÍA',cc:'#0077ff',
+   t:'¿Dónde están las Islas Canarias?',
+   o:['Océano Atlántico, cerca de África','Mar Mediterráneo','Mar Cantábrico','Cerca de Portugal'],a:0,
+   e:'¡En el OCÉANO ATLÁNTICO, muy cerca de la costa de África! Por eso tienen clima cálido todo el año. ¡Son como verano permanente!'},
+  {p:2,cat:'🔢 MATEMÁTICAS',cc:'#ff9800',
+   t:'Bowser tiene 7 castillos y en cada castillo hay 7 habitaciones. ¿Cuántas habitaciones hay en total?',
+   o:['49 habitaciones','42 habitaciones','56 habitaciones','35 habitaciones'],a:0,
+   e:'7 × 7 = 49. ¡49 HABITACIONES que Mario tiene que explorar para encontrar a la Princesa Peach!'},
+  {p:2,cat:'🎮 LUIGI',cc:'#2ea236',
+   t:'¿Cómo se llama el hermano MAYOR de Mario que siempre viste de verde?',
+   o:['Luigi','Wario','Waluigi','Toad'],a:0,
+   e:'¡LUIGI! El hermano de Mario lleva ropa verde y es más alto. Apareció en 1983. ¡Aunque da más miedo que Mario, es igual de valiente!'},
+  {p:2,cat:'🏛️ SOCIEDAD ROMANA',cc:'#c9922a',
+   t:'¿Cómo se llamaba la clase ALTA romana: nobles y senadores dueños de tierras?',
+   o:['Patricios','Plebeyos','Esclavos','Centuriones'],a:0,
+   e:'¡Los PATRICIOS! Los plebeyos eran el pueblo trabajador. Y los esclavos no tenían ningún derecho y eran propiedad de sus amos.'},
+  {p:2,cat:'🎮 MINECRAFT',cc:'#5ba839',
+   t:'¿Cómo se llama el personaje cuadrado con el que juegas por defecto en Minecraft?',
+   o:['Steve','Alex','Notch','Herobrine'],a:0,
+   e:'¡STEVE! También existe Alex. Notch es el creador del juego. Herobrine es un personaje misterioso del que hablan leyendas urbanas.'},
+  {p:2,cat:'🌍 GEOGRAFÍA',cc:'#0077ff',
+   t:'¿Con qué país del oeste comparte España la Península Ibérica?',
+   o:['Portugal','Francia','Andorra','Marruecos'],a:0,
+   e:'¡PORTUGAL! Al norte limita con Francia y Andorra. Al sur con Marruecos (a través del Estrecho de Gibraltar). ¡Y tiene también Ceuta y Melilla!'},
+
+  // ── MUNDO 4 ESPECIAL (p:3) ─ 7 preguntas ──
+  {p:3,cat:'🎉 MAR10 DAY',cc:'#aa00cc',
+   t:'¿Por qué el Día de Mario Bros se celebra el 10 de Marzo?',
+   o:['"MAR10" parece escribir MARIO','Porque Mario nació ese día','Nintendo lo eligió al azar','Es el día de todos los fontaneros'],a:0,
+   e:'¡MAR (Marzo en inglés = MARch) + 10 = MAR10 = MARIO! ¡Es un juego visual con el nombre que adoptaron Nintendo y sus fans!'},
+  {p:3,cat:'🕹️ NINTENDO SWITCH',cc:'#e52222',
+   t:'¿En qué año se lanzó la Nintendo Switch original?',
+   o:['2017','2015','2019','2020'],a:0,
+   e:'¡La Nintendo Switch se lanzó el 3 de Marzo de 2017! Fue una consola revolucionaria que funciona como consola de casa Y portátil a la vez.'},
+  {p:3,cat:'🕹️ SWITCH 2',cc:'#aa0088',
+   t:'¿Cuál es el gran cambio de la Nintendo Switch 2 respecto a la original?',
+   o:['Pantalla más grande y más potencia','Solo es portátil','No tiene Joy-Con','Solo en blanco y negro'],a:0,
+   e:'¡La Nintendo Switch 2 tiene pantalla más grande (8 pulgadas), es mucho más potente y tiene los nuevos Joy-Con 2 con un botón C extra!'},
+  {p:3,cat:'🏎️ MARIO KART',cc:'#ff6600',
+   t:'¿Cuántos jugadores pueden competir a la vez en el MISMO televisor en Mario Kart?',
+   o:['4 jugadores','2 jugadores','8 jugadores','3 jugadores'],a:0,
+   e:'¡Hasta 4 JUGADORES en pantalla dividida! Es uno de los mejores juegos para cumpleaños. ¡Mario Kart 8 Deluxe tiene más de 60 millones de copias vendidas!'},
+  {p:3,cat:'🎮 MARIO BROS',cc:'#e52222',
+   t:'¿Cuál es el nombre COMPLETO y real de Mario, según los videojuegos?',
+   o:['Mario Mario','Mario Rossi','Mario Bros','Mario Nintendo'],a:0,
+   e:'¡Su nombre completo es MARIO MARIO! Y el de su hermano es Luigi Mario. ¡Salió en la película de 1993 y Nintendo lo confirmó oficialmente!'},
+  {p:3,cat:'🏎️ MARIO KART',cc:'#ff6600',
+   t:'En Mario Kart, ¿qué objeto hace GIRAR a todos los rivales que van por delante de ti?',
+   o:['Rayo azul (Blue Shell)','Plátano','Estrella','Champiñón'],a:0,
+   e:'¡El CAPARAZÓN AZUL (Blue Shell o Bala Bill)! Apunta siempre al que va PRIMERO. ¡Es el objeto más temido de Mario Kart! 😱'},
+  {p:3,cat:'🕹️ NINTENDO',cc:'#aa0088',
+   t:'¿Cuántos años lleva Nintendo haciendo videojuegos y entreteniendo a millones de personas?',
+   o:['Más de 40 años','Más de 20 años','Más de 10 años','Más de 60 años'],a:0,
+   e:'¡Nintendo lleva MÁS DE 40 AÑOS en videojuegos (desde los 80s)! Aunque como empresa tiene más de 130 años. ¡Una leyenda pura!'}
+];
+
+/* ────────────────────────────────
+   UTILS
+──────────────────────────────── */
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById(id);
+  el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function phaseQs(){return Qs.filter(q=>q.p===G.phase);}
+
+/* ────────────────────────────────
+   STAR FIELD
+──────────────────────────────── */
+function buildStars(){
+  const sf=document.getElementById('star-field');
+  for(let i=0;i<80;i++){
+    const s=document.createElement('div');
+    s.className='star-p';
+    const sz=Math.random()*2.5+.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*3}s;`;
+    sf.appendChild(s);
+  }
+}
+
+/* ────────────────────────────────
+   MAP SVG
+──────────────────────────────── */
+function buildMap(){
+  const svg=document.getElementById('mapSvg');
+  // clear old nodes (keep paths)
+  svg.querySelectorAll('.map-node').forEach(n=>n.remove());
+  svg.querySelectorAll('.node-label').forEach(n=>n.remove());
+
+  // draw paths
+  const pathIds=['path01','path12','path23'];
+  for(let i=0;i<3;i++){
+    const a=NODE_POS[i], b=NODE_POS[i+1];
+    const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+    // curve through midpoint offset
+    const cp=i===0?{x:mx-40,y:my+30}:i===1?{x:mx+50,y:my-30}:{x:mx-30,y:my-20};
+    document.getElementById(pathIds[i]).setAttribute('d',
+      `M${a.x},${a.y} Q${cp.x},${cp.y} ${b.x},${b.y}`);
+    const opacity=i<G.phase?'1':i===G.phase?'.55':'.25';
+    document.getElementById(pathIds[i]).style.opacity=opacity;
+  }
+
+  // draw nodes
+  NODE_POS.forEach((pos,i)=>{
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.classList.add('map-node');
+    if(i<G.phase)g.classList.add('done');
+    else if(i===G.phase)g.classList.add('current');
+    else g.classList.add('locked');
+
+    // shadow circle
+    const shadow=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    shadow.setAttribute('cx',pos.x+4); shadow.setAttribute('cy',pos.y+4); shadow.setAttribute('r',26);
+    shadow.setAttribute('fill','rgba(0,0,0,.5)');
+    g.appendChild(shadow);
+
+    // main circle
+    const circ=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circ.classList.add('node-bg');
+    circ.setAttribute('cx',pos.x); circ.setAttribute('cy',pos.y); circ.setAttribute('r',26);
+    const fill=i<G.phase?'#1a4400':i===G.phase?'#000066':'#333';
+    const stroke=i<G.phase?'#ffd700':i===G.phase?'#00aaff':'#666';
+    circ.setAttribute('fill',fill); circ.setAttribute('stroke',stroke); circ.setAttribute('stroke-width','4');
+    g.appendChild(circ);
+
+    // emoji text
+    const txt=document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x',pos.x); txt.setAttribute('y',pos.y+8);
+    txt.setAttribute('text-anchor','middle'); txt.setAttribute('font-size','24');
+    txt.textContent=i<G.phase?'✓':NODE_EMOJIS[i];
+    if(i<G.phase){txt.setAttribute('fill','#ffd700');txt.setAttribute('font-family','sans-serif');txt.setAttribute('font-weight','900');}
+    g.appendChild(txt);
+
+    // label
+    const lines=NODE_LABELS[i].split('\n');
+    lines.forEach((ln,li)=>{
+      const lb=document.createElementNS('http://www.w3.org/2000/svg','text');
+      lb.classList.add('node-label');
+      lb.setAttribute('x',pos.x); lb.setAttribute('y',pos.y+40+li*14);
+      lb.setAttribute('text-anchor','middle'); lb.setAttribute('font-size','8');
+      lb.setAttribute('font-family','Press Start 2P, cursive');
+      lb.setAttribute('fill',i===G.phase?'#00ccff':'rgba(255,255,255,.6)');
+      lb.textContent=ln;
+      g.appendChild(lb);
+    });
+
+    // pulse ring for current
+    if(i===G.phase){
+      const ring=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      ring.setAttribute('cx',pos.x); ring.setAttribute('cy',pos.y); ring.setAttribute('r',33);
+      ring.setAttribute('fill','none'); ring.setAttribute('stroke','#00ccff'); ring.setAttribute('stroke-width','2');
+      ring.setAttribute('opacity','0.5');
+      const anim=document.createElementNS('http://www.w3.org/2000/svg','animate');
+      anim.setAttribute('attributeName','r'); anim.setAttribute('values','30;38;30');
+      anim.setAttribute('dur','1.5s'); anim.setAttribute('repeatCount','indefinite');
+      ring.appendChild(anim);
+      g.appendChild(ring);
+      // arrow above current node
+      const arr=document.createElementNS('http://www.w3.org/2000/svg','text');
+      arr.setAttribute('x',pos.x); arr.setAttribute('y',pos.y-34);
+      arr.setAttribute('text-anchor','middle'); arr.setAttribute('font-size','16');
+      arr.textContent='▼';
+      const animArr=document.createElementNS('http://www.w3.org/2000/svg','animate');
+      animArr.setAttribute('attributeName','y'); animArr.setAttribute('values',`${pos.y-40};${pos.y-30};${pos.y-40}`);
+      animArr.setAttribute('dur','1s'); animArr.setAttribute('repeatCount','indefinite');
+      arr.appendChild(animArr);
+      arr.setAttribute('fill','#ffff00');
+      g.appendChild(arr);
+    }
+
+    svg.appendChild(g);
+  });
+
+  // HUD
+  document.getElementById('mapLives').textContent='❤️'.repeat(3);
+  document.getElementById('mapCoins').textContent=G.coins;
+  document.getElementById('mapScore').textContent=G.totalScore;
+  document.getElementById('mapWorld').textContent=G.phase+1;
+  document.getElementById('mapContinueNum').textContent=G.phase+1;
+}
+
+/* ────────────────────────────────
+   GAME FLOW
+──────────────────────────────── */
+function startGame(){
+  G.phase=0; G.qIdx=0; G.wrongInPhase=0;
+  G.coins=0; G.totalScore=0;
+  G.phaseScores=[0,0,0,0];
+  G.wrongList=[]; G.answered=false;
+  buildMap();
+  document.getElementById('mapMsg').textContent='¡EMPIEZA LA AVENTURA, GABRI!';
+  show('s-map');
+}
+
+function continueFromMap(){
+  const ph=PHASES[G.phase];
+  document.getElementById('s-phase-start').className='screen active '+ph.bg;
+  document.getElementById('phTitle').textContent=ph.name;
+  document.getElementById('phEmoji').textContent=ph.emoji;
+  document.getElementById('phSub').textContent=ph.sub;
+  document.getElementById('phEnemy').innerHTML=
+    `<div class="e-icon">${ph.enemy}</div>
+     <div><div class="e-title">ENEMIGO: ${ph.eName}</div>
+     <div class="e-desc">${ph.eDesc}</div></div>`;
+  show('s-phase-start');
+}
+
+function beginPhase(){
+  G.qIdx=0; G.wrongInPhase=0; G.answered=false;
+  renderQ();
+  show('s-question');
+}
+
+function retryPhase(){
+  G.qIdx=0; G.wrongInPhase=0; G.answered=false;
+  G.phaseScores[G.phase]=0;
+  renderQ();
+  show('s-question');
+}
+
+/* ────────────────────────────────
+   QUESTION RENDER
+──────────────────────────────── */
+function renderQ(){
+  const qs=phaseQs();
+  if(G.qIdx>=qs.length){showPhaseWin();return;}
+  const q=qs[G.qIdx];
+  const ph=PHASES[G.phase];
+  document.getElementById('s-question').className='screen active '+ph.bg;
+
+  document.getElementById('hudWorld').textContent=G.phase+1;
+  document.getElementById('hudQ').textContent=G.qIdx+1;
+  updateLivesHud();
+  updateWrongPips();
+  document.getElementById('hudCoins').textContent=G.coins;
+  document.getElementById('hudScore').textContent=G.totalScore;
+
+  const blk=document.getElementById('qBlock');
+  blk.textContent='?'; blk.className='q-block';
+  blk.style.background=''; blk.style.color='';
+
+  const catEl=document.getElementById('qCat');
+  catEl.textContent=q.cat; catEl.style.background=q.cc+'33';
+  catEl.style.borderColor=q.cc; catEl.style.color=q.cc;
+
+  document.getElementById('qNum').textContent=`P${G.qIdx+1}/${qs.length}`;
+  document.getElementById('qText').textContent=q.t;
+
+  const si=shuffle([...Array(q.o.length).keys()]);
+  G.curCorrect=si.indexOf(q.a);
+  G.curExp=q.e; G.curCorrectTxt=q.o[q.a];
+
+  const sOpts=si.map(i=>q.o[i]);
+  const letters=['A','B','C','D'];
+  const cont=document.getElementById('qOpts');
+  cont.innerHTML='';
+  sOpts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='opt';
+    btn.innerHTML=`<span class="ol">${letters[i]}</span>${opt}`;
+    btn.onclick=()=>pickAns(i,btn);
+    cont.appendChild(btn);
+  });
+
+  document.getElementById('qFb').className='q-fb';
+  document.getElementById('btnNext').className='btn-next';
+  document.getElementById('btnNext').textContent=
+    G.qIdx<qs.length-1?'SIGUIENTE ►':'¡VER RESULTADO! 🎉';
+  G.answered=false;
+}
+
+function updateLivesHud(){
+  // lives = 3 - wrongInPhase
+  const remaining=MAX_WRONG-G.wrongInPhase;
+  let h='';
+  for(let i=0;i<MAX_WRONG;i++) h+=`<span class="lp ${i>=remaining?'dead':''}" >❤️</span>`;
+  document.getElementById('hudLives').innerHTML=h;
+}
+
+function updateWrongPips(){
+  let h='';
+  for(let i=0;i<MAX_WRONG;i++)
+    h+=`<span class="wp ${i<G.wrongInPhase?'x':'o'}">💔</span>`;
+  document.getElementById('wrongPips').innerHTML=h;
+}
+
+/* ────────────────────────────────
+   ANSWER PICK
+──────────────────────────────── */
+function pickAns(i,btn){
+  if(G.answered)return;
+  G.answered=true;
+  document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+  const ok=i===G.curCorrect;
+  const blk=document.getElementById('qBlock');
+  blk.classList.add('hit');
+  const fb=document.getElementById('qFb');
+
+  if(ok){
+    btn.classList.add('correct');
+    fb.className='q-fb show cfb';
+    document.getElementById('fbIco').textContent='🎉';
+    document.getElementById('fbTxt').innerHTML=`<strong>¡CORRECTO! +10 puntos 🪙</strong><br>${G.curExp}`;
+    G.coins++; G.totalScore+=10; G.phaseScores[G.phase]++;
+    spawnCoin(btn);
+    setTimeout(()=>{blk.textContent='⭐';blk.style.background='#ffd700';blk.style.color='#000';},320);
+  } else {
+    document.querySelectorAll('.opt')[G.curCorrect].classList.add('correct');
+    btn.classList.add('wrong');
+    fb.className='q-fb show wfb';
+    document.getElementById('fbIco').textContent='😅';
+    document.getElementById('fbTxt').innerHTML=
+      `<strong>¡Casi!</strong> La respuesta era: <strong>"${G.curCorrectTxt}"</strong><br>${G.curExp}`;
+    G.wrongInPhase++;
+    G.wrongList.push({q:document.getElementById('qText').textContent, a:G.curCorrectTxt});
+    updateLivesHud(); updateWrongPips();
+    setTimeout(()=>{blk.textContent='💔';blk.style.background='#440000';},320);
+  }
+
+  document.getElementById('hudCoins').textContent=G.coins;
+  document.getElementById('hudScore').textContent=G.totalScore;
+  document.getElementById('btnNext').classList.add('show');
+}
+
+function nextQuestion(){
+  if(G.wrongInPhase>=MAX_WRONG){
+    showPhaseFail();
+    return;
+  }
+  G.qIdx++; G.answered=false;
+  const qs=phaseQs();
+  if(G.qIdx>=qs.length){showPhaseWin();return;}
+  renderQ();
+}
+
+/* ────────────────────────────────
+   PHASE FAIL
+──────────────────────────────── */
+function showPhaseFail(){
+  const ph=PHASES[G.phase];
+  document.getElementById('failPhase').textContent=
+    `Volverás al inicio de ${ph.name.toUpperCase()}`;
+  document.getElementById('s-phase-fail').className='screen active '+ph.bg;
+  show('s-phase-fail');
+}
+
+/* ────────────────────────────────
+   PHASE WIN
+──────────────────────────────── */
+function showPhaseWin(){
+  const ph=PHASES[G.phase];
+  const cor=G.phaseScores[G.phase];
+  const tot=phaseQs().length;
+  const pct=Math.round(cor/tot*100);
+  const stars=pct>=85?'⭐⭐⭐':pct>=60?'⭐⭐':'⭐';
+  document.getElementById('s-phase-win').className='screen active '+ph.bg;
+  document.getElementById('pwTitle').textContent=ph.name+' ¡COMPLETADO!';
+  document.getElementById('pwStars').textContent=stars;
+  document.getElementById('pwDetail').innerHTML=
+    `<div class="dr"><span>Correctas:</span><span class="dv">${cor}/${tot}</span></div>
+     <div class="dr"><span>Precisión:</span><span class="dv">${pct}%</span></div>
+     <div class="dr"><span>Fallos en este mundo:</span><span class="dv">${G.wrongInPhase}</span></div>
+     <div class="dr"><span>Monedas totales:</span><span class="dv">${G.coins} 🪙</span></div>`;
+  document.getElementById('rIco').textContent=ph.reward.ico;
+  document.getElementById('rTxt').innerHTML=`<strong>${ph.reward.name}</strong><br>${ph.reward.txt}`;
+  const isLast=G.phase===PHASES.length-1;
+  document.getElementById('btnAfterWin').textContent=isLast?'🏆 ¡VER VICTORIA! 🏆':'SIGUIENTE MUNDO ►';
+  show('s-phase-win');
+}
+
+function afterWin(){
+  G.phase++;
+  if(G.phase>=PHASES.length){
+    showVictory();
+  } else {
+    buildMap();
+    document.getElementById('mapMsg').textContent='¡MUNDO '+(G.phase)+ ' COMPLETADO! ¡SIGUE ADELANTE!';
+    show('s-map');
+  }
+}
+
+/* ────────────────────────────────
+   VICTORY
+──────────────────────────────── */
+function showVictory(){
+  const total=Qs.length;
+  const cor=G.phaseScores.reduce((a,b)=>a+b,0);
+  const pct=Math.round(cor/total*100);
+  let em,title,msg;
+  if(pct===100){em='👑';title='¡PUNTUACIÓN PERFECTA!';msg='¡100%! ¡Eres el campeón absoluto del Mushroom Kingdom! Mario, Luigi y Peach están muy orgullosos de ti, Gabri.';}
+  else if(pct>=85){em='🏆';title='¡INCREÍBLE!';msg='¡Casi perfecto! Eres un auténtico maestro del videojuego. ¡Papá está muy orgulloso!';}
+  else if(pct>=70){em='🥇';title='¡EXCELENTE!';msg='¡Muy bien, Gabri! Has demostrado que eres más listo que Bowser. ¡Eso no es difícil, pero es mérito tuyo!';}
+  else if(pct>=50){em='⚔️';title='¡BUEN TRABAJO!';msg='¡Has derrotado a Bowser! Repasa un poco más y la próxima vez sacas perfecto.';}
+  else{em='🛡️';title='¡LO LOGRASTE!';msg='¡Llegaste al final de todos los mundos! ¡Sigue practicando y serás imbatible!';}
+  const stars=pct>=90?'⭐⭐⭐⭐⭐':pct>=75?'⭐⭐⭐⭐':pct>=60?'⭐⭐⭐':pct>=40?'⭐⭐':'⭐';
+  document.getElementById('fStats').innerHTML=
+    `<div style="font-size:3.5rem;margin:8px 0">${em}</div>
+     <div style="font-size:.5rem;color:var(--coin);margin-bottom:8px;">${title}</div>
+     <div class="f-stats">
+       <div class="dr"><span style="font-size:.4rem;color:#aaa;">Correctas:</span><span class="dv" style="font-size:.4rem;">${cor}/${total} · ${pct}%</span></div>
+       <div class="dr"><span style="font-size:.4rem;color:#aaa;">Monedas:</span><span class="dv" style="font-size:.4rem;">${G.coins} 🪙</span></div>
+       <div class="dr"><span style="font-size:.4rem;color:#aaa;">Puntuación:</span><span class="dv" style="font-size:.4rem;">${G.totalScore} ★</span></div>
+     </div>`;
+  document.getElementById('fStars').textContent=stars;
+  document.getElementById('fMsg').textContent=msg;
+  const wr=document.getElementById('fWrong');
+  if(G.wrongList.length>0){
+    wr.innerHTML=`<div style="font-size:.42rem;color:#888;margin-bottom:8px;">📝 REPASA ESTAS RESPUESTAS:</div>`+
+      G.wrongList.slice(0,8).map(w=>
+        `<div class="wi"><div class="wq">${w.q}</div><div class="wa">✅ ${w.a}</div></div>`
+      ).join('');
+  } else {
+    wr.innerHTML=`<div style="color:#90ff90;font-size:.48rem;margin:10px 0;">🎯 ¡TODO CORRECTO! ¡ERES INCREÍBLE!</div>`;
+  }
+  show('s-victory');
+  fireworks();
+}
+
+/* ────────────────────────────────
+   VFX
+──────────────────────────────── */
+function spawnCoin(near){
+  const c=document.createElement('div');
+  c.className='coin-pop'; c.textContent='🪙';
+  const r=near.getBoundingClientRect();
+  c.style.left=(r.left+r.width/2)+'px';
+  c.style.top=r.top+'px';
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(),950);
+}
+
+const confettiStyle=document.createElement('style');
+confettiStyle.textContent='@keyframes fall{to{transform:translateY(110vh)rotate(720deg);opacity:0;}}';
+document.head.appendChild(confettiStyle);
+
+function fireworks(){
+  const emojis=['🎉','🎊','⭐','🌟','🍄','🎂','🏆','🪙','🌸'];
+  const cols=['#ffd700','#e52222','#5c94fc','#2ea236','#ff8800','#ff69b4','#00eeff'];
+  // confetti
+  for(let i=0;i<80;i++){
+    setTimeout(()=>{
+      const c=document.createElement('div');
+      const sz=Math.random()*14+5;
+      const delay=Math.random()*2.5+1;
+      c.style.cssText=`position:fixed;width:${sz}px;height:${sz}px;
+        background:${cols[Math.floor(Math.random()*cols.length)]};
+        left:${Math.random()*100}%;top:-20px;z-index:9999;pointer-events:none;
+        border-radius:${Math.random()>.5?'50%':'2px'};
+        animation:fall ${delay}s linear forwards;`;
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(),(delay+.3)*1000);
+    },i*60);
+  }
+  // emoji bursts
+  for(let i=0;i<20;i++){
+    setTimeout(()=>{
+      const f=document.createElement('div');
+      f.className='v-firework';
+      f.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+      f.style.left=Math.random()*90+'%';
+      f.style.top=Math.random()*80+'%';
+      document.body.appendChild(f);
+      setTimeout(()=>f.remove(),900);
+    },i*200);
+  }
+}
+
+/* ────────────────────────────────
+   INIT
+──────────────────────────────── */
+buildStars();
+</script>
+</body>
+</html>
