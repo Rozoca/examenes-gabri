@@ -129,29 +129,43 @@
         .card.geo     { --accent: linear-gradient(90deg,#00e5ff,#0077ff); --subject-color:#00e5ff; --btn1:#00e5ff; --btn2:#0077ff; }
         .card.math    { --accent: linear-gradient(90deg,#ffb703,#ff6b00); --subject-color:#ffb703; --btn1:#ffb703; --btn2:#ff6b00; }
         .card.english { --accent: linear-gradient(90deg,#ff6bb5,#ff3c8e); --subject-color:#ff6bb5; --btn1:#ff6bb5; --btn2:#ff3c8e; }
-        .card.mario  { --accent: linear-gradient(90deg,#e52222,#ffd700); --subject-color:#ffd700; --btn1:#e52222; --btn2:#8b0000; }
+        .card.mario   { --accent: linear-gradient(90deg,#e52222,#ffd700); --subject-color:#ffd700; --btn1:#e52222; --btn2:#8b0000; }
+        .card.hailmary { --accent: linear-gradient(90deg,#39ff14,#00cc44); --subject-color:#39ff14; --btn1:#39ff14; --btn2:#00884a; }
         .card.soon    { opacity: .55; }
 
         /* Featured highlight card */
         .featured-label {
             font-family: 'Fredoka One', cursive;
             font-size: .85rem; text-transform: uppercase; letter-spacing: 2px;
-            color: #ffd700; margin-bottom: 10px; padding-left: 4px;
+            margin-bottom: 10px; padding-left: 4px;
             display: flex; align-items: center; gap: 8px;
         }
+        .featured-label.green { color: #39ff14; }
+        .featured-label.gold { color: #ffd700; }
         .featured-label::after {
             content: ''; flex: 1; height: 1px;
-            background: linear-gradient(90deg, rgba(255,215,0,.4), transparent);
         }
+        .featured-label.green::after { background: linear-gradient(90deg, rgba(57,255,20,.4), transparent); }
+        .featured-label.gold::after { background: linear-gradient(90deg, rgba(255,215,0,.4), transparent); }
+
         .card.featured {
-            border-color: #ffd700;
-            box-shadow: 0 0 40px rgba(229,34,34,.25), 0 0 80px rgba(255,215,0,.1);
-            background: linear-gradient(135deg, rgba(15,12,41,0.95), rgba(80,10,10,0.6));
             flex-direction: row; align-items: center; gap: 24px;
             padding: 28px 32px; margin-bottom: 32px;
         }
         .card.featured::before { opacity: 1; }
-        .card.featured:hover { transform: translateY(-6px); box-shadow: 0 16px 50px rgba(229,34,34,.4), 0 0 80px rgba(255,215,0,.2); }
+        .card.featured.hailmary {
+            border-color: #39ff14;
+            box-shadow: 0 0 40px rgba(57,255,20,.2), 0 0 80px rgba(57,255,20,.08);
+            background: linear-gradient(135deg, rgba(10,22,40,0.95), rgba(5,40,20,0.5));
+        }
+        .card.featured.hailmary:hover { transform: translateY(-6px); box-shadow: 0 16px 50px rgba(57,255,20,.35), 0 0 80px rgba(57,255,20,.15); }
+        .card.featured.mario {
+            border-color: #ffd700;
+            box-shadow: 0 0 40px rgba(229,34,34,.25), 0 0 80px rgba(255,215,0,.1);
+            background: linear-gradient(135deg, rgba(15,12,41,0.95), rgba(80,10,10,0.6));
+        }
+        .card.featured.mario:hover { transform: translateY(-6px); box-shadow: 0 16px 50px rgba(229,34,34,.4), 0 0 80px rgba(255,215,0,.2); }
+
         .featured-left { flex-shrink: 0; text-align: center; }
         .featured-left .card-emoji { font-size: 5rem; margin-bottom: 0; }
         .featured-right { flex: 1; }
@@ -160,11 +174,13 @@
         .featured-right p { margin-bottom: 14px; }
         .featured-btn-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
         .featured-btn-row .btn { flex: 1; min-width: 180px; font-size: 1.15rem; padding: 14px 24px; }
-        .birthday-pill {
-            background: rgba(255,215,0,.15); border: 1px solid rgba(255,215,0,.4);
+        .new-pill {
             border-radius: 50px; padding: 6px 14px;
-            font-size: .78rem; font-weight: 700; color: #ffd700; white-space: nowrap;
+            font-size: .78rem; font-weight: 700; white-space: nowrap;
         }
+        .new-pill.green { background: rgba(57,255,20,.15); border: 1px solid rgba(57,255,20,.4); color: #39ff14; }
+        .new-pill.gold { background: rgba(255,215,0,.15); border: 1px solid rgba(255,215,0,.4); color: #ffd700; }
+
         @media (max-width: 580px) {
             .card.featured { flex-direction: column; }
             .featured-left .card-emoji { font-size: 3.5rem; }
@@ -182,30 +198,30 @@
         <h1>¡El Rincón de Gabri!</h1>
         <p>Tu zona de estudio para 4º de Primaria · ¡Practica y sube de nivel!</p>
         <div class="score-row">
-            <div class="badge">📚 7 ejercicios disponibles</div>
+            <div class="badge">📚 8 ejercicios disponibles</div>
             <div class="badge">🏆 Hecho con ❤️ por Papá</div>
         </div>
     </header>
 
-    <!-- FEATURED: MARIO BIRTHDAY -->
-    <div class="featured-label">🎂 ¡Destacado de la semana!</div>
-    <div class="card mario featured">
+    <!-- FEATURED: PROYECTO SALVACIÓN -->
+    <div class="featured-label green">🛸 ¡Destacado de la semana!</div>
+    <div class="card hailmary featured">
         <div class="featured-left">
-            <span class="card-emoji">🍄</span>
+            <span class="card-emoji">🛸</span>
         </div>
         <div class="featured-right">
-            <div class="card-subject">🎂 Cumpleaños · MAR10 Day · NUEVO</div>
-            <h2>¡Feliz Cumpleaños Gabri! Mario Bros Adventure</h2>
-            <p>4 mundos + 30 preguntas de Mario, Nintendo Switch, Zelda, Pokémon y más. ¡Derrota a Bowser y rescata a la Princesa Peach en el Castillo!</p>
+            <div class="card-subject">🔬 Ciencias · Astronomía · Mates · NUEVO</div>
+            <h2>Proyecto Salvación: Misión con Rocky</h2>
+            <p>5 fases + 30 preguntas de ciencia real inspiradas en la película. Astrofagos, estrellas reales, biología alienígena y matemáticas. ¡Ayuda al Dr. Grace y a Rocky a salvar la Tierra!</p>
             <div class="card-tags">
-                <span class="tag">🎮 4 Mundos</span>
-                <span class="tag">🐉 Bowser Boss</span>
-                <span class="tag">30 preguntas</span>
-                <span class="tag">🎂 MAR10 Day</span>
+                <span class="tag">⭐ Astronomía real</span>
+                <span class="tag">🦠 Biología</span>
+                <span class="tag">🧮 Mates</span>
+                <span class="tag">🎬 Película 2026</span>
             </div>
             <div class="featured-btn-row">
-                <a href="mario-gabri-birthday.html" class="btn btn-active">🍄 ¡A por Bowser!</a>
-                <span class="birthday-pill">🎉 ¡10 años! · 10 Mar</span>
+                <a href="proyecto-salvacion-gabri.html" class="btn btn-active">🛸 ¡Comenzar Misión!</a>
+                <span class="new-pill green">🚀 ¡NUEVO!</span>
             </div>
         </div>
     </div>
@@ -231,7 +247,7 @@
         <!-- ROMA -->
         <div class="card roma">
             <span class="card-emoji">🏛️</span>
-            <div class="card-subject">Ciencias Sociales · NEW</div>
+            <div class="card-subject">Ciencias Sociales</div>
             <h2>Roma – La Romanización de Hispania</h2>
             <p>3 módulos de teoría + 20 preguntas. Conquista, sociedad romana, caída del Imperio y fin de la Edad Antigua.</p>
             <div class="card-tags">
@@ -298,7 +314,7 @@
         <!-- MARIO BIRTHDAY -->
         <div class="card mario">
             <span class="card-emoji">🍄</span>
-            <div class="card-subject">🎂 Cumpleaños · MAR10 Day · NEW</div>
+            <div class="card-subject">🎂 Cumpleaños · MAR10 Day</div>
             <h2>¡Feliz Cumpleaños Gabri! Mario Bros Adventure</h2>
             <p>4 mundos + 30 preguntas de Mario, Nintendo Switch, Zelda, Pokémon y más. ¡Derrota a Bowser y rescata a la Princesa Peach!</p>
             <div class="card-tags">
@@ -307,6 +323,20 @@
                 <span class="tag">🎂 MAR10 Day</span>
             </div>
             <a href="mario-gabri-birthday.html" class="btn btn-active">🍄 ¡A por Bowser!</a>
+        </div>
+
+        <!-- PROYECTO SALVACIÓN (also in grid) -->
+        <div class="card hailmary">
+            <span class="card-emoji">🛸</span>
+            <div class="card-subject">Ciencias · Astronomía · NEW</div>
+            <h2>Proyecto Salvación: Misión con Rocky</h2>
+            <p>Ciencia real, estrellas, biología extrema y mates. 5 fases para salvar la Tierra con el Dr. Grace y Rocky.</p>
+            <div class="card-tags">
+                <span class="tag">🔬 Ciencia real</span>
+                <span class="tag">🕷️ Rocky</span>
+                <span class="tag">30 preguntas</span>
+            </div>
+            <a href="proyecto-salvacion-gabri.html" class="btn btn-active">🛸 ¡A la misión!</a>
         </div>
 
     </div>
