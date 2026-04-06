@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛸 Proyecto Salvación: Misión con Rocky</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Nunito',sans-serif;background:#020810;color:white;min-height:100vh;overflow-x:hidden}
+        canvas#sf{position:fixed;inset:0;z-index:0;pointer-events:none}
+        .ap{position:fixed;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(57,255,20,.8),rgba(0,200,50,.4),transparent 70%);filter:blur(1px);animation:af 10s ease-in-out infinite}
+        @keyframes af{0%,100%{transform:translateY(0) translateX(0) scale(1);opacity:.25}25%{transform:translateY(-30px) translateX(15px) scale(1.2);opacity:.5}50%{transform:translateY(-15px) translateX(-10px) scale(.9);opacity:.35}75%{transform:translateY(-45px) translateX(20px) scale(1.1);opacity:.55}}
+        .pw{position:relative;z-index:2;max-width:880px;margin:0 auto;padding:20px 16px 60px}
+        .hdr{text-align:center;padding:32px 24px 26px;background:linear-gradient(135deg,rgba(10,22,40,.95),rgba(5,50,25,.6));border:2px solid #39ff14;border-radius:26px;box-shadow:0 0 60px rgba(57,255,20,.15),inset 0 0 40px rgba(57,255,20,.03);margin-bottom:24px;position:relative;overflow:hidden}
+        .hdr::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#39ff14,transparent)}
+        .hdr .ship{font-size:3.2rem;display:block;margin-bottom:6px;animation:sb 3s ease-in-out infinite}
+        @keyframes sb{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-14px) rotate(2deg)}}
+        .hdr h1{font-family:'Orbitron',sans-serif;font-size:clamp(1.1rem,3.8vw,1.7rem);color:#39ff14;text-shadow:0 0 20px #39ff14,0 0 40px rgba(57,255,20,.3);letter-spacing:2px;line-height:1.4}
+        .hdr .sub{color:rgba(255,255,255,.55);font-size:.88rem;font-weight:600;margin-top:6px}
+        .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0;border-radius:14px;overflow:hidden}
+        .gal img{width:100%;height:120px;object-fit:cover;border-radius:10px;border:1px solid rgba(57,255,20,.15);transition:all .3s}
+        .gal img:hover{border-color:#39ff14;transform:scale(1.03)}
+        @media(max-width:500px){.gal{grid-template-columns:1fr 1fr}}
+        .cr{display:flex;justify-content:center;gap:24px;margin:24px 0;flex-wrap:wrap}
+        .cc{background:rgba(10,22,40,.9);border:1px solid rgba(57,255,20,.2);border-radius:16px;padding:16px 20px;text-align:center;width:130px;transition:all .3s}
+        .cc:hover{border-color:#39ff14;transform:translateY(-4px);box-shadow:0 8px 24px rgba(57,255,20,.15)}
+        .cc .emo{font-size:2.4rem;display:block;margin-bottom:6px}
+        .cc .nm{font-family:'Orbitron',sans-serif;font-size:.6rem;color:#39ff14;letter-spacing:1px}
+        .cc .ds{font-size:.7rem;color:rgba(255,255,255,.4);margin-top:4px}
+        .story{font-size:.92rem;line-height:1.85;color:rgba(255,255,255,.65);font-weight:600;max-width:640px;margin:16px auto;text-align:left}
+        .story strong{color:#39ff14}.story em{color:#ffd700;font-style:normal}
+        .st{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;padding:14px 20px;background:rgba(10,22,40,.92);border:1px solid rgba(57,255,20,.25);border-radius:14px;margin-bottom:16px}
+        .ht{font-size:1.2rem;letter-spacing:2px}
+        .po{height:18px;background:rgba(0,0,0,.5);border-radius:9px;border:1px solid rgba(57,255,20,.2);overflow:hidden}
+        .pi{height:100%;border-radius:9px;transition:width .6s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,#39ff14,#00ff88);box-shadow:0 0 10px #39ff14;position:relative}
+        .pi::after{content:'';position:absolute;top:2px;left:4px;right:4px;height:5px;background:rgba(255,255,255,.25);border-radius:4px}
+        .prw{position:relative}
+        .pl{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:.65rem;font-weight:900;color:rgba(255,255,255,.5)}
+        .sb{background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.3);border-radius:10px;padding:6px 14px;text-align:center}
+        .sb .n{font-family:'Orbitron',sans-serif;font-size:1.1rem;color:#39ff14;font-weight:900}
+        .sb .l{font-size:.6rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px}
+        .ph{text-align:center;padding:10px;margin-bottom:16px}
+        .ph span{font-family:'Orbitron',sans-serif;font-size:.72rem;color:#39ff14;letter-spacing:3px;text-transform:uppercase;background:rgba(57,255,20,.08);padding:6px 18px;border-radius:20px;border:1px solid rgba(57,255,20,.15)}
+        .qc{background:rgba(10,22,40,.94);border:2px solid rgba(57,255,20,.3);border-radius:22px;overflow:hidden;box-shadow:0 4px 40px rgba(57,255,20,.08);animation:ci .4s ease-out;margin-bottom:18px}
+        @keyframes ci{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        .qi{width:100%;height:160px;object-fit:cover;display:block;border-bottom:1px solid rgba(57,255,20,.15)}
+        .qb{padding:24px 22px 22px}
+        .qn{font-family:'Orbitron',sans-serif;font-size:.68rem;color:rgba(57,255,20,.5);letter-spacing:2px;margin-bottom:6px}
+        .eb{display:inline-block;background:rgba(0,100,255,.15);border:1px solid rgba(0,150,255,.4);border-radius:6px;padding:2px 8px;font-size:.65rem;font-weight:800;color:#4da6ff;margin-bottom:8px;letter-spacing:1px}
+        .qx{font-size:.82rem;color:rgba(255,255,255,.45);font-weight:600;margin-bottom:10px;padding:10px 14px;background:rgba(57,255,20,.04);border-radius:10px;border-left:3px solid rgba(57,255,20,.2);line-height:1.5}
+        .qx .fun{color:#ffd700}
+        .qt{font-size:1.1rem;font-weight:700;line-height:1.6;margin-bottom:20px;color:rgba(255,255,255,.92)}
+        .opts{display:flex;flex-direction:column;gap:10px}
+        .opt{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(0,0,0,.3);border:2px solid rgba(57,255,20,.2);border-radius:14px;cursor:pointer;transition:all .25s;font-size:1rem;font-weight:600}
+        .opt:hover{border-color:rgba(57,255,20,.5);transform:translateX(4px)}
+        .opt.sel{background:rgba(57,255,20,.12);border-color:#39ff14;box-shadow:0 0 16px rgba(57,255,20,.15)}
+        .opt.ok{background:rgba(0,255,100,.15);border-color:#00ff64;box-shadow:0 0 20px rgba(0,255,100,.2)}
+        .opt.ko{background:rgba(255,50,50,.15);border-color:#ff3232;box-shadow:0 0 20px rgba(255,50,50,.2)}
+        .dot{width:22px;height:22px;border-radius:50%;border:2px solid rgba(57,255,20,.35);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+        .opt.sel .dot{border-color:#39ff14;background:#39ff14}
+        .opt.sel .dot::after{content:'';width:8px;height:8px;border-radius:50%;background:#020810}
+        .chk{width:22px;height:22px;border-radius:6px;border:2px solid rgba(57,255,20,.35);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:.75rem}
+        .opt.sel .chk{border-color:#39ff14;background:#39ff14;color:#020810}
+        .mg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+        .mc h4{text-align:center;font-family:'Orbitron',sans-serif;font-size:.68rem;color:#39ff14;letter-spacing:2px;margin-bottom:10px}
+        .mi{padding:12px;background:rgba(0,0,0,.3);border:2px solid rgba(57,255,20,.2);border-radius:10px;text-align:center;cursor:pointer;transition:all .25s;font-weight:700;font-size:.9rem;margin-bottom:8px}
+        .mi:hover{background:rgba(57,255,20,.08);transform:scale(1.03)}
+        .mi.sel{background:rgba(57,255,20,.15);border-color:#39ff14;box-shadow:0 0 12px rgba(57,255,20,.2)}
+        .mi.done{background:rgba(0,255,100,.1);border-color:#00ff64;opacity:.65;pointer-events:none}
+        .ia{width:100%;padding:14px 18px;font-size:1.1rem;font-weight:700;background:rgba(0,0,0,.35);border:2px solid rgba(57,255,20,.3);border-radius:14px;color:white;outline:none;font-family:'Nunito',sans-serif}
+        .ia:focus{border-color:#39ff14;box-shadow:0 0 16px rgba(57,255,20,.15)}
+        .br{text-align:center;margin:20px 0;display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+        .btn{padding:14px 34px;border-radius:14px;font-family:'Fredoka One',cursive;font-size:1.05rem;cursor:pointer;transition:all .25s;border:none;text-decoration:none;display:inline-block}
+        .bg{background:linear-gradient(135deg,#39ff14,#00cc44);color:#020810;box-shadow:0 4px 24px rgba(57,255,20,.3)}
+        .bg:hover{transform:scale(1.05);box-shadow:0 6px 32px rgba(57,255,20,.5)}
+        .bg:disabled{background:#222;color:#555;cursor:not-allowed;box-shadow:none;transform:none}
+        .ba{background:rgba(57,255,20,.1);border:2px solid #39ff14;color:#39ff14}
+        .ba:hover{background:rgba(57,255,20,.2)}
+        .fb{padding:16px 20px;border-radius:14px;font-size:1rem;font-weight:700;text-align:center;margin:16px 0;display:none;animation:fi .3s ease-out}
+        @keyframes fi{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+        .fb.ok{display:block;background:rgba(0,255,100,.1);border:2px solid rgba(0,255,100,.3);color:#00ff88}
+        .fb.ko{display:block;background:rgba(255,50,50,.1);border:2px solid rgba(255,50,50,.3);color:#ff6464}
+        .fn{display:none;text-align:center;padding:30px 10px}
+        .fn.on{display:block}
+        .fn .big{font-size:4.5rem;animation:sb 2s ease-in-out infinite}
+        .fn h2{font-family:'Orbitron',sans-serif;font-size:clamp(1.1rem,3.5vw,1.7rem);color:#39ff14;text-shadow:0 0 30px #39ff14;margin:14px 0}
+        .fn .sc{font-size:2.2rem;font-weight:900;color:#00ff88;margin:10px 0}
+        .fn .ms{font-size:.95rem;color:rgba(255,255,255,.65);font-weight:600;line-height:1.7;max-width:500px;margin:14px auto}
+        .fn .rq{font-style:italic;color:#ffd700;font-size:1.1rem;margin:16px auto;padding:14px 20px;background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);border-radius:12px;max-width:440px}
+        .hd{display:none!important}
+        .cf{position:fixed;top:-10px;z-index:100;pointer-events:none;animation:cfl 3s ease-out forwards}
+        @keyframes cfl{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+        @media(max-width:500px){.mg{grid-template-columns:1fr}.st{grid-template-columns:1fr;gap:10px;text-align:center}}
+    </style>
+</head>
+<body>
+<canvas id="sf"></canvas>
+<div class="pw">
+<div id="intro" class="intro">
+    <div class="hdr"><span class="ship">🛸</span><h1>PROYECTO SALVACIÓN</h1><p class="sub">Misión con Rocky · Ciencia Real para Salvar la Tierra</p></div>
+    <div class="gal">
+        <img src="img/grace.jpg" alt="Dr. Grace" onerror="this.style.display='none'">
+        <img src="img/rocky.jpg" alt="Rocky" onerror="this.style.display='none'">
+        <img src="img/nave.jpg" alt="Nave Hail Mary" onerror="this.style.display='none'">
+    </div>
+    <div class="cr">
+        <div class="cc"><span class="emo">👨‍🚀</span><span class="nm">Dr. Grace</span><span class="ds">Profesor de ciencias</span></div>
+        <div class="cc"><span class="emo">🪨</span><span class="nm">Rocky</span><span class="ds">Ingeniero alienígena</span></div>
+        <div class="cc"><span class="emo">🦠</span><span class="nm">Astrofago</span><span class="ds">Devorador de estrellas</span></div>
+        <div class="cc"><span class="emo">☀️</span><span class="nm">El Sol</span><span class="ds">¡En peligro!</span></div>
+    </div>
+    <div class="story">
+        <p>🚨 <strong>¡Alerta máxima, Gabri!</strong></p><br>
+        <p>El <strong>Sol</strong> se está apagando. Un organismo microscópico llamado <strong>Astrofago</strong> devora su energía. Si no lo detenemos, la Tierra se congelará.</p><br>
+        <p>El <strong>Dr. Ryland Grace</strong>, un profesor de ciencias, ha viajado 12 años luz hasta la estrella <strong>Tau Ceti</strong>. Allí ha conocido a <strong>Rocky</strong>, un alienígena con aspecto de roca con cinco patas que es ingeniero. <em>¡Su estrella también está en peligro!</em></p><br>
+        <p>Tu misión: demostrar tus conocimientos de <strong>ciencias naturales, astronomía, biología, matemáticas e inglés</strong> para ayudarles a encontrar la cura y <strong>¡salvar ambos mundos!</strong></p><br>
+        <p>🛸 <em>30 preguntas · 5 fases · ¿Estás listo, astronauta?</em></p>
+    </div>
+    <div class="br"><button class="btn bg" onclick="startGame()" style="font-size:1.2rem;padding:18px 44px">🚀 ¡COMENZAR MISIÓN!</button></div>
+</div>
+
+<div id="game" class="hd">
+    <div class="hdr" style="padding:14px 18px;margin-bottom:16px"><h1 style="font-size:clamp(.85rem,2.8vw,1.1rem)">🛸 PROYECTO SALVACIÓN: MISIÓN CON ROCKY</h1></div>
+    <div class="st">
+        <div class="ht" id="hearts">❤️❤️❤️</div>
+        <div class="prw"><div class="po"><div class="pi" id="pbar" style="width:0%"></div></div><div class="pl" id="plbl">0/30</div></div>
+        <div class="sb"><div class="n" id="scr">0</div><div class="l">Aciertos</div></div>
+    </div>
+    <div class="ph" id="phase"><span>FASE 1</span></div>
+    <div id="qa"></div>
+    <div class="fb" id="fb"></div>
+    <div class="br"><button class="btn bg" id="bc" onclick="check()">🔍 VERIFICAR</button><button class="btn ba hd" id="bn" onclick="next()">➡️ SIGUIENTE</button></div>
+</div>
+
+<div id="final" class="fn">
+    <div class="big">🌍🛸🪨</div>
+    <h2 id="ft"></h2><div class="sc" id="fs"></div>
+    <div class="rq" id="fq"></div><p class="ms" id="fm"></p>
+    <div class="br"><button class="btn bg" onclick="location.reload()">🔄 NUEVA MISIÓN</button><a href="index.html" class="btn ba">🏠 Volver al Rincón</a></div>
+</div>
+</div>
+
+<script>
+const cv=document.getElementById('sf'),cx=cv.getContext('2d');let S=[];
+function iS(){cv.width=innerWidth;cv.height=innerHeight;S=[];for(let i=0;i<200;i++)S.push({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*1.8+.2,s:Math.random()*.3+.05,b:Math.random()})}
+function dS(){cx.clearRect(0,0,cv.width,cv.height);S.forEach(s=>{s.b+=s.s;if(s.b>1||s.b<0)s.s*=-1;cx.beginPath();cx.arc(s.x,s.y,s.r,0,Math.PI*2);cx.fillStyle=`rgba(255,255,255,${Math.abs(s.b)*.7+.1})`;cx.fill()});requestAnimationFrame(dS)}
+iS();dS();addEventListener('resize',iS);
+for(let i=0;i<10;i++){const p=document.createElement('div');p.className='ap';const sz=4+Math.random()*12;p.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*8}s;animation-duration:${8+Math.random()*6}s`;document.body.appendChild(p)}
+
+let cur=0,score=0,hearts=3,selO=null,mS={};
+const PH=[{n:"FASE 1: DESPERTAR EN LA NAVE",i:"😴"},{n:"FASE 2: CIENCIAS NATURALES A BORDO",i:"🔬"},{n:"FASE 3: CONOCIENDO A ROCKY",i:"🪨"},{n:"FASE 4: ESTRELLAS Y PLANETAS",i:"⭐"},{n:"FASE 5: MISIÓN FINAL — SALVAR LA TIERRA",i:"🌍"}];
+
+const Q=[
+// F1: DESPERTAR (6)
+{p:0,cx:"Grace despierta solo en la nave sin recordar nada. Lo primero que hace es medir cosas, como un buen científico.",q:"🔬 ¿Cuál es el primer paso del método científico?",t:"m",o:["Experimentar","Observar","Concluir","Publicar un libro"],a:1},
+{p:0,cx:"La nave gira para crear gravedad artificial cuando los motores están apagados. ¡Como un tiovivo gigante!",q:"🔄 ¿Por qué sentimos que algo nos empuja hacia fuera cuando giramos rápido?",t:"m",o:["Por el viento","Por la fuerza centrífuga","Por la gravedad de la Luna","Por el magnetismo"],a:1},
+{p:0,cx:"Grace tiene 360 raciones de comida. Come 2 al día. ¡Tiene que calcular bien!",q:"🧮 ¿Para cuántos días le alcanza la comida? (360 ÷ 2)",t:"i",a:"180"},
+{p:0,cx:"El agua en la nave se recicla. ¡En la Tierra también se recicla de forma natural!",q:"💧 ¿Cómo se llama el proceso natural en el que el agua se evapora, forma nubes y vuelve a caer como lluvia?",t:"m",o:["Ciclo del agua","Fotosíntesis","Digestión","Combustión"],a:0},
+{p:0,cx:"Grace comprueba la temperatura: 22°C. Perfecto. Pero necesita recordar datos básicos de ciencias.",q:"🌡️ ¿A cuántos grados centígrados se congela el agua pura?",t:"i",a:"0"},
+{p:0,cx:"En la nave todo flota cuando los motores se apagan. ¡Como los astronautas de la Estación Espacial!",q:"🧊 ¿Cuáles son los tres estados principales de la materia?",t:"m",o:["Sólido, líquido y gaseoso","Caliente, templado y frío","Grande, mediano y pequeño","Duro, blando y elástico"],a:0},
+
+// F2: CIENCIAS NATURALES (6)
+{p:1,cx:"Grace cultiva algas en el laboratorio para producir oxígeno. Las plantas también producen oxígeno.",q:"🌱 ¿Cómo se llama el proceso por el que las plantas producen oxígeno usando la luz del sol?",t:"m",o:["Respiración","Fotosíntesis","Fermentación","Evaporación"],a:1},
+{p:1,cx:"Grace analiza el Astrofago al microscopio. Es un organismo unicelular, como las bacterias.",q:"🔬 ¿Qué instrumento se usa para ver cosas muy pequeñas como las células?",t:"m",o:["Telescopio","Microscopio","Periscopio","Estetoscopio"],a:1},
+{p:1,cx:"Hay seres vivos que sobreviven en volcanes, en hielo o incluso en el espacio. Se llaman extremófilos.",q:"🐻 ¿Cuál de estos animales REALES puede sobrevivir en el vacío del espacio?",t:"m",o:["La cucaracha","El oso polar","El tardígrado (oso de agua)","El delfín"],a:2},
+{p:1,cx:"En el cuerpo de Grace, la sangre lleva oxígeno a todas las células. El corazón la bombea sin parar.",q:"❤️ ¿Cuál es el órgano que bombea la sangre por todo nuestro cuerpo?",t:"m",o:["Los pulmones","El estómago","El corazón","El cerebro"],a:2},
+{p:1,cx:"Grace necesita saber qué gases hay en la nave para poder respirar bien.",q:"🌬️ ¿Cuál es el gas más abundante en la atmósfera de la Tierra?",t:"m",o:["Oxígeno","Dióxido de carbono","Nitrógeno","Hidrógeno"],a:2},
+{p:1,cx:"Los seres vivos se organizan en reinos. Grace clasifica los organismos que encuentra.",q:"🧬 Conecta cada ser vivo con su reino:",t:"x",pairs:[{l:"Roble",r:"Planta"},{l:"Bacteria",r:"Monera"},{l:"Seta",r:"Hongo"}]},
+
+// F3: ROCKY (6) — película + humor
+{p:2,cx:"<span class='fun'>🎬 ¡Curiosidad de la peli!</span> Rocky NO es CGI. ¡Es una marioneta real operada por 5 titiriteros con la técnica japonesa Bunraku!",q:"🪨 En la película, ¿cuántos titiriteros mueven a Rocky?",t:"m",o:["1","3","5","10"],a:2,img:"img/rocky.jpg"},
+{p:2,cx:"Rocky no tiene ojos. En su planeta la atmósfera es tan densa que no deja pasar la luz. 'Ve' con sonido, igual que los murciélagos.",q:"🦇 ¿Cómo se llama la capacidad de orientarse usando el eco del sonido?",t:"m",o:["Telepatía","Ecolocalización","Magnetismo","Visión nocturna"],a:1},
+{p:2,cx:"<span class='fun'>🎬 ¡Momento divertido!</span> Cuando Rocky está contento, da golpecitos con sus patas y hace sonidos musicales. Grace le enseña a chocar los puños: '¡Fist my bump!'",q:"🎵 ¿Cómo se comunica Rocky con Grace?",t:"m",o:["Escribiendo en papel","Con acordes musicales","Por telepatía","Hablando en español"],a:1},
+{p:2,cx:"Rocky respira amoníaco y vive a temperaturas altísimas. ¡Es muy diferente a nosotros!",q:"🩸 Conecta cada ser con lo que tiene en su sangre:",t:"x",pairs:[{l:"Humanos",r:"Hierro (roja)"},{l:"Rocky",r:"Mercurio (plateada)"},{l:"Pulpos",r:"Cobre (azul)"}]},
+{p:2,cx:"<span class='fun'>🎬 ¡Curiosidad!</span> La película la dirigen Phil Lord y Chris Miller, los mismos directores de Spider-Man: Into the Spider-Verse y The LEGO Movie.",q:"🎬 ¿Qué actor interpreta al Dr. Grace en la película Proyecto Salvación?",t:"m",o:["Tom Hanks","Chris Pratt","Ryan Gosling","Brad Pitt"],a:2,img:"img/grace.jpg"},
+{p:2,cx:"Grace y Rocky construyen un túnel de xenonita entre sus naves. Cada uno respira gases diferentes.",q:"💎 ¿Cuál de estos es el material más duro que conocemos en la Tierra?",t:"m",o:["Acero","Titanio","Diamante","Grafeno"],a:2},
+
+// F4: ESTRELLAS Y PLANETAS (6)
+{p:3,cx:"Tau Ceti es una estrella REAL. Puedes verla en el cielo en la constelación de Cetus (la Ballena). Está a 11,9 años luz.",q:"⭐ ¿Qué es un año luz?",t:"m",o:["El tiempo que tarda la Tierra en girar","La distancia que recorre la luz en un año","Un año en el planeta Luz","365 días de sol"],a:1},
+{p:3,cx:"La Zona Habitable es donde la temperatura permite agua líquida. ¡Como Ricitos de Oro: ni muy caliente, ni muy fría!",q:"💧 ¿Qué planeta de nuestro sistema solar está en la zona habitable?",t:"m",o:["Venus","La Tierra","Júpiter","Mercurio"],a:1},
+{p:3,cx:"El Sol es una estrella mediana. Hay estrellas gigantes rojas y enanas rojas, mucho más pequeñas.",q:"☀️ ¿Qué tipo de astro es el Sol?",t:"m",o:["Un planeta","Una estrella","Un satélite","Un asteroide"],a:1},
+{p:3,cx:"Cuando la luz blanca pasa a través de un prisma de cristal, se separa en todos los colores del arcoíris.",q:"🌈 ¿Cuántos colores principales tiene el arcoíris?",t:"m",o:["5","6","7","10"],a:2},
+{p:3,cx:"El sistema de Rocky tiene TRES estrellas orbitando juntas. ¡Imagina ver tres soles en el cielo!",q:"🌟 ¿Cuántos planetas tiene nuestro sistema solar?",t:"i",a:"8"},
+{p:3,cx:"Venus, la Tierra y Marte están a diferentes distancias del Sol. El orden importa para la temperatura.",q:"🚀 ¿Cuál es el orden correcto desde el Sol: Venus, Tierra, Marte?",t:"m",o:["Venus → Tierra → Marte","Tierra → Venus → Marte","Marte → Tierra → Venus","Venus → Marte → Tierra"],a:0},
+
+// F5: MISIÓN FINAL (6) — mix + English
+{p:4,cx:"Grace cultiva 45 kg de Taumoeba al día. Necesita 900 kg en total para la cura.",q:"🧮 ¿Cuántos días necesita Grace para tener 900 kg? (900 ÷ 45)",t:"i",a:"20"},
+{p:4,cx:"Grace needs to send probes back to Earth. The probes are named after The Beatles!",q:"🇬🇧 ENGLISH: What are the first names of The Beatles?",t:"m",o:["John, Paul, George & Ringo","Mick, Keith, Ron & Charlie","Freddie, Brian, Roger & John","Bono, Edge, Adam & Larry"],a:0,eng:true},
+{p:4,cx:"Rocky communicates using musical sounds. He remembers every word after hearing it just once!",q:"🇬🇧 ENGLISH: How does Rocky 'see' without eyes?",t:"m",o:["He uses magnets","He uses echolocation (sound)","He uses telepathy","He reads Braille"],a:1,eng:true},
+{p:4,cx:"Light is the fastest thing in the universe. Nothing can travel faster!",q:"🇬🇧 ENGLISH: Light travels at approximately 300,000 ___ per second.",t:"m",o:["meters","miles","kilometers","centimeters"],a:2,eng:true},
+{p:4,cx:"<span class='fun'>🎬 ¡Final de la peli!</span> Grace elige salvar a Rocky en vez de volver a la Tierra. Años después, vive en el planeta de Rocky enseñando ciencias a niños eridianos.",q:"❤️ ¿Qué valor demuestra Grace al sacrificarse por su amigo Rocky?",t:"m",o:["Cobardía","Egoísmo","Amistad y generosidad","Indiferencia"],a:2,img:"img/rocky-grace.jpg"},
+{p:4,cx:"¡Última transmisión! Las sondas llevan la cura hacia la Tierra. Solo queda una pregunta para completar la misión...",q:"🌍 Selecciona los DOS gases principales de nuestra atmósfera:",t:"c",o:["Nitrógeno (78%)","Dióxido de carbono","Oxígeno (21%)","Helio","Metano"],a:[0,2]}
+];
+
+function startGame(){document.getElementById('intro').classList.add('hd');document.getElementById('game').classList.remove('hd');loadQ()}
+function loadQ(){
+    const q=Q[cur],ph=q.p;
+    document.getElementById('phase').innerHTML=`<span>${PH[ph].i} ${PH[ph].n}</span>`;
+    document.getElementById('plbl').textContent=`${cur+1}/${Q.length}`;
+    document.getElementById('pbar').style.width=((cur/Q.length)*100)+'%';
+    document.getElementById('scr').textContent=score;
+    document.getElementById('fb').className='fb';
+    document.getElementById('bc').classList.remove('hd');
+    document.getElementById('bn').classList.add('hd');
+    selO=null;mS={};
+    let h=`<div class="qc">`;
+    if(q.img)h+=`<img class="qi" src="${q.img}" alt="" onerror="this.style.display='none'">`;
+    h+=`<div class="qb"><div class="qn">TRANSMISIÓN ${cur+1} DE ${Q.length}</div>`;
+    if(q.eng)h+=`<span class="eb">🇬🇧 ENGLISH QUESTION</span>`;
+    h+=`<div class="qx">📡 ${q.cx}</div><div class="qt">${q.q}</div>`;
+    if(q.t==='m'){h+='<div class="opts">';q.o.forEach((o,i)=>{h+=`<label class="opt" onclick="pO(${i})"><span class="dot"></span>${o}</label>`});h+='</div>'}
+    else if(q.t==='i'){h+=`<input class="ia" id="inp" type="text" placeholder="Escribe tu respuesta..." autocomplete="off" onkeydown="if(event.key==='Enter')check()">`}
+    else if(q.t==='c'){h+='<div class="opts">';q.o.forEach((o,i)=>{h+=`<label class="opt" onclick="tC(this)"><span class="chk"></span>${o}</label>`});h+='</div>'}
+    else if(q.t==='x'){const rs=[...q.pairs.map(p=>p.r)].sort(()=>Math.random()-.5);
+        h+=`<div class="mg"><div class="mc"><h4>CONCEPTO</h4>`;q.pairs.forEach((p,i)=>{h+=`<div class="mi" data-s="l" data-i="${i}" onclick="pM(this)">${p.l}</div>`});
+        h+=`</div><div class="mc"><h4>DEFINICIÓN</h4>`;rs.forEach(r=>{h+=`<div class="mi" data-s="r" data-v="${r}" onclick="pM(this)">${r}</div>`});
+        h+=`</div></div>`;mS={sl:null,sr:null,d:0,t:q.pairs.length}}
+    h+=`</div></div>`;document.getElementById('qa').innerHTML=h}
+
+function pO(i){document.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));document.querySelectorAll('.opt')[i].classList.add('sel');selO=i}
+function tC(el){el.classList.toggle('sel')}
+function pM(el){
+    const s=el.dataset.s;if(el.classList.contains('done'))return;
+    if(s==='l'){document.querySelectorAll('[data-s="l"]').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');mS.sl=+el.dataset.i}
+    else{document.querySelectorAll('[data-s="r"]').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');mS.sr=el.dataset.v}
+    if(mS.sl!==null&&mS.sr!==null){
+        if(Q[cur].pairs[mS.sl].r===mS.sr){mS.d++;document.querySelector(`[data-s="l"][data-i="${mS.sl}"]`).classList.add('done');document.querySelector(`[data-s="r"][data-v="${mS.sr}"]`).classList.add('done')}
+        else{document.querySelectorAll('.mi.sel').forEach(e=>{e.style.borderColor='#ff3232';setTimeout(()=>{e.style.borderColor='';e.classList.remove('sel')},500)})}
+        document.querySelectorAll('.mi').forEach(e=>e.classList.remove('sel'));mS.sl=null;mS.sr=null;
+        if(mS.d===mS.t)setTimeout(()=>{sFb(true);aft()},300)}}
+
+function check(){
+    const q=Q[cur];let ok=false;
+    if(q.t==='m'){if(selO===null)return;ok=selO===q.a;document.querySelectorAll('.opt').forEach((o,i)=>{o.style.pointerEvents='none';if(i===q.a)o.classList.add('ok');if(i===selO&&!ok)o.classList.add('ko')})}
+    else if(q.t==='i'){const v=document.getElementById('inp').value.trim().replace(/\./g,'');ok=v===q.a;document.getElementById('inp').disabled=true}
+    else if(q.t==='c'){const ck=[...document.querySelectorAll('.opt')].map((o,i)=>o.classList.contains('sel')?i:-1).filter(x=>x>=0);ok=q.a.length===ck.length&&q.a.every(a=>ck.includes(a));document.querySelectorAll('.opt').forEach(o=>o.style.pointerEvents='none')}
+    else if(q.t==='x')return;
+    sFb(ok);aft()}
+
+function sFb(ok){const fb=document.getElementById('fb'),q=Q[cur];
+    if(ok){score++;document.getElementById('scr').textContent=score;fb.className='fb ok';fb.textContent=['✅ ¡Correcto! Grace y Rocky avanzan.','✅ ¡Genial, astronauta!','✅ ¡Perfecto! Rocky dice: "¡Amigo listo!"','✅ ¡La misión progresa!'][Math.floor(Math.random()*4)]}
+    else{hearts=Math.max(0,hearts-.5);uH();fb.className='fb ko';let ex='';if(q.t==='m')ex=' → Respuesta: '+q.o[q.a];else if(q.t==='i')ex=' → Respuesta: '+q.a;fb.textContent='❌ ¡Casi! No te rindas.'+ex}}
+
+function aft(){document.getElementById('bc').classList.add('hd');document.getElementById('bn').classList.remove('hd');
+    if(hearts<=0)setTimeout(()=>{alert('💔 ¡Se acabó el oxígeno! Los grandes científicos siempre lo intentan de nuevo.');location.reload()},1200)}
+function next(){cur++;if(cur>=Q.length){sF();return}loadQ()}
+function uH(){const f=Math.floor(hearts),hf=hearts%1!==0;let s='';for(let i=0;i<f;i++)s+='❤️';if(hf)s+='💔';if(!s)s='💀';document.getElementById('hearts').innerHTML=s}
+
+function sF(){document.getElementById('game').classList.add('hd');const f=document.getElementById('final');f.classList.add('on');
+    const pct=Math.round((score/Q.length)*100);document.getElementById('fs').textContent=`${score} / ${Q.length} — ${pct}%`;
+    let t,m,rq;
+    if(pct>=90){t='🌍🛸 ¡MISIÓN PERFECTA!';m='¡Has salvado la Tierra y Erid! El Sol brilla de nuevo. Eres un verdadero científico espacial.';rq='"¡Amigo listo! ¡Amigo bueno! ¡Fist my bump!" 🤜🪨'}
+    else if(pct>=70){t='🚀 ¡MISIÓN CUMPLIDA!';m='Las sondas han llegado a la Tierra con la cura. ¡Buen trabajo, astronauta!';rq='"¡Amigo bueno! ¡Misión buena!" 🪨'}
+    else if(pct>=50){t='⚠️ MISIÓN PARCIAL';m='Algunas sondas llegaron, pero necesitas más datos. ¡Repasa y vuelve a intentarlo!';rq='"Amigo... ¿estudiar más?" 🪨'}
+    else{t='🔄 NECESITAS MÁS ENTRENAMIENTO';m='El Astrofago sigue avanzando... ¡Pero los científicos nunca se rinden!';rq='"No rendirse. Intentar otra vez." 🪨'}
+    document.getElementById('ft').textContent=t;document.getElementById('fm').textContent=m;document.getElementById('fq').textContent=rq;cft()}
+
+function cft(){const c=['#39ff14','#00ff88','#00ccff','#ff3232','#ffd700'];
+for(let i=0;i<70;i++){setTimeout(()=>{const e=document.createElement('div');e.className='cf';const sz=6+Math.random()*10;e.style.cssText=`left:${Math.random()*100}%;background:${c[Math.floor(Math.random()*c.length)]};width:${sz}px;height:${sz}px;border-radius:${Math.random()>.5?'50%':'3px'};animation-delay:${Math.random()*.5}s`;document.body.appendChild(e);setTimeout(()=>e.remove(),3500)},i*35)}}
+</script>
+</body>
+</html>
