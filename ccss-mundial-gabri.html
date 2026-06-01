@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camino al Mundial 2026 ⚽ · Ciencias Sociales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pitch-dark:#0a5c2e;
+    --pitch:#138a3f;
+    --pitch-light:#36b35a;
+    --gold:#ffce2e;
+    --gold-deep:#e0a400;
+    --white:#ffffff;
+    --line:rgba(255,255,255,.55);
+    --red:#d11a3a;
+    --red-soft:#fde7eb;
+    --green-ok:#1faa59;
+    --green-soft:#e3f8ec;
+    --ink:#06351b;
+    --score-bg:#06351b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:'Nunito',sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 20% -5%, rgba(255,255,255,.35) 0%, transparent 30%),
+      radial-gradient(circle at 80% -5%, rgba(255,255,255,.35) 0%, transparent 30%),
+      linear-gradient(180deg, var(--pitch-light) 0%, var(--pitch) 45%, var(--pitch-dark) 100%);
+    display:flex;align-items:center;justify-content:center;
+    padding:16px;overflow-x:hidden;
+  }
+  /* Líneas de campo de fútbol al fondo */
+  .campo{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;}
+  .campo .circulo{position:absolute;top:50%;left:50%;width:230px;height:230px;border:3px solid var(--line);
+    border-radius:50%;transform:translate(-50%,-50%);}
+  .campo .linea{position:absolute;top:0;left:50%;width:3px;height:100%;background:var(--line);transform:translateX(-50%);}
+  .focos{position:fixed;top:0;left:0;width:100%;height:90px;z-index:0;
+    background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.4),transparent 70%);pointer-events:none;}
+
+  .tarjeta{
+    position:relative;z-index:2;width:100%;max-width:580px;
+    background:var(--white);
+    border-radius:24px;
+    padding:0 0 28px;
+    box-shadow:0 24px 60px rgba(0,0,0,.35);
+    overflow:hidden;
+    border:5px solid var(--ink);
+  }
+
+  /* ---------- Marcador superior estilo LED ---------- */
+  .marcador{
+    background:var(--score-bg);
+    color:var(--white);
+    padding:14px 20px;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    border-bottom:4px solid var(--gold);
+  }
+  .marcador .ronda{font-family:'Bungee';font-size:.78rem;letter-spacing:.5px;color:var(--gold);text-transform:uppercase;line-height:1.1;}
+  .marcador .goles{font-family:'Bungee';font-size:1.15rem;background:#04240f;border:2px solid var(--pitch-light);
+    border-radius:10px;padding:4px 12px;color:#7CFFB0;letter-spacing:1px;white-space:nowrap;}
+  .dots{display:flex;gap:5px;flex-wrap:wrap;max-width:160px;}
+  .dot{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.22);transition:.3s;}
+  .dot.done{background:var(--gold);}
+  .dot.now{background:var(--white);box-shadow:0 0 0 3px rgba(255,255,255,.25);}
+
+  .cuerpo{padding:24px 24px 0;}
+
+  /* ---------- Pantalla inicio ---------- */
+  .balon{font-size:4.6rem;text-align:center;display:block;margin:18px 0 4px;animation:bote 1.6s ease-in-out infinite;}
+  @keyframes bote{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-14px) rotate(8deg)}}
+  h1{font-family:'Bungee';font-size:1.9rem;line-height:1.05;text-align:center;color:var(--ink);margin-bottom:6px;}
+  h1 .azul{color:var(--pitch);}
+  .lema{text-align:center;font-weight:800;color:var(--pitch);font-size:1.05rem;margin-bottom:16px;letter-spacing:.3px;}
+  .intro-txt{text-align:center;font-weight:600;color:#2a4a37;line-height:1.55;margin:0 6px 8px;}
+  .bandera{display:inline-block;background:linear-gradient(180deg,var(--red) 0 33%, var(--gold) 33% 66%, var(--red) 66%);
+    padding:2px 8px;border-radius:5px;color:#fff;font-weight:900;font-family:'Bungee';font-size:.8rem;text-shadow:0 1px 1px rgba(0,0,0,.3);}
+
+  /* ---------- Pregunta ---------- */
+  .tipo-badge{display:inline-flex;align-items:center;gap:6px;font-family:'Bungee';font-size:.62rem;letter-spacing:.5px;
+    background:var(--gold);color:var(--ink);padding:5px 11px;border-radius:50px;text-transform:uppercase;margin-bottom:12px;}
+  .pregunta{font-family:'Nunito';font-weight:800;font-size:1.28rem;line-height:1.3;color:var(--ink);margin-bottom:18px;}
+  .pregunta b{color:var(--pitch);}
+
+  .opciones{display:grid;gap:11px;}
+  .opcion{
+    font-family:'Nunito';font-weight:700;font-size:1.05rem;
+    background:#f4fbf6;border:3px solid #cfe9d8;color:var(--ink);
+    padding:14px 16px;border-radius:14px;cursor:pointer;text-align:left;
+    transition:transform .12s, border-color .2s, background .2s;
+    display:flex;align-items:center;gap:12px;
+  }
+  .opcion .num{width:28px;height:28px;flex:0 0 28px;border-radius:8px;background:var(--pitch);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-family:'Bungee';font-size:.8rem;}
+  .opcion:hover:not(:disabled){transform:translateX(4px);border-color:var(--gold);}
+  .opcion:disabled{cursor:default;}
+  .opcion.ok{background:var(--green-soft);border-color:var(--green-ok);}
+  .opcion.ok .num{background:var(--green-ok);}
+  .opcion.no{background:var(--red-soft);border-color:var(--red);}
+  .opcion.no .num{background:var(--red);}
+
+  /* Verdadero / Falso */
+  .vf{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .vf button{font-family:'Bungee';font-size:1.1rem;padding:24px 10px;border-radius:16px;cursor:pointer;border:4px solid;
+    transition:transform .12s;display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .vf .v{background:#eafff2;border-color:var(--green-ok);color:#0c6e3a;}
+  .vf .f{background:#fff0f2;border-color:var(--red);color:#a01228;}
+  .vf button:hover:not(:disabled){transform:scale(1.04);}
+  .vf button:disabled{opacity:.55;cursor:default;}
+  .vf button.elegida{transform:scale(1.04);box-shadow:0 0 0 4px rgba(255,206,46,.5);}
+  .vf .emo{font-size:1.8rem;}
+
+  /* Asociación / matching */
+  .match-instru{font-size:.9rem;font-weight:700;color:#5b7a67;margin-bottom:12px;text-align:center;}
+  .match{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .col{display:flex;flex-direction:column;gap:10px;}
+  .col-tit{font-family:'Bungee';font-size:.6rem;text-transform:uppercase;color:#5b7a67;text-align:center;letter-spacing:.5px;}
+  .mitem{font-family:'Nunito';font-weight:700;font-size:.93rem;padding:12px 10px;border-radius:12px;cursor:pointer;
+    border:3px solid #cfe9d8;background:#f4fbf6;color:var(--ink);text-align:center;transition:transform .12s,background .2s,border-color .2s;line-height:1.25;}
+  .mitem:hover:not(.lock){transform:scale(1.03);border-color:var(--gold);}
+  .mitem.sel{background:var(--gold);border-color:var(--gold-deep);}
+  .mitem.lock{background:var(--green-soft);border-color:var(--green-ok);color:#0c6e3a;cursor:default;opacity:.9;}
+  .mitem.flash{background:var(--red-soft);border-color:var(--red);}
+
+  /* Feedback */
+  .feedback{margin-top:18px;padding:14px 16px;border-radius:14px;font-weight:800;opacity:0;max-height:0;overflow:hidden;
+    transition:opacity .3s, max-height .3s;}
+  .feedback.show{opacity:1;max-height:260px;}
+  .feedback.bien{background:var(--green-soft);border:2px solid var(--green-ok);color:#0c6e3a;}
+  .feedback.mal{background:var(--red-soft);border:2px solid var(--red);color:#a01228;}
+  .feedback small{display:block;font-weight:600;color:#34503f;margin-top:6px;font-size:.92rem;line-height:1.45;}
+
+  .btn{font-family:'Bungee';font-size:1.05rem;color:var(--ink);
+    background:linear-gradient(180deg,var(--gold),var(--gold-deep));
+    border:none;border-radius:14px;padding:15px 28px;cursor:pointer;display:block;margin:20px auto 0;
+    box-shadow:0 6px 0 #b58600;transition:transform .1s,box-shadow .1s;letter-spacing:.4px;}
+  .btn:active{transform:translateY(4px);box-shadow:0 2px 0 #b58600;}
+  .btn.verde{background:linear-gradient(180deg,var(--pitch-light),var(--pitch));color:#fff;box-shadow:0 6px 0 #0a5c2e;}
+  .btn.verde:active{box-shadow:0 2px 0 #0a5c2e;}
+  .oculto{display:none !important;}
+
+  /* Final */
+  .trofeo{font-size:5.2rem;text-align:center;display:block;margin:14px 0 2px;animation:bote 1.8s ease-in-out infinite;}
+  .estrellas{font-size:2.4rem;text-align:center;letter-spacing:8px;margin:8px 0;}
+  .resultado{font-family:'Bungee';font-size:1.3rem;text-align:center;color:var(--ink);margin:4px 0;}
+  .marcador-final{font-family:'Bungee';font-size:2rem;text-align:center;color:var(--pitch);margin:6px 0;}
+  .msg-final{text-align:center;font-weight:700;color:#2a4a37;font-size:1.05rem;margin:6px 14px 0;line-height:1.5;}
+
+  .confeti{position:fixed;top:-12px;width:12px;height:12px;z-index:50;}
+  @media(max-width:480px){
+    h1{font-size:1.5rem}.pregunta{font-size:1.12rem}.balon{font-size:3.6rem}.trofeo{font-size:4rem}
+    .match{gap:10px}.mitem{font-size:.84rem}
+  }
+</style>
+</head>
+<body>
+<div class="focos"></div>
+<div class="campo"><span class="linea"></span><span class="circulo"></span></div>
+
+<div class="tarjeta">
+  <!-- Marcador -->
+  <div class="marcador" id="marcador">
+    <div class="ronda" id="ronda">Camino<br>al Mundial</div>
+    <div class="dots" id="dots"></div>
+    <div class="goles" id="goles">⚽ 0</div>
+  </div>
+
+  <div class="cuerpo">
+
+    <!-- INICIO -->
+    <section id="inicio">
+      <span class="balon">⚽</span>
+      <h1>Camino al <span class="azul">Mundial 2026</span></h1>
+      <p class="lema">Ciencias Sociales · 4º de Primaria</p>
+      <p class="intro-txt">
+        ¡Vistes la camiseta de <span class="bandera">ESPAÑA</span> y empiezas el torneo!
+        Cada respuesta correcta es un <b>gol</b> que te lleva más cerca de levantar la copa. 🏆
+      </p>
+      <p class="intro-txt" style="margin-top:10px;">
+        Pasarás por 5 rondas: fase de grupos, octavos, cuartos, semifinal y la <b>gran final</b>.
+        Hay preguntas de elegir, de verdadero o falso y de relacionar. ¡Concéntrate, crack!
+      </p>
+      <button class="btn" onclick="empezar()">¡SALTAR AL CAMPO!</button>
+    </section>
+
+    <!-- JUEGO -->
+    <section id="juego" class="oculto">
+      <span class="tipo-badge" id="tipoBadge">⚽ Pregunta</span>
+      <div class="pregunta" id="pregunta"></div>
+      <div id="zona"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="btn verde oculto" id="btnNext" onclick="siguiente()">CONTINUAR ➜</button>
+    </section>
+
+    <!-- FINAL -->
+    <section id="final" class="oculto">
+      <span class="trofeo" id="trofeo">🏆</span>
+      <div class="estrellas" id="estrellas"></div>
+      <div class="resultado" id="resultado"></div>
+      <div class="marcador-final" id="marcadorFinal"></div>
+      <p class="msg-final" id="msgFinal"></p>
+      <button class="btn" onclick="reiniciar()">JUGAR OTRA VEZ 🔁</button>
+    </section>
+
+  </div>
+</div>
+
+<script>
+/* ===================== PREGUNTAS ===================== */
+const RONDAS = ["Fase de grupos","Octavos de final","Cuartos de final","Semifinal","¡LA GRAN FINAL!"];
+
+const questions = [
+  // ---- TEMA 9: Organización del territorio ----
+  { type:'mc',
+    q:'España es un estado <b>democrático</b>. ¿Qué significa eso?',
+    options:['Que manda solo una persona','Que los ciudadanos eligen a sus representantes votando','Que no hay leyes'],
+    correct:1,
+    explain:'En democracia, las personas mayores de 18 años votan para elegir quién gobierna.' },
+
+  { type:'mc',
+    q:'¿Qué forma de gobierno tiene España?',
+    options:['Una república','Una monarquía parlamentaria','Una dictadura'],
+    correct:1,
+    explain:'El rey es el jefe del Estado, pero las leyes las hace el Parlamento. Por eso es monarquía PARLAMENTARIA.' },
+
+  { type:'mc',
+    q:'¿Quién es el <b>jefe del Estado</b> en España?',
+    options:['El presidente del Gobierno','El rey (Felipe VI)','El alcalde'],
+    correct:1,
+    explain:'Felipe VI es el rey desde 2014. Su hija, la princesa Leonor, es la heredera de la corona.' },
+
+  { type:'tf',
+    q:'En España, las personas mayores de 18 años pueden votar en las elecciones.',
+    answer:true,
+    explain:'¡Correcto! A partir de los 18 años ya se puede votar para elegir a los representantes.' },
+
+  { type:'mc',
+    q:'¿En cuántas <b>comunidades autónomas</b> se divide España?',
+    options:['15','17','19'],
+    correct:1,
+    explain:'17 comunidades autónomas, más 2 ciudades autónomas. ¡Madrid es una de las comunidades!' },
+
+  { type:'mc',
+    q:'¿Cuáles son las dos <b>ciudades autónomas</b> de España?',
+    options:['Ceuta y Melilla','Baleares y Canarias','Madrid y Barcelona'],
+    correct:0,
+    explain:'Ceuta y Melilla están en el norte de África, pero forman parte de España.' },
+
+  { type:'mc',
+    q:'El territorio va de mayor a menor así: comunidad autónoma → <b>?</b> → municipio. ¿Qué falta en el medio?',
+    options:['Provincia','Continente','Barrio'],
+    correct:0,
+    explain:'Las comunidades se dividen en PROVINCIAS, y las provincias en municipios. El municipio lo gobierna el ayuntamiento.' },
+
+  { type:'mc',
+    q:'¿Cómo se llama el documento con las normas de cada comunidad autónoma?',
+    options:['El padrón','El Estatuto de Autonomía','El censo'],
+    correct:1,
+    explain:'El Estatuto de Autonomía recoge las normas, la capital y la organización de cada comunidad.' },
+
+  { type:'mc',
+    q:'¿A qué <b>continente</b> pertenece España?',
+    options:['África','Europa','América'],
+    correct:1,
+    explain:'España está en el suroeste de Europa, en la península Ibérica, que comparte con Portugal.' },
+
+  { type:'match',
+    q:'Relaciona cada <b>límite de España</b> con lo que hay:',
+    pairs:[
+      {l:'Al NORTE',  r:'Francia y Andorra'},
+      {l:'Al OESTE',  r:'Portugal'},
+      {l:'Al ESTE',   r:'Mar Mediterráneo'},
+      {l:'Al SUR',    r:'Marruecos'}
+    ],
+    explain:'Al norte: mar Cantábrico, Francia y Andorra. Al oeste: Portugal y el océano Atlántico. Al este: mar Mediterráneo. Al sur: Marruecos.' },
+
+  // ---- TEMA 8: La población y las tradiciones ----
+  { type:'mc',
+    q:'¿Qué es la <b>población</b> de un lugar?',
+    options:['El conjunto de personas que viven allí','El número de casas que hay','Los animales del lugar'],
+    correct:0,
+    explain:'La población es el conjunto de personas que viven en un sitio: un pueblo, una ciudad, una provincia o un país.' },
+
+  { type:'mc',
+    q:'¿Cuándo <b>aumenta</b> la población de un lugar?',
+    options:['Cuando muchas personas se marchan','Cuando nacen más personas de las que mueren','Cuando hace mucho calor'],
+    correct:1,
+    explain:'La población crece cuando nacen más de los que mueren, o cuando llegan más personas (inmigrantes) de las que se van.' },
+
+  { type:'match',
+    q:'Relaciona cada palabra con su <b>significado</b>:',
+    pairs:[
+      {l:'Padrón',     r:'Lista de los vecinos de un municipio'},
+      {l:'Censo',      r:'Recuento completo cada 10 años'},
+      {l:'Natalidad',  r:'Niños que nacen en un año'},
+      {l:'Mortalidad', r:'Personas que mueren en un año'}
+    ],
+    explain:'El padrón lo hace el ayuntamiento cada año. El censo es más completo y se hace cada 10 años.' },
+
+  { type:'mc',
+    q:'La <b>población adulta</b> (la que trabaja) está formada por personas de…',
+    options:['0 a 14 años','15 a 64 años','65 años o más'],
+    correct:1,
+    explain:'Joven: 0 a 14 años. Adulta: 15 a 64 años. Anciana: 65 o más. La adulta es la población activa.' },
+
+  { type:'match',
+    q:'Relaciona cada <b>sector económico</b> con un trabajo de ejemplo:',
+    pairs:[
+      {l:'Sector primario',    r:'Agricultor o pescador'},
+      {l:'Sector secundario',  r:'Trabajar en una fábrica'},
+      {l:'Sector terciario',   r:'Médico o profesor'}
+    ],
+    explain:'Primario: saca productos de la naturaleza. Secundario: transforma materias primas (industria). Terciario: ofrece servicios.' },
+
+  { type:'tf',
+    q:'La población urbana es la que vive en los pueblos.',
+    answer:false,
+    explain:'¡Ojo! La población URBANA vive en las ciudades. La que vive en los pueblos es la población RURAL.' },
+
+  { type:'mc',
+    q:'¿Cuál es el <b>baile tradicional de Madrid</b> que se baila en San Isidro?',
+    options:['La sardana','El chotis','La jota'],
+    correct:1,
+    explain:'El chotis se baila con el traje de chulapo y chulapa, muy típico de las fiestas de Madrid.' },
+
+  { type:'mc',
+    q:'¿Qué día se celebra la fiesta de <b>San Isidro</b>, el patrón de Madrid?',
+    options:['El 15 de mayo','El 25 de diciembre','El 12 de octubre'],
+    correct:0,
+    explain:'San Isidro se celebra el 15 de mayo. Es típico comer rosquillas y bailar el chotis en la Pradera.' },
+
+  { type:'tf',
+    q:'El cocido madrileño es un plato típico de la Comunidad de Madrid.',
+    answer:true,
+    explain:'¡Verdadero! El cocido madrileño, los callos y las rosquillas del santo son platos típicos de Madrid.' },
+
+  { type:'mc',
+    q:'Uno de los rascacielos <b>más altos del mundo</b> es el…',
+    options:['Burj Khalifa (Emiratos Árabes)','Torre Picasso (Madrid)','Edificio Telefónica'],
+    correct:0,
+    explain:'El Burj Khalifa tiene más de 150 plantas y mide más de medio kilómetro. En Madrid destacan la Torre Picasso y las Cuatro Torres.' }
+];
+
+/* ===================== ESTADO ===================== */
+let idx = 0, goles = 0, bloqueado = false;
+const $ = id => document.getElementById(id);
+
+function rondaDe(i){ return RONDAS[Math.min(4, Math.floor(i/4))]; }
+
+function empezar(){
+  $('inicio').classList.add('oculto');
+  $('juego').classList.remove('oculto');
+  pintarDots();
+  render();
+}
+
+function pintarDots(){
+  const cont = $('dots'); cont.innerHTML='';
+  for(let i=0;i<questions.length;i++){
+    const d=document.createElement('span');
+    d.className='dot'+(i<idx?' done':'')+(i===idx?' now':'');
+    cont.appendChild(d);
+  }
+}
+
+function shuffle(a){ const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; }
+
+/* ===================== RENDER ===================== */
+function render(){
+  bloqueado=false;
+  const p = questions[idx];
+  $('ronda').innerHTML = rondaDe(idx);
+  $('goles').textContent = '⚽ ' + goles;
+  pintarDots();
+  $('pregunta').innerHTML = p.q;
+  $('feedback').className='feedback';
+  $('feedback').innerHTML='';
+  $('btnNext').classList.add('oculto');
+  $('btnNext').textContent = (idx===questions.length-1) ? 'VER LA COPA 🏆' : 'CONTINUAR ➜';
+
+  const badge=$('tipoBadge'), zona=$('zona');
+  zona.innerHTML='';
+
+  if(p.type==='mc'){
+    badge.innerHTML='⚽ Elige la respuesta';
+    const ul=document.createElement('div'); ul.className='opciones';
+    p.options.forEach((op,i)=>{
+      const b=document.createElement('button');
+      b.className='opcion';
+      b.innerHTML=`<span class="num">${i+1}</span><span>${op}</span>`;
+      b.onclick=()=>responderMC(i,b);
+      ul.appendChild(b);
+    });
+    zona.appendChild(ul);
+  }
+  else if(p.type==='tf'){
+    badge.innerHTML='🟢 Verdadero o Falso 🔴';
+    const wrap=document.createElement('div'); wrap.className='vf';
+    const v=document.createElement('button'); v.className='v'; v.innerHTML='<span class="emo">✅</span>VERDADERO';
+    const f=document.createElement('button'); f.className='f'; f.innerHTML='<span class="emo">❌</span>FALSO';
+    v.onclick=()=>responderTF(true,v,f);
+    f.onclick=()=>responderTF(false,f,v);
+    wrap.appendChild(v); wrap.appendChild(f);
+    zona.appendChild(wrap);
+  }
+  else if(p.type==='match'){
+    badge.innerHTML='🔗 Relaciona las parejas';
+    const instru=document.createElement('p'); instru.className='match-instru';
+    instru.textContent='Toca uno de la izquierda y luego su pareja de la derecha.';
+    zona.appendChild(instru);
+    const grid=document.createElement('div'); grid.className='match';
+
+    const colL=document.createElement('div'); colL.className='col';
+    const tL=document.createElement('div'); tL.className='col-tit'; tL.textContent='Concepto'; colL.appendChild(tL);
+    const colR=document.createElement('div'); colR.className='col';
+    const tR=document.createElement('div'); tR.className='col-tit'; tR.textContent='Pareja'; colR.appendChild(tR);
+
+    p.pairs.forEach(par=>{
+      const li=document.createElement('div'); li.className='mitem'; li.textContent=par.l; li.dataset.l=par.l;
+      li.onclick=()=>seleccionarL(li); colL.appendChild(li);
+    });
+    shuffle(p.pairs).forEach(par=>{
+      const ri=document.createElement('div'); ri.className='mitem'; ri.textContent=par.r; ri.dataset.r=par.r;
+      ri.onclick=()=>seleccionarR(ri); colR.appendChild(ri);
+    });
+    grid.appendChild(colL); grid.appendChild(colR);
+    zona.appendChild(grid);
+  }
+}
+
+/* ===================== RESPUESTAS ===================== */
+function responderMC(i,boton){
+  if(bloqueado)return; bloqueado=true;
+  const p=questions[idx];
+  document.querySelectorAll('.opcion').forEach(b=>b.disabled=true);
+  const fb=$('feedback');
+  if(i===p.correct){
+    boton.classList.add('ok'); goles++; $('goles').textContent='⚽ '+goles;
+    fb.className='feedback bien show';
+    fb.innerHTML=`¡GOOOL! ⚽ <small>${p.explain}</small>`;
+    confeti(10);
+  }else{
+    boton.classList.add('no');
+    document.querySelectorAll('.opcion')[p.correct].classList.add('ok');
+    fb.className='feedback mal show';
+    fb.innerHTML=`¡Uy, fuera! La respuesta era la ${p.correct+1}. <small>${p.explain}</small>`;
+  }
+  $('btnNext').classList.remove('oculto');
+}
+
+function responderTF(valor,elegida,otra){
+  if(bloqueado)return; bloqueado=true;
+  const p=questions[idx];
+  elegida.classList.add('elegida');
+  elegida.disabled=true; otra.disabled=true;
+  const fb=$('feedback');
+  if(valor===p.answer){
+    goles++; $('goles').textContent='⚽ '+goles;
+    fb.className='feedback bien show';
+    fb.innerHTML=`¡GOOOL! ⚽ <small>${p.explain}</small>`;
+    confeti(10);
+  }else{
+    fb.className='feedback mal show';
+    fb.innerHTML=`¡Casi! La respuesta correcta era <b>${p.answer?'VERDADERO':'FALSO'}</b>. <small>${p.explain}</small>`;
+  }
+  $('btnNext').classList.remove('oculto');
+}
+
+/* ---- Matching ---- */
+let selL=null;
+function seleccionarL(el){
+  if(el.classList.contains('lock'))return;
+  document.querySelectorAll('.col')[0].querySelectorAll('.mitem').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel'); selL=el;
+}
+function seleccionarR(el){
+  if(el.classList.contains('lock')||!selL)return;
+  const p=questions[idx];
+  const correcta = p.pairs.find(par=>par.l===selL.dataset.l).r;
+  if(el.dataset.r===correcta){
+    selL.classList.remove('sel'); selL.classList.add('lock'); el.classList.add('lock');
+    selL=null;
+    // ¿completado?
+    const total=p.pairs.length;
+    const hechos=document.querySelectorAll('.col')[0].querySelectorAll('.mitem.lock').length;
+    if(hechos===total) finMatch();
+  }else{
+    const a=selL, b=el;
+    a.classList.add('flash'); b.classList.add('flash');
+    setTimeout(()=>{a.classList.remove('flash','sel'); b.classList.remove('flash');},550);
+    selL=null;
+  }
+}
+function finMatch(){
+  if(bloqueado)return; bloqueado=true;
+  const p=questions[idx];
+  goles++; $('goles').textContent='⚽ '+goles;
+  const fb=$('feedback');
+  fb.className='feedback bien show';
+  fb.innerHTML=`¡Parejas completas! ⚽ <small>${p.explain}</small>`;
+  confeti(14);
+  $('btnNext').classList.remove('oculto');
+}
+
+/* ===================== NAVEGACIÓN ===================== */
+function siguiente(){
+  idx++;
+  if(idx<questions.length) render();
+  else mostrarFinal();
+}
+
+function mostrarFinal(){
+  $('juego').classList.add('oculto');
+  $('final').classList.remove('oculto');
+  $('ronda').innerHTML='Final del<br>torneo';
+  $('goles').textContent='⚽ '+goles;
+  pintarDots();
+  const total=questions.length;
+  let estrellas, titulo, emoji, msg;
+  if(goles>=18){ estrellas=3; titulo='¡CAMPEÓN DEL MUNDO!'; emoji='🏆'; msg='¡Increíble, Gabri! Dominas el tema de pe a pa. Levanta la copa, te la has ganado.'; }
+  else if(goles>=14){ estrellas=2; titulo='¡SUBCAMPEÓN!'; emoji='🥈'; msg='¡Gran torneo! Te has quedado muy cerca. Repasa lo que falló y la próxima es tuya.'; }
+  else if(goles>=10){ estrellas=1; titulo='¡A CUARTOS!'; emoji='🥉'; msg='¡Buen partido! Vas por el camino. Vuelve a jugar para subir al podio.'; }
+  else { estrellas=0; titulo='¡A SEGUIR ENTRENANDO!'; emoji='⚽'; msg='Cada campeón empieza entrenando. Repasa el tema y juega otra vez: ¡seguro que marcas más goles!'; }
+  $('trofeo').textContent=emoji;
+  $('estrellas').textContent='⭐'.repeat(estrellas)+'☆'.repeat(3-estrellas);
+  $('resultado').textContent=titulo;
+  $('marcadorFinal').textContent=goles+' / '+total+' goles';
+  $('msgFinal').textContent=msg;
+  if(goles>=14){ for(let k=0;k<4;k++) setTimeout(()=>confeti(22),k*260); }
+}
+
+function reiniciar(){
+  idx=0; goles=0; bloqueado=false; selL=null;
+  $('final').classList.add('oculto');
+  $('inicio').classList.remove('oculto');
+  $('ronda').innerHTML='Camino<br>al Mundial';
+  $('goles').textContent='⚽ 0';
+  $('dots').innerHTML='';
+}
+
+/* ===================== CONFETI ===================== */
+function confeti(n){
+  const colores=['#ffce2e','#d11a3a','#36b35a','#ffffff','#0e7ec4'];
+  for(let i=0;i<n;i++){
+    const c=document.createElement('div'); c.className='confeti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=colores[Math.floor(Math.random()*colores.length)];
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    document.body.appendChild(c);
+    const dur=1100+Math.random()*900;
+    c.animate(
+      [{transform:'translateY(0) rotate(0)',opacity:1},
+       {transform:`translateY(105vh) rotate(${Math.random()*720}deg)`,opacity:0}],
+      {duration:dur,easing:'ease-in'}
+    );
+    setTimeout(()=>c.remove(),dur);
+  }
+}
+</script>
+</body>
+</html>
