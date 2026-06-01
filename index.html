@@ -131,6 +131,8 @@
         .card.english { --accent: linear-gradient(90deg,#ff6bb5,#ff3c8e); --subject-color:#ff6bb5; --btn1:#ff6bb5; --btn2:#ff3c8e; }
         .card.mario   { --accent: linear-gradient(90deg,#e52222,#ffd700); --subject-color:#ffd700; --btn1:#e52222; --btn2:#8b0000; }
         .card.hailmary { --accent: linear-gradient(90deg,#39ff14,#00cc44); --subject-color:#39ff14; --btn1:#39ff14; --btn2:#00884a; }
+        .card.mundial   { --accent: linear-gradient(90deg,#36b35a,#ffce2e); --subject-color:#ffce2e; --btn1:#1faa59; --btn2:#0a5c2e; }
+        .card.periodico { --accent: linear-gradient(90deg,#ff5252,#c8102e); --subject-color:#ff7a7a; --btn1:#c8102e; --btn2:#7a0a1c; }
         .card.soon    { opacity: .55; }
 
         /* Featured highlight card */
@@ -142,11 +144,13 @@
         }
         .featured-label.green { color: #39ff14; }
         .featured-label.gold { color: #ffd700; }
+        .featured-label.mundial { color: #ffce2e; }
         .featured-label::after {
             content: ''; flex: 1; height: 1px;
         }
         .featured-label.green::after { background: linear-gradient(90deg, rgba(57,255,20,.4), transparent); }
         .featured-label.gold::after { background: linear-gradient(90deg, rgba(255,215,0,.4), transparent); }
+        .featured-label.mundial::after { background: linear-gradient(90deg, rgba(255,206,46,.4), transparent); }
 
         .card.featured {
             flex-direction: row; align-items: center; gap: 24px;
@@ -165,6 +169,12 @@
             background: linear-gradient(135deg, rgba(15,12,41,0.95), rgba(80,10,10,0.6));
         }
         .card.featured.mario:hover { transform: translateY(-6px); box-shadow: 0 16px 50px rgba(229,34,34,.4), 0 0 80px rgba(255,215,0,.2); }
+        .card.featured.mundial {
+            border-color: #ffce2e;
+            box-shadow: 0 0 40px rgba(54,179,90,.25), 0 0 80px rgba(255,206,46,.1);
+            background: linear-gradient(135deg, rgba(15,12,41,0.95), rgba(10,60,30,0.6));
+        }
+        .card.featured.mundial:hover { transform: translateY(-6px); box-shadow: 0 16px 50px rgba(54,179,90,.4), 0 0 80px rgba(255,206,46,.2); }
 
         .featured-left { flex-shrink: 0; text-align: center; }
         .featured-left .card-emoji { font-size: 5rem; margin-bottom: 0; }
@@ -180,6 +190,7 @@
         }
         .new-pill.green { background: rgba(57,255,20,.15); border: 1px solid rgba(57,255,20,.4); color: #39ff14; }
         .new-pill.gold { background: rgba(255,215,0,.15); border: 1px solid rgba(255,215,0,.4); color: #ffd700; }
+        .new-pill.mundial { background: rgba(255,206,46,.15); border: 1px solid rgba(255,206,46,.4); color: #ffce2e; }
 
         @media (max-width: 580px) {
             .card.featured { flex-direction: column; }
@@ -198,30 +209,30 @@
         <h1>¡El Rincón de Gabri!</h1>
         <p>Tu zona de estudio para 4º de Primaria · ¡Practica y sube de nivel!</p>
         <div class="score-row">
-            <div class="badge">📚 8 ejercicios disponibles</div>
+            <div class="badge">📚 10 ejercicios disponibles</div>
             <div class="badge">🏆 Hecho con ❤️ por Papá</div>
         </div>
     </header>
 
-    <!-- FEATURED: PROYECTO SALVACIÓN -->
-    <div class="featured-label green">🛸 ¡Destacado de la semana!</div>
-    <div class="card hailmary featured">
+    <!-- FEATURED: MUNDIAL 2026 -->
+    <div class="featured-label mundial">⚽ ¡Novedad de la semana!</div>
+    <div class="card mundial featured">
         <div class="featured-left">
-            <span class="card-emoji">🛸</span>
+            <span class="card-emoji">⚽</span>
         </div>
         <div class="featured-right">
-            <div class="card-subject">🔬 Ciencias · Astronomía · Mates · NUEVO</div>
-            <h2>Proyecto Salvación: Misión con Rocky</h2>
-            <p>5 fases + 30 preguntas de ciencia real inspiradas en la película. Astrofagos, estrellas reales, biología alienígena y matemáticas. ¡Ayuda al Dr. Grace y a Rocky a salvar la Tierra!</p>
+            <div class="card-subject">🌍 Ciencias Sociales · NUEVO</div>
+            <h2>Camino al Mundial 2026</h2>
+            <p>20 retos para llegar de la fase de grupos a la gran final. Organización del territorio de España (comunidades, provincias, límites) y la población y las tradiciones. ¡Marca goles y levanta la copa!</p>
             <div class="card-tags">
-                <span class="tag">⭐ Astronomía real</span>
-                <span class="tag">🦠 Biología</span>
-                <span class="tag">🧮 Mates</span>
-                <span class="tag">🎬 Película 2026</span>
+                <span class="tag">🗺️ Territorio</span>
+                <span class="tag">👨‍👩‍👧 Población</span>
+                <span class="tag">🔗 Relacionar</span>
+                <span class="tag">⚽ 20 preguntas</span>
             </div>
             <div class="featured-btn-row">
-                <a href="proyecto-salvacion-gabri.html" class="btn btn-active">🛸 ¡Comenzar Misión!</a>
-                <span class="new-pill green">🚀 ¡NUEVO!</span>
+                <a href="ccss-mundial-gabri.html" class="btn btn-active">⚽ ¡Saltar al campo!</a>
+                <span class="new-pill mundial">🏆 ¡NUEVO!</span>
             </div>
         </div>
     </div>
@@ -229,6 +240,34 @@
     <div class="section-title">🚀 Tus ejercicios</div>
 
     <div class="cards-grid">
+
+        <!-- LENGUA: EL PERIÓDICO DE GABRI -->
+        <div class="card periodico">
+            <span class="card-emoji">📰</span>
+            <div class="card-subject">Lengua · NUEVO</div>
+            <h2>El Periódico de Gabri</h2>
+            <p>¡Eres el reportero estrella! 20 retos por tres secciones: gramática (adverbio, conjunciones, sujeto y predicado), ortografía (X, LL, Y, H, plurales) y textos periodísticos (noticia, reportaje, entrevista).</p>
+            <div class="card-tags">
+                <span class="tag">✍️ Gramática</span>
+                <span class="tag">🔤 Ortografía</span>
+                <span class="tag">🎤 Periodismo</span>
+            </div>
+            <a href="lengua-redaccion-gabri.html" class="btn btn-active">📰 ¡A la redacción!</a>
+        </div>
+
+        <!-- MUNDIAL (también en grid) -->
+        <div class="card mundial">
+            <span class="card-emoji">⚽</span>
+            <div class="card-subject">Ciencias Sociales · NUEVO</div>
+            <h2>Camino al Mundial 2026</h2>
+            <p>Territorio de España y población, en formato torneo. 5 rondas hasta la final, con preguntas de elegir, verdadero/falso y relacionar.</p>
+            <div class="card-tags">
+                <span class="tag">🌍 España</span>
+                <span class="tag">🏆 Torneo</span>
+                <span class="tag">20 preguntas</span>
+            </div>
+            <a href="ccss-mundial-gabri.html" class="btn btn-active">⚽ ¡Jugar!</a>
+        </div>
 
         <!-- PLANTS -->
         <div class="card plants">
@@ -325,7 +364,7 @@
             <a href="mario-gabri-birthday.html" class="btn btn-active">🍄 ¡A por Bowser!</a>
         </div>
 
-        <!-- PROYECTO SALVACIÓN (also in grid) -->
+        <!-- PROYECTO SALVACIÓN -->
         <div class="card hailmary">
             <span class="card-emoji">🛸</span>
             <div class="card-subject">Ciencias · Astronomía · NEW</div>
