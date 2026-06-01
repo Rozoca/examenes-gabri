@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Periódico de Gabri 📰 · Lengua</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:wght@700;900&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f7f3e9;
+    --paper-edge:#e9e1cd;
+    --ink:#1a1a1a;
+    --ink-soft:#4a4540;
+    --red:#c8102e;
+    --red-deep:#9b0c23;
+    --red-soft:#fbe6e9;
+    --ok:#1f7a3d;
+    --ok-soft:#e6f5ec;
+    --blue:#1b4d7a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:'Nunito',sans-serif;color:var(--ink);min-height:100vh;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(255,240,200,.18), transparent 55%),
+      linear-gradient(180deg,#1c1c24,#121218);
+    display:flex;align-items:center;justify-content:center;padding:16px;overflow-x:hidden;
+  }
+  .tarjeta{
+    position:relative;z-index:2;width:100%;max-width:580px;
+    background:var(--paper);
+    background-image:repeating-linear-gradient(90deg, rgba(0,0,0,.018) 0 1px, transparent 1px 26px);
+    border:5px solid var(--ink);border-radius:6px;
+    box-shadow:0 26px 60px rgba(0,0,0,.5);
+    padding:0 0 28px;overflow:hidden;
+  }
+
+  /* ---- Cabecera del periódico ---- */
+  .cabecera{
+    padding:12px 20px;border-bottom:3px double var(--ink);
+    display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--paper);
+  }
+  .seccion-kicker{font-family:'Anton';font-size:.82rem;letter-spacing:1px;color:var(--red);text-transform:uppercase;line-height:1;}
+  .seccion-kicker small{display:block;font-family:'Nunito';font-weight:700;font-size:.6rem;color:var(--ink-soft);letter-spacing:.5px;margin-top:3px;}
+  .contador{font-family:'Anton';font-size:1.05rem;background:var(--ink);color:var(--paper);
+    border-radius:4px;padding:5px 11px;letter-spacing:1px;white-space:nowrap;}
+  .dots{display:flex;gap:4px;flex-wrap:wrap;max-width:150px;}
+  .dot{width:10px;height:10px;border-radius:2px;background:rgba(0,0,0,.13);transition:.3s;}
+  .dot.done{background:var(--red);}
+  .dot.now{background:var(--ink);box-shadow:0 0 0 2px rgba(0,0,0,.2);}
+
+  .cuerpo{padding:22px 24px 0;}
+
+  /* ---- Inicio ---- */
+  .ultima-hora{display:inline-block;background:var(--red);color:#fff;font-family:'Anton';letter-spacing:1.5px;
+    font-size:.72rem;padding:5px 13px;border-radius:3px;text-transform:uppercase;margin:8px auto 10px;}
+  .masthead{font-family:'Anton';font-size:2.5rem;line-height:.95;text-align:center;color:var(--ink);text-transform:uppercase;letter-spacing:1px;}
+  .dateline{text-align:center;font-weight:700;color:var(--ink-soft);font-size:.82rem;border-top:1px solid var(--ink);
+    border-bottom:1px solid var(--ink);padding:6px 0;margin:10px 0 16px;letter-spacing:.5px;}
+  .periodista{font-size:4rem;text-align:center;display:block;margin:6px 0;animation:teclea 2.2s ease-in-out infinite;}
+  @keyframes teclea{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+  .intro-txt{text-align:center;font-weight:600;color:var(--ink-soft);line-height:1.55;margin:0 4px 8px;}
+  .intro-txt b{color:var(--red);}
+
+  /* ---- Pregunta ---- */
+  .tipo-badge{display:inline-flex;align-items:center;gap:6px;font-family:'Anton';font-size:.62rem;letter-spacing:1px;
+    background:var(--ink);color:var(--paper);padding:5px 11px;border-radius:3px;text-transform:uppercase;margin-bottom:12px;}
+  .pregunta{font-family:'Playfair Display';font-weight:900;font-size:1.4rem;line-height:1.25;color:var(--ink);margin-bottom:18px;}
+  .pregunta b{color:var(--red);}
+
+  .opciones{display:grid;gap:11px;}
+  .opcion{font-family:'Nunito';font-weight:700;font-size:1.05rem;background:#fffdf7;border:2px solid var(--ink);
+    color:var(--ink);padding:14px 16px;border-radius:6px;cursor:pointer;text-align:left;
+    transition:transform .12s, background .2s, box-shadow .2s;display:flex;align-items:center;gap:12px;box-shadow:3px 3px 0 rgba(0,0,0,.15);}
+  .opcion .num{width:28px;height:28px;flex:0 0 28px;border-radius:4px;background:var(--ink);color:var(--paper);
+    display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:.85rem;}
+  .opcion:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(0,0,0,.2);}
+  .opcion:disabled{cursor:default;}
+  .opcion.ok{background:var(--ok-soft);border-color:var(--ok);}
+  .opcion.ok .num{background:var(--ok);}
+  .opcion.no{background:var(--red-soft);border-color:var(--red);}
+  .opcion.no .num{background:var(--red);}
+
+  /* Verdadero / Falso */
+  .vf{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .vf button{font-family:'Anton';font-size:1.05rem;letter-spacing:1px;padding:22px 10px;border-radius:6px;cursor:pointer;
+    border:3px solid var(--ink);transition:transform .12s;display:flex;flex-direction:column;align-items:center;gap:6px;
+    box-shadow:4px 4px 0 rgba(0,0,0,.18);background:#fffdf7;color:var(--ink);}
+  .vf button:hover:not(:disabled){transform:translate(-2px,-2px);}
+  .vf button:disabled{opacity:.55;cursor:default;}
+  .vf button.elegida{outline:3px solid var(--red);}
+  .vf .emo{font-size:1.7rem;}
+
+  /* Asociación */
+  .match-instru{font-size:.9rem;font-weight:700;color:var(--ink-soft);margin-bottom:12px;text-align:center;}
+  .match{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .col{display:flex;flex-direction:column;gap:10px;}
+  .col-tit{font-family:'Anton';font-size:.6rem;text-transform:uppercase;color:var(--ink-soft);text-align:center;letter-spacing:1px;}
+  .mitem{font-family:'Nunito';font-weight:700;font-size:.92rem;padding:12px 10px;border-radius:6px;cursor:pointer;
+    border:2px solid var(--ink);background:#fffdf7;color:var(--ink);text-align:center;line-height:1.25;
+    transition:transform .12s,background .2s;box-shadow:2px 2px 0 rgba(0,0,0,.15);}
+  .mitem:hover:not(.lock){transform:translate(-2px,-2px);}
+  .mitem.sel{background:var(--ink);color:var(--paper);}
+  .mitem.lock{background:var(--ok-soft);border-color:var(--ok);color:var(--ok);cursor:default;opacity:.92;box-shadow:none;}
+  .mitem.flash{background:var(--red-soft);border-color:var(--red);}
+
+  /* Feedback */
+  .feedback{margin-top:18px;padding:14px 16px;border-radius:6px;font-weight:800;opacity:0;max-height:0;overflow:hidden;
+    transition:opacity .3s,max-height .3s;border-left:6px solid;}
+  .feedback.show{opacity:1;max-height:280px;}
+  .feedback.bien{background:var(--ok-soft);border-color:var(--ok);color:var(--ok);}
+  .feedback.mal{background:var(--red-soft);border-color:var(--red);color:var(--red-deep);}
+  .feedback small{display:block;font-weight:600;color:var(--ink-soft);margin-top:6px;font-size:.92rem;line-height:1.45;}
+
+  .btn{font-family:'Anton';font-size:1.05rem;letter-spacing:1px;color:#fff;
+    background:var(--red);border:none;border-radius:6px;padding:15px 30px;cursor:pointer;display:block;margin:20px auto 0;
+    box-shadow:0 5px 0 var(--red-deep);transition:transform .1s,box-shadow .1s;text-transform:uppercase;}
+  .btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--red-deep);}
+  .btn.tinta{background:var(--ink);box-shadow:0 5px 0 #000;}
+  .btn.tinta:active{box-shadow:0 1px 0 #000;}
+  .oculto{display:none !important;}
+
+  /* Final */
+  .carne{font-size:4.6rem;text-align:center;display:block;margin:12px 0 4px;}
+  .estrellas{font-size:2.3rem;text-align:center;letter-spacing:8px;margin:6px 0;}
+  .titulo-final{font-family:'Anton';font-size:1.6rem;text-align:center;color:var(--ink);text-transform:uppercase;letter-spacing:.5px;margin:4px 0;}
+  .marcador-final{font-family:'Playfair Display';font-weight:900;font-size:1.5rem;text-align:center;color:var(--red);margin:6px 0;}
+  .msg-final{text-align:center;font-weight:700;color:var(--ink-soft);font-size:1.05rem;margin:6px 14px 0;line-height:1.5;}
+
+  .confeti{position:fixed;top:-12px;width:11px;height:11px;z-index:50;}
+  @media(max-width:480px){
+    .masthead{font-size:1.9rem}.pregunta{font-size:1.18rem}.periodista{font-size:3.2rem}
+    .match{gap:9px}.mitem{font-size:.82rem}
+  }
+</style>
+</head>
+<body>
+<div class="tarjeta">
+  <!-- Cabecera -->
+  <div class="cabecera">
+    <div class="seccion-kicker" id="kicker">El Periódico<small>DE GABRI</small></div>
+    <div class="dots" id="dots"></div>
+    <div class="contador" id="contador">🗞️ 0</div>
+  </div>
+
+  <div class="cuerpo">
+
+    <!-- INICIO -->
+    <section id="inicio">
+      <div style="text-align:center;"><span class="ultima-hora">★ Última hora ★</span></div>
+      <span class="periodista">📰</span>
+      <h1 class="masthead">El Periódico<br>de Gabri</h1>
+      <div class="dateline">EDICIÓN ESPECIAL · LENGUA · 4º DE PRIMARIA</div>
+      <p class="intro-txt">
+        ¡Eres el nuevo <b>reportero estrella</b>! Para publicar la edición de hoy tienes que superar
+        las tres secciones del periódico: <b>Gramática</b>, <b>Ortografía</b> y <b>Periodismo</b>.
+      </p>
+      <p class="intro-txt" style="margin-top:10px;">
+        Cada acierto es una noticia publicada 🗞️. Hay preguntas de elegir, de verdadero o falso
+        y de relacionar. ¡A por la portada, crack!
+      </p>
+      <button class="btn" onclick="empezar()">¡Entrar a la redacción!</button>
+    </section>
+
+    <!-- JUEGO -->
+    <section id="juego" class="oculto">
+      <span class="tipo-badge" id="tipoBadge">Pregunta</span>
+      <div class="pregunta" id="pregunta"></div>
+      <div id="zona"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="btn tinta oculto" id="btnNext" onclick="siguiente()">Continuar ➜</button>
+    </section>
+
+    <!-- FINAL -->
+    <section id="final" class="oculto">
+      <span class="carne" id="carne">🪪</span>
+      <div class="estrellas" id="estrellas"></div>
+      <div class="titulo-final" id="tituloFinal"></div>
+      <div class="marcador-final" id="marcadorFinal"></div>
+      <p class="msg-final" id="msgFinal"></p>
+      <button class="btn" onclick="reiniciar()">Escribir otra edición 🔁</button>
+    </section>
+
+  </div>
+</div>
+
+<script>
+/* ===================== PREGUNTAS ===================== */
+const questions = [
+  /* ---------- SECCIÓN GRAMÁTICA ---------- */
+  { sec:'Gramática', type:'mc',
+    q:'En la frase <b>«Llegamos tarde»</b>, ¿qué clase de palabra es <b>tarde</b>?',
+    options:['Un adverbio','Un sustantivo','Un verbo'],
+    correct:0,
+    explain:'El adverbio acompaña al verbo y dice cómo, cuándo, cuánto o dónde pasa algo. "Tarde" nos dice CUÁNDO llegamos.' },
+
+  { sec:'Gramática', type:'match',
+    q:'Relaciona cada <b>adverbio</b> con su tipo:',
+    pairs:[
+      {l:'ayer',         r:'De tiempo'},
+      {l:'aquí',         r:'De lugar'},
+      {l:'rápidamente',  r:'De modo'},
+      {l:'mucho',        r:'De cantidad'}
+    ],
+    explain:'Tiempo: hoy, ayer, mañana. Lugar: aquí, allí, lejos. Modo: bien, mal, rápidamente. Cantidad: mucho, poco, muy.' },
+
+  { sec:'Gramática', type:'tf',
+    q:'La palabra <b>«pero»</b> es una conjunción, porque sirve para unir ideas.',
+    answer:true,
+    explain:'¡Correcto! Las conjunciones (y, o, pero, porque) son palabras cortas que unen palabras u oraciones.' },
+
+  { sec:'Gramática', type:'mc',
+    q:'¿Cuál de estas palabras es una <b>conjunción</b>?',
+    options:['corre','porque','azul'],
+    correct:1,
+    explain:'"Porque" une dos ideas: «Aplaudimos PORQUE la obra fue divertida». Otras conjunciones: y, o, pero.' },
+
+  { sec:'Gramática', type:'mc',
+    q:'En <b>«El perro corre rápido»</b>, ¿cuál es el <b>sujeto</b>?',
+    options:['El perro','corre rápido','rápido'],
+    correct:0,
+    explain:'El sujeto es quien realiza la acción. Pregunta clave: ¿QUIÉN hace la acción? → El perro.' },
+
+  { sec:'Gramática', type:'mc',
+    q:'En <b>«Ana y Luis cantan en el teatro»</b>, ¿cuál es el <b>predicado</b>?',
+    options:['Ana y Luis','cantan en el teatro','el teatro'],
+    correct:1,
+    explain:'El predicado es lo que se dice del sujeto y SIEMPRE incluye el verbo. Aquí el verbo es "cantan".' },
+
+  { sec:'Gramática', type:'mc',
+    q:'¿Cuál de estas es una <b>onomatopeya</b>?',
+    options:['¡Guau!','mesa','correr'],
+    correct:0,
+    explain:'Las onomatopeyas imitan sonidos o ruidos: ¡guau!, ¡miau!, ¡pum!, ¡tic-tac!' },
+
+  /* ---------- SECCIÓN ORTOGRAFÍA ---------- */
+  { sec:'Ortografía', type:'mc',
+    q:'¿Cuál está <b>bien escrita</b>? (terminadas en -illo/-illa van con LL)',
+    options:['chiquiyo','chiquillo','chikillo'],
+    correct:1,
+    explain:'Las palabras terminadas en -illo / -illa se escriben con LL: chiquillo, martillo, mesilla, rodilla.' },
+
+  { sec:'Ortografía', type:'mc',
+    q:'¿Cuál está <b>bien escrita</b>?',
+    options:['rei','rrey','rey'],
+    correct:2,
+    explain:'Las palabras que terminan en sonido «y» se escriben con Y: rey, hoy, voy, soy.' },
+
+  { sec:'Ortografía', type:'mc',
+    q:'La palabra <b>«taxi»</b> lleva la letra X. La X suena como…',
+    options:['«ks»','«s»','«ch»'],
+    correct:0,
+    explain:'La X suena como /ks/: ta-k-si, e-k-s-amen (examen). También está en xilófono.' },
+
+  { sec:'Ortografía', type:'mc',
+    q:'¿Cuál es el <b>plural</b> de <b>«lápiz»</b>?',
+    options:['lápizes','lápices','lapís'],
+    correct:1,
+    explain:'Las palabras terminadas en -z hacen el plural cambiando la z por -ces: lápiz→lápices, pez→peces.' },
+
+  { sec:'Ortografía', type:'mc',
+    q:'¿Cuál es el <b>plural</b> de <b>«ciudad»</b>?',
+    options:['ciudades','ciudads','ciudaes'],
+    correct:0,
+    explain:'Las palabras terminadas en -d hacen el plural añadiendo -es: ciudad→ciudades, amistad→amistades.' },
+
+  { sec:'Ortografía', type:'tf',
+    q:'La letra <b>H</b> no se pronuncia en español, pero hay que escribirla.',
+    answer:true,
+    explain:'¡Verdadero! La H es muda: hola, huevo, ahora, cohete. Aun así hay que escribirla.' },
+
+  /* ---------- SECCIÓN PERIODISMO ---------- */
+  { sec:'Periodismo', type:'mc',
+    q:'¿Qué es una <b>noticia</b>?',
+    options:['Un texto que informa de hechos reales y recientes','Un cuento inventado con dragones','Un poema con rimas'],
+    correct:0,
+    explain:'La noticia es un texto periodístico que informa de hechos ocurridos, poniendo primero lo más importante.' },
+
+  { sec:'Periodismo', type:'match',
+    q:'Relaciona cada <b>pregunta de la noticia</b> con lo que averigua:',
+    pairs:[
+      {l:'¿Quién?',   r:'El protagonista'},
+      {l:'¿Dónde?',   r:'El lugar'},
+      {l:'¿Cuándo?',  r:'El tiempo'},
+      {l:'¿Por qué?', r:'La causa'}
+    ],
+    explain:'Una buena noticia responde a: ¿quién?, ¿qué?, ¿dónde?, ¿cuándo?, ¿por qué? y ¿cómo?' },
+
+  { sec:'Periodismo', type:'mc',
+    q:'En una noticia, ¿cómo se llama el <b>título breve e impactante</b>?',
+    options:['El titular','La entradilla','El cuerpo'],
+    correct:0,
+    explain:'El titular es la información principal, breve e impactante, que llama la atención del lector.' },
+
+  { sec:'Periodismo', type:'mc',
+    q:'¿Cómo se llama el <b>primer párrafo</b> de la noticia, con la información esencial?',
+    options:['La entradilla','El titular','El pie de foto'],
+    correct:0,
+    explain:'La entradilla (o entrada/lead) es el párrafo con lo esencial. Después va el cuerpo de la noticia.' },
+
+  { sec:'Periodismo', type:'tf',
+    q:'En una noticia el periodista <b>NO</b> debe escribir su opinión: debe ser objetiva.',
+    answer:true,
+    explain:'¡Correcto! La noticia es objetiva y veraz. La opinión va en el ARTÍCULO DE OPINIÓN, no en la noticia.' },
+
+  { sec:'Periodismo', type:'match',
+    q:'Relaciona cada <b>texto periodístico</b> con lo que hace:',
+    pairs:[
+      {l:'Noticia',             r:'Informa de un hecho reciente'},
+      {l:'Reportaje',           r:'Explica un tema con detalle'},
+      {l:'Entrevista',          r:'Preguntas y respuestas'},
+      {l:'Artículo de opinión', r:'Una persona da su opinión'}
+    ],
+    explain:'La noticia informa, el reportaje explica con más detalle, la entrevista es preguntas y respuestas, y el artículo de opinión expresa lo que piensa el autor.' },
+
+  { sec:'Periodismo', type:'mc',
+    q:'En una <b>entrevista</b>, ¿cómo se llama la persona que <b>hace las preguntas</b>?',
+    options:['El entrevistador','El entrevistado','El lector'],
+    correct:0,
+    explain:'El entrevistador hace las preguntas; el entrevistado las responde. Se puede ver en TV, radio o prensa.' }
+];
+
+/* ===================== ESTADO ===================== */
+let idx = 0, puntos = 0, bloqueado = false, selL = null;
+const $ = id => document.getElementById(id);
+
+function kickerHTML(sec){
+  return `${sec}<small>EL PERIÓDICO DE GABRI</small>`;
+}
+
+function empezar(){
+  $('inicio').classList.add('oculto');
+  $('juego').classList.remove('oculto');
+  pintarDots();
+  render();
+}
+
+function pintarDots(){
+  const cont=$('dots'); cont.innerHTML='';
+  for(let i=0;i<questions.length;i++){
+    const d=document.createElement('span');
+    d.className='dot'+(i<idx?' done':'')+(i===idx?' now':'');
+    cont.appendChild(d);
+  }
+}
+
+function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+/* ===================== RENDER ===================== */
+function render(){
+  bloqueado=false;
+  const p=questions[idx];
+  $('kicker').innerHTML='Sección · '+p.sec;
+  $('contador').textContent='🗞️ '+puntos;
+  pintarDots();
+  $('pregunta').innerHTML=p.q;
+  $('feedback').className='feedback';
+  $('feedback').innerHTML='';
+  $('btnNext').classList.add('oculto');
+  $('btnNext').textContent=(idx===questions.length-1)?'Publicar la portada 📰':'Continuar ➜';
+
+  const badge=$('tipoBadge'), zona=$('zona');
+  zona.innerHTML='';
+
+  if(p.type==='mc'){
+    badge.innerHTML='✱ Elige la respuesta';
+    const ul=document.createElement('div'); ul.className='opciones';
+    p.options.forEach((op,i)=>{
+      const b=document.createElement('button'); b.className='opcion';
+      b.innerHTML=`<span class="num">${i+1}</span><span>${op}</span>`;
+      b.onclick=()=>responderMC(i,b);
+      ul.appendChild(b);
+    });
+    zona.appendChild(ul);
+  }
+  else if(p.type==='tf'){
+    badge.innerHTML='✱ Verdadero o Falso';
+    const wrap=document.createElement('div'); wrap.className='vf';
+    const v=document.createElement('button'); v.innerHTML='<span class="emo">✅</span>VERDADERO';
+    const f=document.createElement('button'); f.innerHTML='<span class="emo">❌</span>FALSO';
+    v.onclick=()=>responderTF(true,v,f);
+    f.onclick=()=>responderTF(false,f,v);
+    wrap.appendChild(v); wrap.appendChild(f);
+    zona.appendChild(wrap);
+  }
+  else if(p.type==='match'){
+    badge.innerHTML='✱ Relaciona las parejas';
+    const instru=document.createElement('p'); instru.className='match-instru';
+    instru.textContent='Toca uno de la izquierda y luego su pareja de la derecha.';
+    zona.appendChild(instru);
+    const grid=document.createElement('div'); grid.className='match';
+    const colL=document.createElement('div'); colL.className='col';
+    const tL=document.createElement('div'); tL.className='col-tit'; tL.textContent='Concepto'; colL.appendChild(tL);
+    const colR=document.createElement('div'); colR.className='col';
+    const tR=document.createElement('div'); tR.className='col-tit'; tR.textContent='Pareja'; colR.appendChild(tR);
+    p.pairs.forEach(par=>{
+      const li=document.createElement('div'); li.className='mitem'; li.textContent=par.l; li.dataset.l=par.l;
+      li.onclick=()=>seleccionarL(li); colL.appendChild(li);
+    });
+    shuffle(p.pairs).forEach(par=>{
+      const ri=document.createElement('div'); ri.className='mitem'; ri.textContent=par.r; ri.dataset.r=par.r;
+      ri.onclick=()=>seleccionarR(ri); colR.appendChild(ri);
+    });
+    grid.appendChild(colL); grid.appendChild(colR);
+    zona.appendChild(grid);
+  }
+}
+
+/* ===================== RESPUESTAS ===================== */
+function responderMC(i,boton){
+  if(bloqueado)return; bloqueado=true;
+  const p=questions[idx];
+  document.querySelectorAll('.opcion').forEach(b=>b.disabled=true);
+  const fb=$('feedback');
+  if(i===p.correct){
+    boton.classList.add('ok'); puntos++; $('contador').textContent='🗞️ '+puntos;
+    fb.className='feedback bien show';
+    fb.innerHTML=`¡Publicada! 📰 <small>${p.explain}</small>`;
+    confeti(10);
+  }else{
+    boton.classList.add('no');
+    document.querySelectorAll('.opcion')[p.correct].classList.add('ok');
+    fb.className='feedback mal show';
+    fb.innerHTML=`¡Casi! La correcta era la ${p.correct+1}. <small>${p.explain}</small>`;
+  }
+  $('btnNext').classList.remove('oculto');
+}
+
+function responderTF(valor,elegida,otra){
+  if(bloqueado)return; bloqueado=true;
+  const p=questions[idx];
+  elegida.classList.add('elegida'); elegida.disabled=true; otra.disabled=true;
+  const fb=$('feedback');
+  if(valor===p.answer){
+    puntos++; $('contador').textContent='🗞️ '+puntos;
+    fb.className='feedback bien show';
+    fb.innerHTML=`¡Publicada! 📰 <small>${p.explain}</small>`;
+    confeti(10);
+  }else{
+    fb.className='feedback mal show';
+    fb.innerHTML=`¡Casi! Era <b>${p.answer?'VERDADERO':'FALSO'}</b>. <small>${p.explain}</small>`;
+  }
+  $('btnNext').classList.remove('oculto');
+}
+
+/* ---- Matching ---- */
+function seleccionarL(el){
+  if(el.classList.contains('lock'))return;
+  document.querySelectorAll('.col')[0].querySelectorAll('.mitem').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel'); selL=el;
+}
+function seleccionarR(el){
+  if(el.classList.contains('lock')||!selL)return;
+  const p=questions[idx];
+  const correcta=p.pairs.find(par=>par.l===selL.dataset.l).r;
+  if(el.dataset.r===correcta){
+    selL.classList.remove('sel'); selL.classList.add('lock'); el.classList.add('lock'); selL=null;
+    const total=p.pairs.length;
+    const hechos=document.querySelectorAll('.col')[0].querySelectorAll('.mitem.lock').length;
+    if(hechos===total) finMatch();
+  }else{
+    const a=selL,b=el;
+    a.classList.add('flash'); b.classList.add('flash');
+    setTimeout(()=>{a.classList.remove('flash','sel'); b.classList.remove('flash');},550);
+    selL=null;
+  }
+}
+function finMatch(){
+  if(bloqueado)return; bloqueado=true;
+  const p=questions[idx];
+  puntos++; $('contador').textContent='🗞️ '+puntos;
+  const fb=$('feedback');
+  fb.className='feedback bien show';
+  fb.innerHTML=`¡Parejas listas! 📰 <small>${p.explain}</small>`;
+  confeti(14);
+  $('btnNext').classList.remove('oculto');
+}
+
+/* ===================== NAVEGACIÓN ===================== */
+function siguiente(){
+  idx++;
+  if(idx<questions.length) render();
+  else mostrarFinal();
+}
+
+function mostrarFinal(){
+  $('juego').classList.add('oculto');
+  $('final').classList.remove('oculto');
+  $('kicker').innerHTML='Edición<small>PUBLICADA</small>';
+  $('contador').textContent='🗞️ '+puntos;
+  pintarDots();
+  const total=questions.length;
+  let estrellas,titulo,emoji,msg;
+  if(puntos>=18){estrellas=3;titulo='¡Periodista Estrella!';emoji='🏅';msg='¡Edición de lujo, Gabri! Dominas la gramática, la ortografía y el periodismo. ¡Portada para ti!';}
+  else if(puntos>=14){estrellas=2;titulo='¡Gran Reportero!';emoji='🪪';msg='¡Buen trabajo en la redacción! Repasa lo que falló y tu próxima edición será perfecta.';}
+  else if(puntos>=10){estrellas=1;titulo='¡Reportero en prácticas!';emoji='✏️';msg='¡Vas bien! Vuelve a la redacción y practica un poco más para llegar a portada.';}
+  else{estrellas=0;titulo='¡A seguir entrenando!';emoji='📓';msg='Todo gran periodista empieza practicando. Repasa el tema y escribe otra edición: ¡lo harás genial!';}
+  $('carne').textContent=emoji;
+  $('estrellas').textContent='⭐'.repeat(estrellas)+'☆'.repeat(3-estrellas);
+  $('tituloFinal').textContent=titulo;
+  $('marcadorFinal').textContent=puntos+' / '+total+' noticias publicadas';
+  $('msgFinal').textContent=msg;
+  if(puntos>=14){for(let k=0;k<4;k++) setTimeout(()=>confeti(22),k*260);}
+}
+
+function reiniciar(){
+  idx=0; puntos=0; bloqueado=false; selL=null;
+  $('final').classList.add('oculto');
+  $('inicio').classList.remove('oculto');
+  $('kicker').innerHTML='El Periódico<small>DE GABRI</small>';
+  $('contador').textContent='🗞️ 0';
+  $('dots').innerHTML='';
+}
+
+/* ===================== CONFETI ===================== */
+function confeti(n){
+  const colores=['#c8102e','#1a1a1a','#1f7a3d','#1b4d7a','#e9e1cd'];
+  for(let i=0;i<n;i++){
+    const c=document.createElement('div'); c.className='confeti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=colores[Math.floor(Math.random()*colores.length)];
+    c.style.borderRadius=Math.random()>.5?'50%':'1px';
+    document.body.appendChild(c);
+    const dur=1100+Math.random()*900;
+    c.animate([{transform:'translateY(0) rotate(0)',opacity:1},
+      {transform:`translateY(105vh) rotate(${Math.random()*720}deg)`,opacity:0}],
+      {duration:dur,easing:'ease-in'});
+    setTimeout(()=>c.remove(),dur);
+  }
+}
+</script>
+</body>
+</html>
