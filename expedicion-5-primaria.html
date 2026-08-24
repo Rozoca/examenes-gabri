@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expedición 5º · El Rincón de Gabri</title>
+<meta name="description" content="Cuatro campamentos, 50 retos y una cumbre: la preparación de Gabri para 5º de Primaria.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#101736;
+  --deep:#1B2350;
+  --dusk:#3A2E77;
+  --alpen:#FF7A59;
+  --sun:#FFC85C;
+  --ice:#6FE0F2;
+  --moss:#4ADCA5;
+  --snow:#F2F7FF;
+  --mute:#9BA6D4;
+  --wrong:#FF6E8A;
+  --card:rgba(255,255,255,.06);
+  --line:rgba(255,255,255,.14);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Nunito",system-ui,sans-serif;
+  color:var(--snow);
+  background:
+    radial-gradient(1000px 520px at 78% -6%, rgba(255,122,89,.32), transparent 62%),
+    radial-gradient(760px 460px at 12% 8%, rgba(111,224,242,.16), transparent 60%),
+    linear-gradient(180deg,#1A1F4B 0%, var(--night) 42%, #0B1029 100%);
+  background-attachment:fixed;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+h1,h2,h3,.fred{font-family:"Fredoka",sans-serif;font-weight:600;letter-spacing:-.01em}
+.num{font-family:"Space Mono",monospace}
+.wrap{max-width:940px;margin:0 auto;padding:26px 18px 60px;position:relative}
+
+/* ---------- estrellas de fondo ---------- */
+#stars{position:fixed;inset:0;pointer-events:none;opacity:.7}
+
+/* ---------- cabecera ---------- */
+.top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);
+  border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--sun)}
+.hero{margin:20px 0 6px}
+.hero h1{margin:0;font-size:clamp(32px,7vw,60px);line-height:1;font-weight:700}
+.hero h1 span{background:linear-gradient(92deg,var(--sun),var(--alpen));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:12px 0 0;font-size:16px;color:#C9D3F5;max-width:56ch;line-height:1.6}
+
+/* ---------- progreso global ---------- */
+.progress-box{margin:22px 0 6px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+.progress-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.progress-head strong{font-family:"Fredoka",sans-serif;font-size:17px}
+.progress-head .count{font-family:"Space Mono",monospace;font-size:15px;color:var(--sun)}
+.bar{height:12px;border-radius:99px;background:rgba(0,0,0,.32);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--ice),var(--moss) 55%,var(--sun));transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.medals{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.medal{font-size:20px;filter:grayscale(1);opacity:.32;transition:.3s}
+.medal.on{filter:none;opacity:1;transform:scale(1.12)}
+
+/* ---------- MAPA (signature) ---------- */
+.map{position:relative;margin:30px 0 0;border-radius:26px;overflow:hidden;border:1px solid var(--line);
+  background:linear-gradient(180deg,#251C55 0%, #161A40 55%, #0E1230 100%)}
+.map svg{display:block;width:100%;height:auto}
+.camps{position:absolute;inset:0}
+.camp{position:absolute;transform:translate(-50%,-50%);width:min(46%,330px);text-align:left}
+.camp button{
+  width:100%;display:flex;gap:12px;align-items:flex-start;text-align:left;cursor:pointer;
+  background:rgba(16,20,50,.82);backdrop-filter:blur(6px);
+  border:1.5px solid var(--line);border-radius:16px;padding:12px 13px;color:var(--snow);
+  font-family:inherit;transition:transform .18s,border-color .18s,box-shadow .18s}
+.camp button:hover,.camp button:focus-visible{transform:translateY(-3px);border-color:var(--sun);
+  box-shadow:0 10px 34px rgba(255,200,92,.22);outline:none}
+.camp .ic{flex:0 0 auto;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:21px;
+  background:linear-gradient(140deg,var(--dusk),var(--deep));border:1px solid var(--line)}
+.camp .tt{min-width:0}
+.camp .kicker{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--ice);text-transform:uppercase}
+.camp .nm{font-family:"Fredoka",sans-serif;font-size:15.5px;font-weight:600;line-height:1.2;margin:2px 0 3px}
+.camp .sub{font-size:11.5px;color:var(--mute);line-height:1.4}
+.camp .chip{display:inline-block;margin-top:7px;font-family:"Space Mono",monospace;font-size:10px;
+  border:1px solid var(--line);border-radius:99px;padding:2px 8px;color:var(--sun)}
+.camp.locked button{opacity:.5;cursor:not-allowed}
+.camp.locked .ic{filter:grayscale(1)}
+.camp.done .ic{background:linear-gradient(140deg,var(--moss),#1E8F6B);border-color:var(--moss)}
+.camp .score{font-family:"Space Mono",monospace;font-size:10.5px;color:var(--moss);margin-top:5px}
+.flag{position:absolute;transform:translate(-50%,-50%);font-size:26px;pointer-events:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))}
+
+@media (max-width:700px){
+  .map{border-radius:20px}
+  .map svg{height:600px}
+  .camp{left:50%!important;width:88%}
+  .camp .nm{font-size:15px}
+}
+
+/* lista alternativa en móvil muy estrecho */
+.hint{margin:14px 2px 0;font-size:12.5px;color:var(--mute)}
+
+/* ---------- QUIZ ---------- */
+.screen{position:fixed;inset:0;z-index:50;background:linear-gradient(180deg,#171D45,#0A0E26);
+  display:none;overflow-y:auto;padding:20px 18px 44px}
+.screen.on{display:block}
+.screen-inner{max-width:720px;margin:0 auto}
+.qtop{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.back{background:var(--card);border:1px solid var(--line);color:var(--snow);border-radius:99px;
+  padding:8px 14px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.back:hover{border-color:var(--alpen);color:var(--sun)}
+.qtitle{font-family:"Fredoka",sans-serif;font-size:17px;flex:1;min-width:150px}
+.streak{font-family:"Space Mono",monospace;font-size:13px;color:var(--sun)}
+.qbar{height:9px;border-radius:99px;background:rgba(0,0,0,.4);overflow:hidden;margin-bottom:22px}
+.qbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ice),var(--moss));transition:width .45s}
+
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px 20px}
+.qmeta{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ice);margin-bottom:10px}
+.qtext{font-family:"Fredoka",sans-serif;font-size:clamp(19px,3.4vw,25px);line-height:1.3;margin:0 0 20px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;width:100%;cursor:pointer;
+  background:rgba(255,255,255,.05);border:1.5px solid var(--line);border-radius:14px;padding:14px 15px;
+  color:var(--snow);font-family:inherit;font-size:16px;font-weight:600;transition:.15s}
+.opt:hover:not(:disabled){border-color:var(--ice);background:rgba(111,224,242,.1)}
+.opt:disabled{cursor:default}
+.opt .lt{flex:0 0 auto;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+  background:rgba(255,255,255,.1);font-family:"Space Mono",monospace;font-size:13px}
+.opt.good{border-color:var(--moss);background:rgba(74,220,165,.18)}
+.opt.good .lt{background:var(--moss);color:#08281E}
+.opt.bad{border-color:var(--wrong);background:rgba(255,110,138,.16)}
+.opt.bad .lt{background:var(--wrong);color:#3B0A18}
+
+.why{margin-top:16px;border-radius:14px;padding:14px 16px;font-size:14.5px;line-height:1.55;display:none;
+  background:rgba(255,200,92,.1);border:1px solid rgba(255,200,92,.35)}
+.why.on{display:block;animation:pop .3s ease}
+.why b{font-family:"Fredoka",sans-serif;display:block;margin-bottom:3px;font-size:15px;color:var(--sun)}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.next{margin-top:18px;display:none;width:100%;cursor:pointer;border:0;border-radius:14px;padding:15px;
+  font-family:"Fredoka",sans-serif;font-size:17px;font-weight:600;color:#221000;
+  background:linear-gradient(92deg,var(--sun),var(--alpen))}
+.next.on{display:block}
+.next:hover{filter:brightness(1.06)}
+
+/* ---------- resultado ---------- */
+.result{text-align:center;padding:26px 20px 10px}
+.result .big{font-size:66px;line-height:1;margin-bottom:10px}
+.result h2{font-size:clamp(24px,5vw,34px);margin:0 0 8px}
+.result .sc{font-family:"Space Mono",monospace;font-size:19px;color:var(--sun);margin-bottom:6px}
+.result p{color:#C9D3F5;font-size:15px;line-height:1.6;max-width:44ch;margin:0 auto 22px}
+.stars{font-size:32px;letter-spacing:6px;margin-bottom:14px}
+.rbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.rbtns button{cursor:pointer;border-radius:99px;padding:13px 22px;font-family:"Fredoka",sans-serif;font-size:15px;font-weight:600;border:1.5px solid var(--line);background:var(--card);color:var(--snow)}
+.rbtns button.pri{background:linear-gradient(92deg,var(--sun),var(--alpen));color:#221000;border:0}
+.rbtns button:hover{filter:brightness(1.08)}
+
+footer{margin-top:38px;padding-top:18px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--mute)}
+footer a{color:var(--ice);text-decoration:none}
+footer a:hover{text-decoration:underline}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="wrap">
+
+  <div class="top">
+    <span class="badge">🏔️ Temporada 2026-27 · Nueva</span>
+    <span class="badge" style="color:var(--ice)">50 retos · 4 campamentos</span>
+  </div>
+
+  <div class="hero">
+    <h1>Expedición <span>5º de Primaria</span></h1>
+    <p>El verano es la subida. Cuatro campamentos, cada uno un poco más alto que el anterior. Empiezas repasando lo que ya dominas de 4º y terminas en la cumbre, con contenido que todavía no has dado. Llega arriba y 5º empieza cuesta abajo.</p>
+  </div>
+
+  <div class="progress-box">
+    <div class="progress-head">
+      <strong>Tu ascensión</strong>
+      <span class="count"><span id="doneCount">0</span> / 50 retos</span>
+    </div>
+    <div class="bar"><i id="globalBar"></i></div>
+    <div class="medals" id="medals">
+      <span class="medal" title="Campamento Base">🥾</span>
+      <span class="medal" title="Refugio del Bosque">🌲</span>
+      <span class="medal" title="Glaciar de los Números">🧊</span>
+      <span class="medal" title="La Cumbre">🏔️</span>
+    </div>
+  </div>
+
+  <!-- ================= MAPA ================= -->
+  <div class="map">
+    <svg viewBox="0 0 800 620" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3B2C78"/><stop offset="100%" stop-color="#141A40"/>
+        </linearGradient>
+        <linearGradient id="peak" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#F6FAFF"/><stop offset="38%" stop-color="#8FA0D8"/><stop offset="100%" stop-color="#2A2E63"/>
+        </linearGradient>
+        <linearGradient id="mid" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#5A5AA0"/><stop offset="100%" stop-color="#20244F"/>
+        </linearGradient>
+        <linearGradient id="fore" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2C2F63"/><stop offset="100%" stop-color="#0C1029"/>
+        </linearGradient>
+        <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#6FE0F2"/><stop offset="50%" stop-color="#4ADCA5"/><stop offset="100%" stop-color="#FFC85C"/>
+        </linearGradient>
+      </defs>
+
+      <rect width="800" height="620" fill="url(#sky)"/>
+      <circle cx="648" cy="92" r="42" fill="#FFC85C" opacity=".85"/>
+      <circle cx="648" cy="92" r="72" fill="#FF7A59" opacity=".16"/>
+
+      <!-- cumbre -->
+      <path d="M400 58 L512 250 L470 250 L400 160 L330 250 L288 250 Z" fill="url(#peak)"/>
+      <path d="M400 58 L448 140 L400 118 L352 140 Z" fill="#FFFFFF" opacity=".92"/>
+      <!-- macizo medio -->
+      <path d="M120 300 L268 120 L400 300 Z" fill="url(#mid)" opacity=".9"/>
+      <path d="M420 300 L600 140 L740 300 Z" fill="url(#mid)" opacity=".75"/>
+      <!-- laderas -->
+      <path d="M0 620 L0 380 L150 250 L330 400 L500 240 L680 400 L800 320 L800 620 Z" fill="url(#fore)"/>
+      <!-- niebla -->
+      <ellipse cx="250" cy="392" rx="230" ry="16" fill="#8FA0D8" opacity=".1"/>
+      <ellipse cx="580" cy="300" rx="200" ry="14" fill="#8FA0D8" opacity=".08"/>
+
+      <!-- sendero -->
+      <path id="trail" d="M175 545 C 300 520, 300 470, 215 430 C 130 392, 250 345, 400 330 C 545 316, 610 275, 545 225 C 490 182, 430 165, 400 132"
+            fill="none" stroke="url(#glow)" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 13" opacity=".85"/>
+    </svg>
+
+    <div class="camps" id="camps"></div>
+    <div class="flag" style="left:50%;top:20%">🚩</div>
+  </div>
+
+  <p class="hint">💡 Cada campamento se abre cuando terminas el anterior. Puedes repetir los que ya hayas hecho tantas veces como quieras — la nota que se guarda es la mejor.</p>
+
+  <footer>
+    <span>Hecho con ❤️ por Papá · Gabri, 5º de Primaria 2026-27</span>
+    <a href="https://rozoca.github.io/examenes-gabri/">← Volver al Rincón de Gabri</a>
+  </footer>
+</div>
+
+<!-- ================= PANTALLA DE QUIZ ================= -->
+<div class="screen" id="screen">
+  <div class="screen-inner">
+    <div class="qtop">
+      <button class="back" id="btnBack">← Al mapa</button>
+      <span class="qtitle" id="qTitle"></span>
+      <span class="streak" id="streak"></span>
+    </div>
+    <div class="qbar"><i id="qBar"></i></div>
+    <div id="stage"></div>
+  </div>
+</div>
+
+<script>
+/* ===================== CONTENIDO ===================== */
+const CAMPS = [
+  {
+    id:"base", icon:"🥾", kicker:"Campamento 1 · 1.200 m", name:"Campamento Base",
+    sub:"Repaso de lo que ya conquistaste: Roma, plantas, España y cálculo.", chip:"10 retos",
+    x:22, y:88,
+    qs:[
+      {t:"Historia", q:"¿En qué año empezó la conquista romana de la Península Ibérica?", o:["En el año 218 a.C.","En el año 476 d.C.","En el año 1492"], a:0,
+       w:"Los romanos desembarcaron en Ampurias en el 218 a.C., durante la Segunda Guerra Púnica. Tardaron casi 200 años en dominarla entera."},
+      {t:"Historia", q:"¿Cómo llamaban los romanos a la Península Ibérica?", o:["Galia","Hispania","Britania"], a:1,
+       w:"De ahí viene la palabra España. Galia era Francia y Britania, Gran Bretaña."},
+      {t:"Science · English", q:"Which part of the plant makes photosynthesis?", o:["The roots","The leaves","The stem"], a:1,
+       w:"Leaves have chlorophyll, the green substance that captures sunlight."},
+      {t:"Naturales", q:"¿Qué gas absorbe la planta del aire para hacer la fotosíntesis?", o:["Oxígeno","Nitrógeno","Dióxido de carbono"], a:2,
+       w:"Absorbe dióxido de carbono (CO₂) y suelta oxígeno. Por eso las plantas limpian el aire."},
+      {t:"Sociales", q:"¿Cuántas comunidades autónomas tiene España?", o:["15","17","19"], a:1,
+       w:"17 comunidades autónomas más 2 ciudades autónomas: Ceuta y Melilla."},
+      {t:"Sociales", q:"¿Qué país limita con España por el oeste?", o:["Francia","Portugal","Marruecos"], a:1,
+       w:"Portugal, con la frontera terrestre más larga de Europa: unos 1.200 km."},
+      {t:"Matemáticas", q:"¿Cuánto es 7 × 8 + 6?", o:["62","98","56"], a:0,
+       w:"Primero la multiplicación (7×8=56) y después la suma: 56+6=62. El orden importa."},
+      {t:"English", q:"What is the past simple of the verb “go”?", o:["goed","went","gone"], a:1,
+       w:"“Went” is the past simple; “gone” is the past participle (I have gone)."},
+      {t:"Astronomía", q:"¿Cuál es el planeta más cercano al Sol?", o:["Venus","Mercurio","Marte"], a:1,
+       w:"Mercurio. Es el más pequeño y da una vuelta al Sol en solo 88 días."},
+      {t:"Matemáticas", q:"¿Cuánto es 1.000 − 375?", o:["725","625","635"], a:1,
+       w:"1.000 − 375 = 625. Truco: 375 + 625 = 1.000."}
+    ]
+  },
+  {
+    id:"bosque", icon:"🌲", kicker:"Campamento 2 · 1.900 m", name:"Refugio del Bosque",
+    sub:"Lengua, población y ciencia. Lo que viste en el Periódico y el Mundial.", chip:"10 retos",
+    x:76, y:64,
+    qs:[
+      {t:"Sociales", q:"¿En qué comunidad autónoma está Sevilla?", o:["Extremadura","Andalucía","Murcia"], a:1,
+       w:"Andalucía, la comunidad con más población de España y con 8 provincias."},
+      {t:"Sociales", q:"La densidad de población mide…", o:["Cuántos habitantes viven en cada km²","Cuánta gente nace cada año","Cuántas ciudades tiene un país"], a:0,
+       w:"Se calcula dividiendo los habitantes entre la superficie. Madrid tiene una densidad altísima; Soria, bajísima."},
+      {t:"Lengua", q:"En «Gabriel juega al fútbol en el parque», ¿cuál es el sujeto?", o:["Gabriel","juega al fútbol","en el parque"], a:0,
+       w:"El sujeto es quien realiza la acción. Truco: pregunta al verbo «¿quién juega?»."},
+      {t:"Lengua", q:"En «Mis amigos comieron pizza», ¿cuál es el predicado?", o:["Mis amigos","comieron pizza","pizza"], a:1,
+       w:"El predicado empieza siempre en el verbo y cuenta lo que hace el sujeto."},
+      {t:"Ortografía", q:"¿Cuál es el plural de «lápiz»?", o:["lápizes","lápices","lápiz"], a:1,
+       w:"Las palabras acabadas en -z cambian la z por c antes de -es: pez → peces, luz → luces."},
+      {t:"Ortografía", q:"¿Cuál de estas palabras está bien escrita?", o:["ueso","hueso","gueso"], a:1,
+       w:"Se escriben con h las palabras que empiezan por ue-: hueso, huevo, huerta, huella."},
+      {t:"Lengua", q:"En «Gabri corre rápidamente», ¿cuál es el adverbio?", o:["Gabri","corre","rápidamente"], a:2,
+       w:"El adverbio acompaña al verbo y dice cómo, cuándo o dónde. Los de modo suelen acabar en -mente."},
+      {t:"Lengua", q:"¿Qué es una noticia?", o:["Un texto que informa de un hecho real y actual","Un cuento inventado","Una carta a un amigo"], a:0,
+       w:"Una noticia responde a: qué, quién, cuándo, dónde, por qué y cómo. Las famosas 6 preguntas del periodista."},
+      {t:"Astronomía", q:"El Sol es una estrella. ¿Verdadero o falso?", o:["Verdadero","Falso"], a:0,
+       w:"Verdadero: una bola gigante de gas que produce su propia luz y calor. Los planetas no brillan solos, reflejan la luz."},
+      {t:"Astronomía", q:"¿Qué planeta se conoce como «el planeta rojo»?", o:["Júpiter","Marte","Saturno"], a:1,
+       w:"Marte. Su suelo tiene óxido de hierro: literalmente está oxidado, y por eso se ve rojo."}
+    ]
+  },
+  {
+    id:"glaciar", icon:"🧊", kicker:"Campamento 3 · 2.800 m", name:"Glaciar de los Números",
+    sub:"Aquí empieza 5º de verdad: decimales, fracciones, potencias y áreas.", chip:"15 retos · difícil",
+    x:26, y:40,
+    qs:[
+      {t:"Decimales", q:"¿Cómo se lee el número 3,45?", o:["Tres coma cuarenta y cinco décimas","Tres unidades y cuarenta y cinco centésimas","Tres unidades y cuarenta y cinco milésimas"], a:1,
+       w:"Dos cifras detrás de la coma = centésimas. Una cifra = décimas; tres = milésimas."},
+      {t:"Decimales", q:"¿Cuánto es 2,5 + 1,75?", o:["4,25","3,25","4,20"], a:0,
+       w:"Coloca las comas una debajo de otra: 2,50 + 1,75 = 4,25. Añadir el cero ayuda."},
+      {t:"Decimales", q:"¿Cuánto es 6,4 × 10?", o:["0,64","64","640"], a:1,
+       w:"Multiplicar por 10 mueve la coma un lugar a la derecha. Por 100, dos lugares."},
+      {t:"Fracciones", q:"¿Qué fracción es mayor: 3/4 o 2/3?", o:["3/4","2/3","Son iguales"], a:0,
+       w:"3/4 = 0,75 y 2/3 ≈ 0,67. Truco: pásalas a decimal dividiendo arriba entre abajo."},
+      {t:"Fracciones", q:"¿Cuánto es 1/2 de 48?", o:["12","24","36"], a:1,
+       w:"La mitad de 48 son 24. Para hallar una fracción de un número: divides por el de abajo y multiplicas por el de arriba."},
+      {t:"Fracciones", q:"¿Cuánto es 3/5 de 45?", o:["27","15","9"], a:0,
+       w:"45 : 5 = 9, y 9 × 3 = 27. Siempre en ese orden: dividir y luego multiplicar."},
+      {t:"Múltiplos", q:"¿Cuál es el mínimo común múltiplo (m.c.m.) de 4 y 6?", o:["24","12","10"], a:1,
+       w:"Múltiplos de 4: 4, 8, 12… De 6: 6, 12… El primero que comparten es 12."},
+      {t:"Divisores", q:"¿Cuál de estos números NO es divisor de 12?", o:["3","4","5"], a:2,
+       w:"Los divisores de 12 son 1, 2, 3, 4, 6 y 12. El 5 no cabe en 12 un número exacto de veces."},
+      {t:"Potencias", q:"¿Cuánto vale 5²?", o:["10","25","52"], a:1,
+       w:"5² significa 5 × 5 = 25. No es 5 × 2: es el 5 multiplicado dos veces por sí mismo."},
+      {t:"Potencias", q:"¿Cuánto vale 10³?", o:["30","100","1.000"], a:2,
+       w:"10 × 10 × 10 = 1.000. Truco rápido: el exponente te dice cuántos ceros lleva."},
+      {t:"Geometría", q:"¿Cuál es el área de un rectángulo de 8 cm de largo y 5 cm de ancho?", o:["13 cm²","26 cm²","40 cm²"], a:2,
+       w:"Área = base × altura = 8 × 5 = 40 cm². El área siempre va en unidades cuadradas."},
+      {t:"Geometría", q:"¿Cuál es el perímetro de un cuadrado de 7 cm de lado?", o:["14 cm","28 cm","49 cm"], a:1,
+       w:"El perímetro es la suma de los lados: 7 × 4 = 28 cm. Si fuera el área, sería 49 cm²."},
+      {t:"Problema", q:"Gabri compra 3 libros de 12,50 € cada uno y paga con un billete de 50 €. ¿Cuánto le devuelven?", o:["12,50 €","17,50 €","10,00 €"], a:0,
+       w:"3 × 12,50 = 37,50 €. Y 50 − 37,50 = 12,50 €. Dos pasos: primero el gasto, luego la vuelta."},
+      {t:"Problema", q:"Un tren sale a las 9:45 y tarda 2 horas y 30 minutos. ¿A qué hora llega?", o:["11:15","12:15","12:75"], a:1,
+       w:"9:45 + 2 h = 11:45, y +30 min = 12:15. Ojo: las horas van de 60 en 60, no de 100 en 100."},
+      {t:"Medida", q:"¿Cuántos mililitros hay en 2,5 litros?", o:["250 ml","2.500 ml","25.000 ml"], a:1,
+       w:"1 litro = 1.000 ml, así que 2,5 × 1.000 = 2.500 ml. Una botella grande y media."}
+    ]
+  },
+  {
+    id:"cumbre", icon:"🏔️", kicker:"Campamento 4 · 3.400 m", name:"La Cumbre",
+    sub:"Relieve, ríos, climas y cuerpo humano. Contenido nuevo de 5º.", chip:"15 retos · cumbre",
+    x:66, y:16,
+    qs:[
+      {t:"Ríos", q:"¿Cuál es el río más largo de España?", o:["El Ebro","El Tajo","El Guadalquivir"], a:1,
+       w:"El Tajo, con más de 1.000 km. Nace en Teruel, pasa por Toledo y desemboca en Lisboa."},
+      {t:"Ríos", q:"¿Qué río pasa por Zaragoza?", o:["El Ebro","El Duero","El Segura"], a:0,
+       w:"El Ebro es el más caudaloso de España y el único grande que desemboca en el Mediterráneo."},
+      {t:"Relieve", q:"¿Cuál es el pico más alto de España?", o:["El Mulhacén","El Teide","El Aneto"], a:1,
+       w:"El Teide (3.715 m), en Tenerife. Es un volcán, y el pico más alto de todo el Atlántico."},
+      {t:"Relieve", q:"¿Y el pico más alto de la Península (sin contar las islas)?", o:["El Mulhacén","El Aneto","El Naranjo de Bulnes"], a:0,
+       w:"El Mulhacén (3.479 m), en Sierra Nevada, Granada. El Aneto es el más alto de los Pirineos."},
+      {t:"Relieve", q:"¿Qué cordillera separa España de Francia?", o:["Los Alpes","Los Pirineos","La Cordillera Cantábrica"], a:1,
+       w:"Los Pirineos, unos 430 km de frontera natural. Andorra está justo en medio."},
+      {t:"Relieve", q:"¿Qué sistema montañoso atraviesa la Meseta por el centro y la divide en dos?", o:["El Sistema Ibérico","El Sistema Central","Sierra Morena"], a:1,
+       w:"El Sistema Central, con Gredos y Guadarrama. Separa la submeseta norte de la sur."},
+      {t:"Europa", q:"¿Cuál es el río más largo de Europa?", o:["El Danubio","El Rin","El Volga"], a:2,
+       w:"El Volga, en Rusia: 3.530 km. El Danubio es el segundo y atraviesa 10 países."},
+      {t:"Europa", q:"¿Qué océano baña las costas de Galicia?", o:["El Atlántico","El Mediterráneo","El Ártico"], a:0,
+       w:"El Atlántico. España es de los pocos países bañados por un océano y un mar a la vez."},
+      {t:"Clima", q:"¿Qué clima tiene veranos secos y calurosos e inviernos suaves, típico del litoral mediterráneo?", o:["Clima oceánico","Clima mediterráneo","Clima de montaña"], a:1,
+       w:"El mediterráneo. El oceánico (norte) es húmedo todo el año y con temperaturas más suaves."},
+      {t:"Clima", q:"¿Qué instrumento mide la cantidad de lluvia caída?", o:["El termómetro","El pluviómetro","La veleta"], a:1,
+       w:"El pluviómetro. «Pluvia» significa lluvia en latín. La veleta marca la dirección del viento."},
+      {t:"Cuerpo humano", q:"¿Qué aparato se encarga de transportar la sangre por todo el cuerpo?", o:["El aparato respiratorio","El aparato circulatorio","El aparato digestivo"], a:1,
+       w:"El circulatorio: corazón, arterias, venas y capilares. El corazón late unas 100.000 veces al día."},
+      {t:"Cuerpo humano", q:"¿Cuántos huesos tiene aproximadamente el esqueleto de una persona adulta?", o:["106","206","306"], a:1,
+       w:"206. Un bebé nace con unos 300, pero muchos se van uniendo al crecer."},
+      {t:"Cuerpo humano", q:"¿En qué órgano se absorben la mayoría de los nutrientes de los alimentos?", o:["En el estómago","En el intestino delgado","En el hígado"], a:1,
+       w:"En el intestino delgado, que mide unos 7 metros y está lleno de vellosidades para absorber mejor."},
+      {t:"Ecosistemas", q:"En una cadena alimentaria, ¿quiénes son los productores?", o:["Las plantas","Los herbívoros","Los carnívoros"], a:0,
+       w:"Las plantas: fabrican su propio alimento con la fotosíntesis. Todo lo demás depende de ellas."},
+      {t:"Science · English", q:"Which of these animals is a mammal?", o:["A shark","A dolphin","A crocodile"], a:1,
+       w:"Dolphins are mammals: they breathe air, are warm-blooded and feed their babies with milk."}
+    ]
+  }
+];
+
+/* ===================== ESTADO ===================== */
+const KEY = "gabri-exp5-v1";
+let mem = {};
+const store = {
+  read(){ try{ return JSON.parse(localStorage.getItem(KEY)) || {}; }catch(e){ return mem; } },
+  write(o){ mem = o; try{ localStorage.setItem(KEY, JSON.stringify(o)); }catch(e){} }
+};
+let progress = store.read();
+
+/* ===================== MAPA ===================== */
+const campsEl = document.getElementById('camps');
+
+function unlocked(i){ return i === 0 || !!(progress[CAMPS[i-1].id]); }
+
+function paintMap(){
+  campsEl.innerHTML = '';
+  CAMPS.forEach((c,i)=>{
+    const rec = progress[c.id];
+    const open = unlocked(i);
+    const d = document.createElement('div');
+    d.className = 'camp' + (open ? '' : ' locked') + (rec ? ' done' : '');
+    d.style.left = c.x + '%';
+    d.style.top  = c.y + '%';
+    d.innerHTML =
+      '<button ' + (open ? '' : 'disabled aria-disabled="true"') + '>' +
+        '<span class="ic">' + (open ? c.icon : '🔒') + '</span>' +
+        '<span class="tt">' +
+          '<span class="kicker">' + c.kicker + '</span>' +
+          '<span class="nm">' + c.name + '</span>' +
+          '<span class="sub">' + (open ? c.sub : 'Termina el campamento anterior para abrir esta ruta.') + '</span>' +
+          '<span class="chip">' + c.chip + '</span>' +
+          (rec ? '<span class="score">✔ Mejor marca: ' + rec.best + '/' + c.qs.length + '</span>' : '') +
+        '</span>' +
+      '</button>';
+    if(open) d.querySelector('button').addEventListener('click', ()=> startCamp(i));
+    campsEl.appendChild(d);
+  });
+  paintProgress();
+}
+
+function paintProgress(){
+  let done = 0;
+  CAMPS.forEach(c=>{ if(progress[c.id]) done += c.qs.length; });
+  document.getElementById('doneCount').textContent = done;
+  document.getElementById('globalBar').style.width = (done/50*100) + '%';
+  document.querySelectorAll('#medals .medal').forEach((m,i)=>{
+    m.classList.toggle('on', !!progress[CAMPS[i].id]);
+  });
+}
+
+/* ===================== QUIZ ===================== */
+const screen = document.getElementById('screen');
+const stage  = document.getElementById('stage');
+let cur = 0, idx = 0, hits = 0, run = 0;
+
+function startCamp(i){
+  cur = i; idx = 0; hits = 0; run = 0;
+  document.getElementById('qTitle').textContent = CAMPS[i].icon + '  ' + CAMPS[i].name;
+  screen.classList.add('on');
+  document.body.style.overflow = 'hidden';
+  render();
+}
+
+function render(){
+  const camp = CAMPS[cur];
+  const q = camp.qs[idx];
+  document.getElementById('qBar').style.width = (idx / camp.qs.length * 100) + '%';
+  document.getElementById('streak').textContent = run >= 3 ? '🔥 ' + run + ' seguidas' : (idx>0 ? hits + ' aciertos' : '');
+
+  stage.innerHTML =
+    '<div class="qcard">' +
+      '<div class="qmeta">Reto ' + (idx+1) + ' de ' + camp.qs.length + ' · ' + q.t + '</div>' +
+      '<p class="qtext">' + q.q + '</p>' +
+      '<div class="opts" id="opts"></div>' +
+      '<div class="why" id="why"></div>' +
+      '<button class="next" id="next"></button>' +
+    '</div>';
+
+  const box = document.getElementById('opts');
+  const letters = ['A','B','C','D'];
+  q.o.forEach((txt,k)=>{
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.innerHTML = '<span class="lt">' + letters[k] + '</span><span>' + txt + '</span>';
+    b.addEventListener('click', ()=> answer(k));
+    box.appendChild(b);
+  });
+}
+
+function answer(k){
+  const camp = CAMPS[cur], q = camp.qs[idx];
+  const btns = Array.prototype.slice.call(document.querySelectorAll('.opt'));
+  btns.forEach((b,i)=>{
+    b.disabled = true;
+    if(i === q.a) b.classList.add('good');
+    if(i === k && k !== q.a) b.classList.add('bad');
+  });
+
+  const ok = (k === q.a);
+  if(ok){ hits++; run++; } else { run = 0; }
+
+  const why = document.getElementById('why');
+  why.innerHTML = '<b>' + (ok ? (run >= 3 ? '🔥 ¡Racha de ' + run + '!' : '✅ ¡Correcto!') : '💡 Casi. Fíjate:') + '</b>' + q.w;
+  why.classList.add('on');
+
+  const nx = document.getElementById('next');
+  nx.textContent = (idx === camp.qs.length - 1) ? 'Ver mi resultado 🏁' : 'Siguiente reto →';
+  nx.classList.add('on');
+  nx.addEventListener('click', ()=>{
+    if(idx === camp.qs.length - 1){ finish(); }
+    else { idx++; render(); window.scrollTo({top:0}); }
+  });
+  nx.focus();
+}
+
+function finish(){
+  const camp = CAMPS[cur];
+  const total = camp.qs.length;
+  const pct = hits / total;
+  const stars = pct >= .9 ? 3 : pct >= .7 ? 2 : pct >= .5 ? 1 : 0;
+
+  const prev = progress[camp.id];
+  progress[camp.id] = { best: Math.max(hits, prev ? prev.best : 0), stars: Math.max(stars, prev ? prev.stars : 0) };
+  store.write(progress);
+
+  const last = (cur === CAMPS.length - 1);
+  let title, msg, emo;
+  if(pct >= .9){ emo = last ? '🏔️' : '⭐'; title = last ? '¡Cumbre conquistada!' : '¡Campamento clavado!';
+    msg = last ? 'Has llegado arriba del todo con casi todo correcto. 5º te va a parecer una bajada tranquila.' : 'Casi pleno. Sigues subiendo y el siguiente campamento ya está abierto.'; }
+  else if(pct >= .7){ emo = '💪'; title = '¡Campamento superado!';
+    msg = 'Buen ritmo. Repasa las que fallaste y vuelve a intentarlo si quieres las 3 estrellas.'; }
+  else if(pct >= .5){ emo = '🧗'; title = 'Campamento superado, con esfuerzo';
+    msg = 'Has llegado, que es lo que cuenta. Merece la pena repetirlo: la segunda vez siempre sale mejor.'; }
+  else { emo = '🎒'; title = 'Toca acampar y repasar';
+    msg = 'Este tramo era duro. Lee las explicaciones con calma y vuelve a subir: nadie sube a la primera.'; }
+
+  document.getElementById('qBar').style.width = '100%';
+  document.getElementById('streak').textContent = '';
+  stage.innerHTML =
+    '<div class="qcard"><div class="result">' +
+      '<div class="big">' + emo + '</div>' +
+      '<h2>' + title + '</h2>' +
+      '<div class="stars">' + '⭐'.repeat(stars) + '☆'.repeat(3-stars) + '</div>' +
+      '<div class="sc">' + hits + ' de ' + total + ' aciertos</div>' +
+      '<p>' + msg + '</p>' +
+      '<div class="rbtns">' +
+        '<button id="again">🔁 Repetir</button>' +
+        (last ? '' : '<button class="pri" id="onward">Siguiente campamento →</button>') +
+        '<button class="' + (last ? 'pri' : '') + '" id="toMap">🗺️ Volver al mapa</button>' +
+      '</div>' +
+    '</div></div>';
+
+  document.getElementById('again').addEventListener('click', ()=> startCamp(cur));
+  document.getElementById('toMap').addEventListener('click', closeScreen);
+  const on = document.getElementById('onward');
+  if(on) on.addEventListener('click', ()=> startCamp(cur+1));
+  paintMap();
+}
+
+function closeScreen(){
+  screen.classList.remove('on');
+  document.body.style.overflow = '';
+  paintMap();
+  document.querySelector('.map').scrollIntoView({behavior:'smooth', block:'center'});
+}
+document.getElementById('btnBack').addEventListener('click', closeScreen);
+document.addEventListener('keydown', e=>{ if(e.key === 'Escape' && screen.classList.contains('on')) closeScreen(); });
+
+/* ===================== ESTRELLAS ===================== */
+(function(){
+  const cv = document.getElementById('stars'), cx = cv.getContext('2d');
+  let dots = [];
+  function size(){
+    cv.width = innerWidth; cv.height = innerHeight;
+    dots = Array.from({length: Math.round(innerWidth/14)}, ()=>({
+      x: Math.random()*cv.width, y: Math.random()*cv.height*0.75,
+      r: Math.random()*1.4+0.3, a: Math.random(), s: Math.random()*0.012+0.003
+    }));
+  }
+  function loop(){
+    cx.clearRect(0,0,cv.width,cv.height);
+    dots.forEach(d=>{
+      d.a += d.s; const o = 0.25 + Math.abs(Math.sin(d.a))*0.6;
+      cx.beginPath(); cx.arc(d.x,d.y,d.r,0,6.284);
+      cx.fillStyle = 'rgba(255,255,255,' + o + ')'; cx.fill();
+    });
+    requestAnimationFrame(loop);
+  }
+  addEventListener('resize', size);
+  size();
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) loop();
+  else { cx.clearRect(0,0,cv.width,cv.height); dots.forEach(d=>{ cx.beginPath(); cx.arc(d.x,d.y,d.r,0,6.284); cx.fillStyle='rgba(255,255,255,.5)'; cx.fill(); }); }
+})();
+
+paintMap();
+</script>
+</body>
+</html>
