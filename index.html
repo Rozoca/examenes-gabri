@@ -1,389 +1,387 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Rincón de Prácticas de Gabri</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Rincón de Gabri · Zona de estudio</title>
+<meta name="description" content="Once aventuras interactivas y más de 220 retos para estudiar jugando. Matemáticas, sociales, naturales, lengua e inglés.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#101736;
+  --deep:#1B2350;
+  --dusk:#3A2E77;
+  --alpen:#FF7A59;
+  --sun:#FFC85C;
+  --ice:#6FE0F2;
+  --moss:#4ADCA5;
+  --grape:#B98CFF;
+  --rose:#FF8FB1;
+  --snow:#F2F7FF;
+  --mute:#9BA6D4;
+  --card:rgba(255,255,255,.055);
+  --line:rgba(255,255,255,.13);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Nunito",system-ui,sans-serif;color:var(--snow);
+  background:
+    radial-gradient(1100px 560px at 82% -8%, rgba(255,122,89,.30), transparent 62%),
+    radial-gradient(820px 480px at 8% 4%, rgba(111,224,242,.15), transparent 60%),
+    radial-gradient(700px 500px at 50% 100%, rgba(185,140,255,.14), transparent 65%),
+    linear-gradient(180deg,#1A1F4B 0%, var(--night) 45%, #0A0E26 100%);
+  background-attachment:fixed;min-height:100vh;overflow-x:hidden;
+}
+h1,h2,h3,.fred{font-family:"Fredoka",sans-serif;font-weight:600;letter-spacing:-.015em}
+.mono{font-family:"Space Mono",monospace}
+.wrap{max-width:1080px;margin:0 auto;padding:24px 18px 70px;position:relative;z-index:1}
+#stars{position:fixed;inset:0;pointer-events:none;opacity:.7;z-index:0}
+a{color:inherit}
 
-        body {
-            font-family: 'Nunito', sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: white;
-            min-height: 100vh;
-            padding: 30px 16px 60px;
-            position: relative;
-            overflow-x: hidden;
-        }
+/* ---------- barra superior ---------- */
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:34px}
+.brand{display:flex;align-items:center;gap:11px;font-family:"Fredoka",sans-serif;font-size:16px;font-weight:600}
+.brand .dot{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:18px;
+  background:linear-gradient(140deg,var(--dusk),var(--deep));border:1px solid var(--line)}
+.pill{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid var(--line);border-radius:99px;padding:6px 13px;color:var(--mute);background:var(--card)}
 
-        body::before {
-            content: '';
-            position: fixed; inset: 0;
-            background-image:
-                radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,.6) 0%, transparent 100%),
-                radial-gradient(1px 1px at 30% 40%, rgba(255,255,255,.4) 0%, transparent 100%),
-                radial-gradient(1px 1px at 55% 20%, rgba(255,255,255,.5) 0%, transparent 100%),
-                radial-gradient(1px 1px at 75% 60%, rgba(255,255,255,.3) 0%, transparent 100%),
-                radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,.6) 0%, transparent 100%),
-                radial-gradient(2px 2px at 20% 75%, rgba(0,255,255,.2) 0%, transparent 100%),
-                radial-gradient(2px 2px at 80% 35%, rgba(0,255,255,.15) 0%, transparent 100%);
-            pointer-events: none; z-index: 0;
-        }
+/* ---------- hero ---------- */
+.hero{margin-bottom:34px}
+.hero h1{margin:0;font-size:clamp(38px,8.2vw,76px);line-height:.98;font-weight:700}
+.hero h1 em{font-style:normal;background:linear-gradient(94deg,var(--sun),var(--alpen) 55%,var(--rose));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{margin:16px 0 0;font-size:clamp(15px,2.1vw,18px);line-height:1.62;color:#C6D0F2;max-width:60ch}
+.stats{display:flex;gap:26px;flex-wrap:wrap;margin-top:24px}
+.stat b{display:block;font-family:"Fredoka",sans-serif;font-size:26px;line-height:1;color:var(--sun)}
+.stat span{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:700}
 
-        .wrapper { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; }
+/* ---------- destacado ---------- */
+.feature{position:relative;margin:34px 0 44px;border-radius:26px;overflow:hidden;
+  border:1px solid rgba(255,200,92,.34);
+  background:linear-gradient(120deg, rgba(58,46,119,.9), rgba(21,26,64,.92) 62%),
+             radial-gradient(500px 240px at 88% 12%, rgba(255,122,89,.34), transparent 66%);
+  display:grid;grid-template-columns:1.55fr 1fr}
+.feature-txt{padding:32px 30px}
+.tagline{display:inline-flex;align-items:center;gap:7px;font-family:"Space Mono",monospace;font-size:10.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:#221000;background:linear-gradient(92deg,var(--sun),var(--alpen));
+  border-radius:99px;padding:5px 12px;font-weight:700}
+.feature h2{margin:15px 0 10px;font-size:clamp(26px,4.6vw,40px);line-height:1.04}
+.feature p{margin:0 0 18px;font-size:15.5px;line-height:1.62;color:#D2DBF7;max-width:46ch}
+.camp-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.camp-row span{font-size:11.5px;font-weight:700;border:1px solid var(--line);border-radius:9px;padding:6px 11px;color:#CBD5F5}
+.cta{display:inline-flex;align-items:center;gap:9px;text-decoration:none;border-radius:14px;padding:14px 24px;
+  font-family:"Fredoka",sans-serif;font-size:17px;font-weight:600;color:#221000;
+  background:linear-gradient(92deg,var(--sun),var(--alpen));transition:.18s}
+.cta:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(255,150,89,.34)}
+.feature-art{position:relative;display:grid;place-items:center;padding:20px}
+.feature-art svg{width:100%;height:auto;max-width:280px;filter:drop-shadow(0 14px 30px rgba(0,0,0,.5))}
+@media (max-width:820px){
+  .feature{grid-template-columns:1fr}
+  .feature-art{order:-1;padding:24px 20px 0}
+  .feature-art svg{max-width:210px}
+  .feature-txt{padding:24px 22px 28px}
+}
 
-        header {
-            text-align: center;
-            padding: 36px 24px 28px;
-            background: rgba(15,12,41,0.85);
-            border: 2px solid #00ffff;
-            border-radius: 28px;
-            box-shadow: 0 0 40px rgba(0,255,255,.25), inset 0 0 40px rgba(0,255,255,.03);
-            margin-bottom: 36px;
-            position: relative;
-            overflow: hidden;
-        }
-        header::before {
-            content: '✨ 🌟 ✨ 🌟 ✨ 🌟 ✨';
-            position: absolute; top: 8px; left: 0; right: 0;
-            text-align: center; font-size: 14px;
-            opacity: .25; letter-spacing: 8px;
-        }
-        header .avatar {
-            font-size: 3.5rem; display: block; margin-bottom: 6px;
-            animation: bounce 2s ease infinite;
-        }
-        @keyframes bounce {
-            0%,100% { transform: translateY(0) rotate(-3deg); }
-            50%      { transform: translateY(-10px) rotate(3deg); }
-        }
-        header h1 {
-            font-family: 'Fredoka One', cursive;
-            font-size: clamp(1.8rem, 5vw, 2.8rem);
-            color: #00ffff;
-            text-shadow: 0 0 20px #00ffff, 0 0 40px rgba(0,255,255,.4);
-            letter-spacing: 1px;
-        }
-        header p { color: rgba(255,255,255,.75); font-size: 1rem; font-weight: 600; margin-top: 8px; }
-        .score-row { display: flex; justify-content: center; gap: 16px; margin-top: 18px; flex-wrap: wrap; }
-        .badge {
-            background: rgba(0,255,255,.1); border: 1px solid rgba(0,255,255,.35);
-            border-radius: 50px; padding: 6px 18px;
-            font-size: .82rem; font-weight: 700; color: #00ffff;
-        }
+/* ---------- filtros ---------- */
+.tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:22px}
+.sec-title{font-family:"Fredoka",sans-serif;font-size:22px;margin:0 auto 0 0}
+.chip{cursor:pointer;font-family:inherit;font-weight:700;font-size:13px;color:#C6D0F2;
+  background:var(--card);border:1px solid var(--line);border-radius:99px;padding:8px 15px;transition:.15s}
+.chip:hover{border-color:var(--ice);color:var(--snow)}
+.chip.on{background:linear-gradient(92deg,var(--ice),var(--moss));color:#062A26;border-color:transparent}
+.dice{cursor:pointer;font-family:"Fredoka",sans-serif;font-weight:600;font-size:13.5px;color:#221000;
+  background:linear-gradient(92deg,var(--sun),var(--alpen));border:0;border-radius:99px;padding:9px 17px}
+.dice:hover{filter:brightness(1.07)}
 
-        .section-title {
-            font-family: 'Fredoka One', cursive; font-size: 1.1rem;
-            color: rgba(255,255,255,.5); text-transform: uppercase;
-            letter-spacing: 2px; margin-bottom: 18px; padding-left: 4px;
-        }
+/* ---------- rejilla ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(288px,1fr));gap:16px}
+.item{position:relative;display:flex;flex-direction:column;text-decoration:none;color:inherit;
+  background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px 19px 18px;overflow:hidden;
+  transition:transform .2s cubic-bezier(.2,.8,.2,1),border-color .2s,box-shadow .2s}
+.item::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--accent, var(--ice));opacity:.85}
+.item::after{content:"";position:absolute;width:180px;height:180px;right:-70px;top:-70px;border-radius:50%;
+  background:var(--accent, var(--ice));opacity:.09;transition:opacity .25s,transform .35s}
+.item:hover{transform:translateY(-5px);border-color:var(--accent, var(--ice));box-shadow:0 16px 40px rgba(0,0,0,.36)}
+.item:hover::after{opacity:.2;transform:scale(1.18)}
+.item.hide{display:none}
+.item .ico{font-size:27px;margin-bottom:12px}
+.item .kicker{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent, var(--ice));margin-bottom:6px}
+.item h3{margin:0 0 8px;font-size:18.5px;line-height:1.2}
+.item p{margin:0 0 14px;font-size:13.5px;line-height:1.55;color:#B4C0E8;flex:1}
+.tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tags span{font-family:"Space Mono",monospace;font-size:10px;border:1px solid var(--line);
+  border-radius:7px;padding:4px 8px;color:var(--mute)}
+.tags .q{color:var(--sun);border-color:rgba(255,200,92,.4)}
+.new{position:absolute;top:16px;right:16px;font-family:"Space Mono",monospace;font-size:9.5px;
+  letter-spacing:.12em;background:var(--alpen);color:#2B0C02;border-radius:99px;padding:4px 9px;font-weight:700}
+.arrow{margin-top:14px;font-size:13px;font-weight:800;color:var(--accent, var(--ice));opacity:0;transform:translateX(-6px);transition:.2s}
+.item:hover .arrow{opacity:1;transform:none}
 
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 22px; margin-bottom: 32px;
-        }
+.divider{margin:46px 0 20px;display:flex;align-items:center;gap:14px}
+.divider h2{margin:0;font-size:21px;white-space:nowrap}
+.divider i{flex:1;height:1px;background:var(--line)}
+.divider small{font-size:12px;color:var(--mute);font-family:"Space Mono",monospace}
 
-        .card {
-            background: rgba(15,12,41,0.88);
-            border: 2px solid rgba(0,255,255,.35);
-            border-radius: 22px; padding: 26px 22px 22px;
-            display: flex; flex-direction: column;
-            transition: all .3s cubic-bezier(.4,0,.2,1);
-            position: relative; overflow: hidden;
-        }
-        .card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-            background: var(--accent, linear-gradient(90deg,#00ffff,#00ff88));
-            opacity: 0; transition: opacity .3s;
-        }
-        .card:hover { transform: translateY(-8px); border-color: rgba(0,255,255,.7); box-shadow: 0 12px 36px rgba(0,255,255,.2); }
-        .card:hover::before { opacity: 1; }
+.empty{display:none;padding:34px 4px;color:var(--mute);font-family:"Space Mono",monospace;font-size:13.5px}
 
-        .card-emoji { font-size: 2.8rem; margin-bottom: 10px; display: block; }
-        .card-subject { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--subject-color, #00ffff); margin-bottom: 6px; opacity: .8; }
-        .card h2 { font-family: 'Fredoka One', cursive; font-size: 1.25rem; color: #fff; margin-bottom: 10px; line-height: 1.3; }
-        .card p { font-size: .88rem; line-height: 1.55; color: rgba(255,255,255,.65); flex-grow: 1; margin-bottom: 20px; font-weight: 600; }
-        .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
-        .tag { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15); border-radius: 50px; padding: 3px 10px; font-size: .7rem; font-weight: 700; color: rgba(255,255,255,.55); }
-
-        .btn {
-            display: block; padding: 13px 20px; border-radius: 14px;
-            font-family: 'Fredoka One', cursive; font-size: 1.05rem;
-            text-align: center; text-decoration: none; cursor: pointer;
-            transition: all .25s; border: none;
-        }
-        .btn-active {
-            background: linear-gradient(135deg, var(--btn1, #00ffff), var(--btn2, #00ff88));
-            color: #0f0c29; box-shadow: 0 4px 16px rgba(0,255,255,.3);
-        }
-        .btn-active:hover { transform: scale(1.04); box-shadow: 0 6px 22px rgba(0,255,255,.5); }
-        .btn-soon { background: rgba(255,255,255,.06); border: 2px dashed rgba(255,255,255,.2); color: rgba(255,255,255,.35); cursor: default; }
-
-        /* Card accent colors */
-        .card.plants  { --accent: linear-gradient(90deg,#3dbf7d,#1d8a4e); --subject-color:#3dbf7d; --btn1:#3dbf7d; --btn2:#1d8a4e; }
-        .card.roma    { --accent: linear-gradient(90deg,#f0b429,#c9922a); --subject-color:#f0b429; --btn1:#f0b429; --btn2:#8b1a1a; }
-        .card.space   { --accent: linear-gradient(90deg,#b44fff,#7b00ff); --subject-color:#b44fff; --btn1:#b44fff; --btn2:#7b00ff; }
-        .card.geo     { --accent: linear-gradient(90deg,#00e5ff,#0077ff); --subject-color:#00e5ff; --btn1:#00e5ff; --btn2:#0077ff; }
-        .card.math    { --accent: linear-gradient(90deg,#ffb703,#ff6b00); --subject-color:#ffb703; --btn1:#ffb703; --btn2:#ff6b00; }
-        .card.english { --accent: linear-gradient(90deg,#ff6bb5,#ff3c8e); --subject-color:#ff6bb5; --btn1:#ff6bb5; --btn2:#ff3c8e; }
-        .card.mario   { --accent: linear-gradient(90deg,#e52222,#ffd700); --subject-color:#ffd700; --btn1:#e52222; --btn2:#8b0000; }
-        .card.hailmary { --accent: linear-gradient(90deg,#39ff14,#00cc44); --subject-color:#39ff14; --btn1:#39ff14; --btn2:#00884a; }
-        .card.mundial   { --accent: linear-gradient(90deg,#36b35a,#ffce2e); --subject-color:#ffce2e; --btn1:#1faa59; --btn2:#0a5c2e; }
-        .card.periodico { --accent: linear-gradient(90deg,#ff5252,#c8102e); --subject-color:#ff7a7a; --btn1:#c8102e; --btn2:#7a0a1c; }
-        .card.soon    { opacity: .55; }
-
-        /* Featured highlight card */
-        .featured-label {
-            font-family: 'Fredoka One', cursive;
-            font-size: .85rem; text-transform: uppercase; letter-spacing: 2px;
-            margin-bottom: 10px; padding-left: 4px;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .featured-label.green { color: #39ff14; }
-        .featured-label.gold { color: #ffd700; }
-        .featured-label.mundial { color: #ffce2e; }
-        .featured-label::after {
-            content: ''; flex: 1; height: 1px;
-        }
-        .featured-label.green::after { background: linear-gradient(90deg, rgba(57,255,20,.4), transparent); }
-        .featured-label.gold::after { background: linear-gradient(90deg, rgba(255,215,0,.4), transparent); }
-        .featured-label.mundial::after { background: linear-gradient(90deg, rgba(255,206,46,.4), transparent); }
-
-        .card.featured {
-            flex-direction: row; align-items: center; gap: 24px;
-            padding: 28px 32px; margin-bottom: 32px;
-        }
-        .card.featured::before { opacity: 1; }
-        .card.featured.hailmary {
-            border-color: #39ff14;
-            box-shadow: 0 0 40px rgba(57,255,20,.2), 0 0 80px rgba(57,255,20,.08);
-            background: linear-gradient(135deg, rgba(10,22,40,0.95), rgba(5,40,20,0.5));
-        }
-        .card.featured.hailmary:hover { transform: translateY(-6px); box-shadow: 0 16px 50px rgba(57,255,20,.35), 0 0 80px rgba(57,255,20,.15); }
-        .card.featured.mario {
-            border-color: #ffd700;
-            box-shadow: 0 0 40px rgba(229,34,34,.25), 0 0 80px rgba(255,215,0,.1);
-            background: linear-gradient(135deg, rgba(15,12,41,0.95), rgba(80,10,10,0.6));
-        }
-        .card.featured.mario:hover { transform: translateY(-6px); box-shadow: 0 16px 50px rgba(229,34,34,.4), 0 0 80px rgba(255,215,0,.2); }
-        .card.featured.mundial {
-            border-color: #ffce2e;
-            box-shadow: 0 0 40px rgba(54,179,90,.25), 0 0 80px rgba(255,206,46,.1);
-            background: linear-gradient(135deg, rgba(15,12,41,0.95), rgba(10,60,30,0.6));
-        }
-        .card.featured.mundial:hover { transform: translateY(-6px); box-shadow: 0 16px 50px rgba(54,179,90,.4), 0 0 80px rgba(255,206,46,.2); }
-
-        .featured-left { flex-shrink: 0; text-align: center; }
-        .featured-left .card-emoji { font-size: 5rem; margin-bottom: 0; }
-        .featured-right { flex: 1; }
-        .featured-right .card-subject { font-size: .8rem; }
-        .featured-right h2 { font-size: 1.55rem; }
-        .featured-right p { margin-bottom: 14px; }
-        .featured-btn-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-        .featured-btn-row .btn { flex: 1; min-width: 180px; font-size: 1.15rem; padding: 14px 24px; }
-        .new-pill {
-            border-radius: 50px; padding: 6px 14px;
-            font-size: .78rem; font-weight: 700; white-space: nowrap;
-        }
-        .new-pill.green { background: rgba(57,255,20,.15); border: 1px solid rgba(57,255,20,.4); color: #39ff14; }
-        .new-pill.gold { background: rgba(255,215,0,.15); border: 1px solid rgba(255,215,0,.4); color: #ffd700; }
-        .new-pill.mundial { background: rgba(255,206,46,.15); border: 1px solid rgba(255,206,46,.4); color: #ffce2e; }
-
-        @media (max-width: 580px) {
-            .card.featured { flex-direction: column; }
-            .featured-left .card-emoji { font-size: 3.5rem; }
-        }
-
-        footer { text-align: center; margin-top: 16px; font-size: .85rem; color: rgba(255,255,255,.3); font-weight: 600; }
-        footer span { color: rgba(255,0,100,.6); }
-    </style>
+footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--mute)}
+footer a{color:var(--ice);text-decoration:none}
+footer a:hover{text-decoration:underline}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
-<div class="wrapper">
+<canvas id="stars"></canvas>
 
-    <header>
-        <span class="avatar">🎮</span>
-        <h1>¡El Rincón de Gabri!</h1>
-        <p>Tu zona de estudio para 4º de Primaria · ¡Practica y sube de nivel!</p>
-        <div class="score-row">
-            <div class="badge">📚 10 ejercicios disponibles</div>
-            <div class="badge">🏆 Hecho con ❤️ por Papá</div>
-        </div>
-    </header>
+<div class="wrap">
 
-    <!-- FEATURED: MUNDIAL 2026 -->
-    <div class="featured-label mundial">⚽ ¡Novedad de la semana!</div>
-    <div class="card mundial featured">
-        <div class="featured-left">
-            <span class="card-emoji">⚽</span>
-        </div>
-        <div class="featured-right">
-            <div class="card-subject">🌍 Ciencias Sociales · NUEVO</div>
-            <h2>Camino al Mundial 2026</h2>
-            <p>20 retos para llegar de la fase de grupos a la gran final. Organización del territorio de España (comunidades, provincias, límites) y la población y las tradiciones. ¡Marca goles y levanta la copa!</p>
-            <div class="card-tags">
-                <span class="tag">🗺️ Territorio</span>
-                <span class="tag">👨‍👩‍👧 Población</span>
-                <span class="tag">🔗 Relacionar</span>
-                <span class="tag">⚽ 20 preguntas</span>
-            </div>
-            <div class="featured-btn-row">
-                <a href="ccss-mundial-gabri.html" class="btn btn-active">⚽ ¡Saltar al campo!</a>
-                <span class="new-pill mundial">🏆 ¡NUEVO!</span>
-            </div>
-        </div>
+  <nav class="nav">
+    <div class="brand"><span class="dot">🎮</span> El Rincón de Gabri</div>
+    <span class="pill">Curso 2026-27 · 5º de Primaria</span>
+  </nav>
+
+  <header class="hero">
+    <h1>Estudiar también<br>se puede <em>jugar</em>.</h1>
+    <p class="lead">Once aventuras hechas a medida: cada una convierte un tema del cole en una misión con niveles, retos y explicaciones. Elige una, súbete el listón y demuéstrate de lo que eres capaz.</p>
+    <div class="stats">
+      <div class="stat"><b id="nAdv">11</b><span>Aventuras</span></div>
+      <div class="stat"><b>220+</b><span>Retos</span></div>
+      <div class="stat"><b>5</b><span>Asignaturas</span></div>
+      <div class="stat"><b>∞</b><span>Intentos</span></div>
     </div>
+  </header>
 
-    <div class="section-title">🚀 Tus ejercicios</div>
-
-    <div class="cards-grid">
-
-        <!-- LENGUA: EL PERIÓDICO DE GABRI -->
-        <div class="card periodico">
-            <span class="card-emoji">📰</span>
-            <div class="card-subject">Lengua · NUEVO</div>
-            <h2>El Periódico de Gabri</h2>
-            <p>¡Eres el reportero estrella! 20 retos por tres secciones: gramática (adverbio, conjunciones, sujeto y predicado), ortografía (X, LL, Y, H, plurales) y textos periodísticos (noticia, reportaje, entrevista).</p>
-            <div class="card-tags">
-                <span class="tag">✍️ Gramática</span>
-                <span class="tag">🔤 Ortografía</span>
-                <span class="tag">🎤 Periodismo</span>
-            </div>
-            <a href="lengua-redaccion-gabri.html" class="btn btn-active">📰 ¡A la redacción!</a>
-        </div>
-
-        <!-- MUNDIAL (también en grid) -->
-        <div class="card mundial">
-            <span class="card-emoji">⚽</span>
-            <div class="card-subject">Ciencias Sociales · NUEVO</div>
-            <h2>Camino al Mundial 2026</h2>
-            <p>Territorio de España y población, en formato torneo. 5 rondas hasta la final, con preguntas de elegir, verdadero/falso y relacionar.</p>
-            <div class="card-tags">
-                <span class="tag">🌍 España</span>
-                <span class="tag">🏆 Torneo</span>
-                <span class="tag">20 preguntas</span>
-            </div>
-            <a href="ccss-mundial-gabri.html" class="btn btn-active">⚽ ¡Jugar!</a>
-        </div>
-
-        <!-- PLANTS -->
-        <div class="card plants">
-            <span class="card-emoji">🌿</span>
-            <div class="card-subject">Ciencias Naturales · English</div>
-            <h2>Plants – Study Adventure</h2>
-            <p>3 módulos de teoría + 23 preguntas en inglés. Partes de la planta, fotosíntesis, reproducción y polinización.</p>
-            <div class="card-tags">
-                <span class="tag">📖 Teoría interactiva</span>
-                <span class="tag">❓ 23 preguntas</span>
-                <span class="tag">✅ Checklist</span>
-            </div>
-            <a href="plants-study-gabriel.html" class="btn btn-active">🌱 ¡Empezar!</a>
-        </div>
-
-        <!-- ROMA -->
-        <div class="card roma">
-            <span class="card-emoji">🏛️</span>
-            <div class="card-subject">Ciencias Sociales</div>
-            <h2>Roma – La Romanización de Hispania</h2>
-            <p>3 módulos de teoría + 20 preguntas. Conquista, sociedad romana, caída del Imperio y fin de la Edad Antigua.</p>
-            <div class="card-tags">
-                <span class="tag">⚔️ Conquista</span>
-                <span class="tag">🏺 Sociedad</span>
-                <span class="tag">❓ 20 preguntas</span>
-            </div>
-            <a href="roma-estudio-gabri.html" class="btn btn-active">🏛️ ¡Ave Caesar!</a>
-        </div>
-
-        <!-- SPACE -->
-        <div class="card space">
-            <span class="card-emoji">🚀</span>
-            <div class="card-subject">Mates · Sociales</div>
-            <h2>Misión Espacial: Destino Luna</h2>
-            <p>¡Conviértete en astronauta! Resuelve 30 preguntas de mates y sociales para que tu cohete despegue.</p>
-            <div class="card-tags">
-                <span class="tag">🔢 Matemáticas</span>
-                <span class="tag">🌍 Sociales</span>
-                <span class="tag">30 preguntas</span>
-            </div>
-            <a href="mision_espacial_luna_final.html" class="btn btn-active">🚀 ¡Comenzar Misión!</a>
-        </div>
-
-        <!-- GEO -->
-        <div class="card geo">
-            <span class="card-emoji">🌍</span>
-            <div class="card-subject">Ciencias Sociales</div>
-            <h2>La Tierra y los Límites de España</h2>
-            <p>Repasa el Tema 2 de Ciencias Sociales con este examen interactivo sobre la Tierra y España.</p>
-            <div class="card-tags">
-                <span class="tag">🗺️ Geografía</span>
-                <span class="tag">🇪🇸 España</span>
-            </div>
-            <a href="limites-espana-primaria.html" class="btn btn-active">🌍 ¡Hacer Examen!</a>
-        </div>
-
-        <!-- MATH -->
-        <div class="card math">
-            <span class="card-emoji">🎮</span>
-            <div class="card-subject">Matemáticas</div>
-            <h2>Gabri Math Adventure</h2>
-            <p>Aventura matemática con retos y puzzles numéricos para ejercitar el cálculo y la lógica.</p>
-            <div class="card-tags">
-                <span class="tag">🔢 Cálculo</span>
-                <span class="tag">🧩 Lógica</span>
-            </div>
-            <a href="gabri-math-adventure (4).html" class="btn btn-active">🎮 ¡A Jugar!</a>
-        </div>
-
-        <!-- ENGLISH -->
-        <div class="card english">
-            <span class="card-emoji">📝</span>
-            <div class="card-subject">English</div>
-            <h2>Irregular Verbs Lesson</h2>
-            <p>Practice irregular verbs in English with interactive exercises and fun challenges.</p>
-            <div class="card-tags">
-                <span class="tag">🇬🇧 English</span>
-                <span class="tag">📚 Verbos</span>
-            </div>
-            <a href="irregular-verbs-lesson.html" class="btn btn-active">📝 ¡Let's Go!</a>
-        </div>
-
-        <!-- MARIO BIRTHDAY -->
-        <div class="card mario">
-            <span class="card-emoji">🍄</span>
-            <div class="card-subject">🎂 Cumpleaños · MAR10 Day</div>
-            <h2>¡Feliz Cumpleaños Gabri! Mario Bros Adventure</h2>
-            <p>4 mundos + 30 preguntas de Mario, Nintendo Switch, Zelda, Pokémon y más. ¡Derrota a Bowser y rescata a la Princesa Peach!</p>
-            <div class="card-tags">
-                <span class="tag">🎮 4 Mundos</span>
-                <span class="tag">🐉 Bowser Boss</span>
-                <span class="tag">🎂 MAR10 Day</span>
-            </div>
-            <a href="mario-gabri-birthday.html" class="btn btn-active">🍄 ¡A por Bowser!</a>
-        </div>
-
-        <!-- PROYECTO SALVACIÓN -->
-        <div class="card hailmary">
-            <span class="card-emoji">🛸</span>
-            <div class="card-subject">Ciencias · Astronomía · NEW</div>
-            <h2>Proyecto Salvación: Misión con Rocky</h2>
-            <p>Ciencia real, estrellas, biología extrema y mates. 5 fases para salvar la Tierra con el Dr. Grace y Rocky.</p>
-            <div class="card-tags">
-                <span class="tag">🔬 Ciencia real</span>
-                <span class="tag">🪨 Rocky</span>
-                <span class="tag">30 preguntas</span>
-            </div>
-            <a href="proyecto-salvacion-gabri.html" class="btn btn-active">🛸 ¡A la misión!</a>
-        </div>
-
+  <!-- ============ DESTACADO ============ -->
+  <section class="feature">
+    <div class="feature-txt">
+      <span class="tagline">⛰️ Nuevo · Temporada 2026-27</span>
+      <h2>Expedición 5º de Primaria</h2>
+      <p>Cuatro campamentos, 50 retos y una cumbre. Empiezas repasando lo que ya dominas de 4º y terminas con contenido que aún no has dado. Llega arriba y 5º empieza cuesta abajo.</p>
+      <div class="camp-row">
+        <span>🥾 Campamento Base · 10</span>
+        <span>🌲 Refugio · 10</span>
+        <span>🧊 Glaciar · 15</span>
+        <span>🏔️ Cumbre · 15</span>
+      </div>
+      <a class="cta" href="expedicion-5-primaria.html">Empezar la ascensión →</a>
     </div>
+    <div class="feature-art" aria-hidden="true">
+      <svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="pk" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#F8FBFF"/><stop offset="42%" stop-color="#8FA0D8"/><stop offset="100%" stop-color="#2A2E63"/>
+          </linearGradient>
+          <linearGradient id="tr" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stop-color="#6FE0F2"/><stop offset="60%" stop-color="#4ADCA5"/><stop offset="100%" stop-color="#FFC85C"/>
+          </linearGradient>
+        </defs>
+        <circle cx="238" cy="46" r="24" fill="#FFC85C" opacity=".9"/>
+        <circle cx="238" cy="46" r="44" fill="#FF7A59" opacity=".18"/>
+        <path d="M150 24 L246 214 L54 214 Z" fill="url(#pk)"/>
+        <path d="M150 24 L186 96 L150 78 L114 96 Z" fill="#fff" opacity=".95"/>
+        <path d="M14 214 L92 128 L150 190 L214 122 L286 214 Z" fill="#20244F" opacity=".9"/>
+        <path d="M64 200 C 108 188, 96 158, 132 150 C 166 142, 140 108, 150 62"
+              fill="none" stroke="url(#tr)" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="7 10"/>
+        <circle cx="64" cy="200" r="6" fill="#6FE0F2"/><circle cx="112" cy="176" r="5.5" fill="#4ADCA5"/>
+        <circle cx="140" cy="128" r="5.5" fill="#B98CFF"/><circle cx="150" cy="62" r="7" fill="#FFC85C"/>
+        <rect x="150" y="42" width="2.4" height="22" fill="#FFC85C"/>
+        <path d="M153 42 L170 48 L153 55 Z" fill="#FF7A59"/>
+      </svg>
+    </div>
+  </section>
 
-    <footer>
-        <p>Hecho con <span>❤️</span> por Papá · Gabri 4º Primaria 2025-26</p>
-    </footer>
+  <!-- ============ FILTROS ============ -->
+  <div class="tools">
+    <h2 class="sec-title">Todas las aventuras</h2>
+    <button class="chip on" data-f="all">Todo</button>
+    <button class="chip" data-f="mates">🔢 Mates</button>
+    <button class="chip" data-f="sociales">🌍 Sociales</button>
+    <button class="chip" data-f="naturales">🔬 Naturales</button>
+    <button class="chip" data-f="lengua">✍️ Lengua</button>
+    <button class="chip" data-f="english">🇬🇧 English</button>
+    <button class="dice" id="dice">🎲 Sorpréndeme</button>
+  </div>
 
+  <div class="grid" id="grid">
+
+    <a class="item" href="expedicion-5-primaria.html" data-cat="mates sociales naturales english" style="--accent:var(--sun)">
+      <span class="new">NUEVO</span>
+      <div class="ico">⛰️</div>
+      <div class="kicker">Multi · 5º Primaria</div>
+      <h3>Expedición 5º</h3>
+      <p>Cuatro campamentos que suben de dificultad: repaso de 4º, decimales y fracciones, potencias, relieve de España y cuerpo humano.</p>
+      <div class="tags"><span class="q">50 retos</span><span>4 niveles</span><span>Progreso</span></div>
+      <div class="arrow">Empezar →</div>
+    </a>
+
+    <a class="item" href="lengua-redaccion-gabri.html" data-cat="lengua" style="--accent:var(--rose)">
+      <div class="ico">📰</div>
+      <div class="kicker">Lengua · 4º</div>
+      <h3>El Periódico de Gabri</h3>
+      <p>Eres el reportero estrella. Gramática, ortografía y textos periodísticos repartidos en tres secciones de redacción.</p>
+      <div class="tags"><span class="q">20 retos</span><span>Gramática</span><span>Periodismo</span></div>
+      <div class="arrow">A la redacción →</div>
+    </a>
+
+    <a class="item" href="ccss-mundial-gabri.html" data-cat="sociales" style="--accent:var(--moss)">
+      <div class="ico">⚽</div>
+      <div class="kicker">Sociales · 4º</div>
+      <h3>Camino al Mundial 2026</h3>
+      <p>De la fase de grupos a la final. Comunidades, provincias y límites de España, población y tradiciones, en formato torneo.</p>
+      <div class="tags"><span class="q">20 retos</span><span>5 rondas</span><span>España</span></div>
+      <div class="arrow">Saltar al campo →</div>
+    </a>
+
+    <a class="item" href="proyecto-salvacion-gabri.html" data-cat="naturales mates" style="--accent:var(--grape)">
+      <div class="ico">🛸</div>
+      <div class="kicker">Ciencias · Astronomía</div>
+      <h3>Proyecto Salvación</h3>
+      <p>Ciencia real con el Dr. Grace y Rocky: estrellas, biología extrema y matemáticas en cinco fases para salvar la Tierra.</p>
+      <div class="tags"><span class="q">30 retos</span><span>5 fases</span><span>Ciencia real</span></div>
+      <div class="arrow">A la misión →</div>
+    </a>
+
+    <a class="item" href="mision_espacial_luna_final.html" data-cat="mates sociales" style="--accent:var(--ice)">
+      <div class="ico">🚀</div>
+      <div class="kicker">Mates · Sociales</div>
+      <h3>Misión Espacial: Destino Luna</h3>
+      <p>Conviértete en astronauta. Cada respuesta correcta acerca el despegue del cohete; cada fallo, cuenta atrás de nuevo.</p>
+      <div class="tags"><span class="q">30 retos</span><span>Cálculo</span><span>Sociales</span></div>
+      <div class="arrow">Comenzar misión →</div>
+    </a>
+
+    <a class="item" href="plants-study-gabriel.html" data-cat="naturales english" style="--accent:var(--moss)">
+      <div class="ico">🌿</div>
+      <div class="kicker">Science · English</div>
+      <h3>Plants — Study Adventure</h3>
+      <p>Tres módulos de teoría interactiva y un test final, todo en inglés: partes de la planta, fotosíntesis y polinización.</p>
+      <div class="tags"><span class="q">23 retos</span><span>Teoría</span><span>English</span></div>
+      <div class="arrow">Let's start →</div>
+    </a>
+
+    <a class="item" href="roma-estudio-gabri.html" data-cat="sociales" style="--accent:var(--alpen)">
+      <div class="ico">🏛️</div>
+      <div class="kicker">Sociales · Historia</div>
+      <h3>Roma y la Hispania romana</h3>
+      <p>Conquista, sociedad romana, caída del Imperio y final de la Edad Antigua, con teoría antes de cada bloque de preguntas.</p>
+      <div class="tags"><span class="q">20 retos</span><span>3 módulos</span><span>Historia</span></div>
+      <div class="arrow">Ave Caesar →</div>
+    </a>
+
+    <a class="item" href="limites-espana-primaria.html" data-cat="sociales" style="--accent:var(--ice)">
+      <div class="ico">🌍</div>
+      <div class="kicker">Sociales · Geografía</div>
+      <h3>La Tierra y los límites de España</h3>
+      <p>Examen interactivo del Tema 2: la Tierra, los puntos cardinales y las fronteras y costas españolas.</p>
+      <div class="tags"><span>Geografía</span><span>Examen</span></div>
+      <div class="arrow">Hacer examen →</div>
+    </a>
+
+    <a class="item" href="gabri-math-adventure%20(4).html" data-cat="mates" style="--accent:var(--sun)">
+      <div class="ico">🎮</div>
+      <div class="kicker">Matemáticas</div>
+      <h3>Gabri Math Adventure</h3>
+      <p>Aventura de cálculo y lógica con puzzles numéricos. La más veterana del Rincón y todavía de las más difíciles.</p>
+      <div class="tags"><span>Cálculo</span><span>Lógica</span></div>
+      <div class="arrow">A jugar →</div>
+    </a>
+
+    <a class="item" href="irregular-verbs-lesson.html" data-cat="english" style="--accent:var(--grape)">
+      <div class="ico">📝</div>
+      <div class="kicker">English</div>
+      <h3>Irregular Verbs Lesson</h3>
+      <p>Los verbos irregulares que hay que saberse sí o sí, con ejercicios interactivos para memorizarlos sin listas aburridas.</p>
+      <div class="tags"><span>Verbos</span><span>English</span></div>
+      <div class="arrow">Let's go →</div>
+    </a>
+
+    <a class="item" href="mario-gabri-birthday.html" data-cat="mates" style="--accent:var(--rose)">
+      <div class="ico">🍄</div>
+      <div class="kicker">Especial · Cumpleaños</div>
+      <h3>Mario Bros Adventure</h3>
+      <p>Cuatro mundos hasta el castillo de Bowser. La edición especial del MAR10 Day: Nintendo, Zelda, Pokémon y mucha nostalgia.</p>
+      <div class="tags"><span class="q">30 retos</span><span>4 mundos</span><span>Boss final</span></div>
+      <div class="arrow">A por Bowser →</div>
+    </a>
+
+  </div>
+
+  <p class="empty" id="empty">No hay aventuras de esa asignatura todavía. Papá está en ello. 🛠️</p>
+
+  <footer>
+    <span>Hecho con ❤️ por Papá · Gabri, 5º de Primaria · Curso 2026-27</span>
+    <a href="https://rozoca.github.io/">rozoca.github.io</a>
+  </footer>
 </div>
+
+<script>
+/* ----- filtros ----- */
+const chips = document.querySelectorAll('.chip');
+const items = Array.prototype.slice.call(document.querySelectorAll('.item'));
+const empty = document.getElementById('empty');
+
+chips.forEach(c=>{
+  c.addEventListener('click', ()=>{
+    chips.forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');
+    const f = c.dataset.f;
+    let n = 0;
+    items.forEach(it=>{
+      const ok = (f === 'all') || it.dataset.cat.split(' ').indexOf(f) > -1;
+      it.classList.toggle('hide', !ok);
+      if(ok) n++;
+    });
+    empty.style.display = n ? 'none' : 'block';
+  });
+});
+
+/* ----- dado ----- */
+document.getElementById('dice').addEventListener('click', ()=>{
+  const pool = items.filter(i=>!i.classList.contains('hide'));
+  if(!pool.length) return;
+  const pick = pool[Math.floor(Math.random()*pool.length)];
+  pick.scrollIntoView({behavior:'smooth', block:'center'});
+  pick.style.transition = 'transform .25s';
+  pick.style.transform = 'translateY(-6px) scale(1.03)';
+  pick.style.borderColor = 'var(--sun)';
+  setTimeout(()=>{ pick.style.transform=''; pick.style.borderColor=''; }, 1100);
+});
+
+/* ----- contador ----- */
+document.getElementById('nAdv').textContent = items.length;
+
+/* ----- estrellas ----- */
+(function(){
+  const cv = document.getElementById('stars'), cx = cv.getContext('2d');
+  let dots = [];
+  function size(){
+    cv.width = innerWidth; cv.height = innerHeight;
+    dots = Array.from({length: Math.round(innerWidth/15)}, ()=>({
+      x: Math.random()*cv.width, y: Math.random()*cv.height*0.8,
+      r: Math.random()*1.3+0.3, a: Math.random(), s: Math.random()*0.011+0.003
+    }));
+  }
+  function loop(){
+    cx.clearRect(0,0,cv.width,cv.height);
+    dots.forEach(d=>{
+      d.a += d.s; const o = 0.22 + Math.abs(Math.sin(d.a))*0.6;
+      cx.beginPath(); cx.arc(d.x,d.y,d.r,0,6.284);
+      cx.fillStyle='rgba(255,255,255,'+o+')'; cx.fill();
+    });
+    requestAnimationFrame(loop);
+  }
+  addEventListener('resize', size);
+  size();
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) loop();
+  else dots.forEach(d=>{ cx.beginPath(); cx.arc(d.x,d.y,d.r,0,6.284); cx.fillStyle='rgba(255,255,255,.5)'; cx.fill(); });
+})();
+</script>
 </body>
 </html>
