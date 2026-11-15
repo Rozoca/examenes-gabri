@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Una aventura de Sociales de 5º: 20 retos sobre la Edad Media, cinco misiones, tarjetas y un simulacro. Basada en el cuaderno del primer trimestre.">
+  <meta name="theme-color" content="#101736">
+  <title>El portal del tiempo · Sociales · El Rincón de Gabri</title>
+  <link rel="stylesheet" href="sociales-edad-media.css">
+  <script src="sociales-edad-media-data.js" defer></script>
+  <script src="sociales-edad-media.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+<div class="wrap">
+  <header class="topbar">
+    <a href="./" class="home">← El Rincón de Gabri</a>
+    <span class="course">SOCIALES · 5º PRIMARIA</span>
+  </header>
+  <main id="main">
+    <div id="homeScreen">
+      <section class="hero" aria-labelledby="pageTitle">
+        <div class="hero-copy">
+          <span class="eyebrow">PRIMER TRIMESTRE / VIAJE AL PASADO</span>
+          <h1 id="pageTitle">El portal<br>del <em>tiempo.</em></h1>
+          <p>Cinco llaves han desaparecido en la Edad Media. Recupéralas con tus mejores herramientas: <strong>observar, recordar y pensar.</strong></p>
+          <div class="hero-tags"><span>20 retos en total</span><span>Sin cuenta atrás</span><span>Una pregunta cada vez</span></div>
+          <div class="hero-actions"><button class="primary" id="startAdventure">Conseguir la primera llave →</button><button class="outline" id="resume" hidden>Continuar partida</button></div>
+        </div>
+        <div class="portal-art" aria-hidden="true">
+          <svg viewBox="0 0 370 380" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="portalGlow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6fe0f2"/><stop offset="1" stop-color="#bdabff"/></linearGradient><radialGradient id="portalSky"><stop stop-color="#3b4380"/><stop offset="1" stop-color="#141a40"/></radialGradient></defs>
+            <circle cx="185" cy="180" r="154" fill="url(#portalSky)"/>
+            <circle cx="185" cy="180" r="150" fill="none" stroke="#ffc85c" stroke-opacity=".45" stroke-dasharray="2 16"/>
+            <circle cx="283" cy="65" r="22" fill="#ffc85c"/>
+            <path d="M74 319V145a111 111 0 0 1 222 0v174" fill="#222c58" stroke="url(#portalGlow)" stroke-width="8"/>
+            <path d="M94 319V151a91 91 0 0 1 182 0v168" fill="#101736" stroke="#677bb5" stroke-width="2"/>
+            <path d="M113 320V207h26v-26h22v26h49v-55h13v-18h13v18h13v168Z" fill="#59679c"/>
+            <path d="M101 320h171v-66h-25v-17h-19v17h-24v-17h-20v17h-24v-17h-20v17h-39Z" fill="#8795bd"/>
+            <path d="M170 320v-35a15 15 0 0 1 30 0v35" fill="#ffc85c"/>
+            <path d="M219 150v-36m0 0 25 8-25 9" fill="#ff9d85" stroke="#ff9d85" stroke-width="3"/>
+            <path d="M76 319h219M64 332h243M53 345h265" stroke="#6fe0f2" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="186" cy="90" r="21" fill="#101736" stroke="#ffc85c" stroke-width="2"/>
+            <path d="M186 76v15l9 5" fill="none" stroke="#ffc85c" stroke-width="3" stroke-linecap="round"/>
+            <path d="M42 160h16m-8-8v16M303 201h16m-8-8v16M128 45h10m-5-5v10" stroke="#6fe0f2" stroke-width="2"/>
+            <g transform="translate(270 295) rotate(-25)"><circle r="12" fill="#101736" stroke="#ffc85c" stroke-width="6"/><path d="M0 12v37m0-9h10m-10-10h7" stroke="#ffc85c" stroke-width="6" stroke-linecap="round"/></g>
+          </svg>
+          <span class="art-label">DESTINO: 476 — 1492</span>
+        </div>
+      </section>
+
+      <section class="progress-panel" aria-label="Tu progreso">
+        <div><span class="eyebrow">TU MAPA DE CONOCIMIENTOS</span><p><strong id="masteryCount">0 de 20</strong> retos con la última respuesta correcta</p></div>
+        <div class="progress-side"><span id="keyCount">0 / 5 llaves</span><progress id="masteryBar" max="20" value="0" aria-label="Retos con la última respuesta correcta"></progress></div>
+      </section>
+
+      <section aria-labelledby="missionsTitle" class="missions-section">
+        <div class="section-head"><div><span class="eyebrow">ELIGE TU PRÓXIMA PARADA</span><h2 id="missionsTitle">Cinco puertas al pasado</h2></div><span class="muted small">4 retos por misión · Todas abiertas</span></div>
+        <div class="missions" id="missions"></div>
+      </section>
+
+      <section class="practice" aria-labelledby="practiceTitle">
+        <div class="section-head"><div><span class="eyebrow">A TU RITMO</span><h2 id="practiceTitle">Elige cómo practicar</h2></div></div>
+        <div class="practice-grid">
+          <article><span class="mode-icon">↗</span><h3>Una vuelta rápida</h3><p>10 retos: dos de cada tema, con pistas y explicación.</p><button class="outline" id="quick">Entrenar 10 retos</button></article>
+          <article><span class="mode-icon">◇</span><h3>Simulacro de prueba</h3><p>20 retos. Las soluciones aparecen al terminar. Sin límite de tiempo.</p><button class="outline" id="exam">Empezar simulacro</button><span class="small muted" id="bestExam"></span></article>
+          <article><span class="mode-icon">↺</span><h3>Lo que cuesta un poco</h3><p>Vuelve a intentar las preguntas cuya última respuesta fue incorrecta.</p><button class="outline" id="retry" disabled>Sin errores pendientes</button></article>
+        </div>
+      </section>
+
+      <section class="study-section" aria-labelledby="studyTitle">
+        <div class="section-head"><div><span class="eyebrow">ANTES DE JUGAR, O DESPUÉS</span><h2 id="studyTitle">Tu cuaderno de viaje</h2></div><button class="outline compact" id="openCards">18 tarjetas de memoria</button></div>
+        <div id="lessons"></div>
+      </section>
+      <aside class="parent-note"><strong>Una idea para hoy:</strong> lee un resumen, juega una misión y explica una respuesta con tus palabras. Mañana vuelve a recordarla sin mirar. Las llaves muestran lo practicado; no predicen la nota del examen.</aside>
+      <footer><p>Basado en <cite>Sociales · Primer trimestre: Viaje al pasado. La Edad Media</cite>. Cada reto indica su página del cuaderno y del PDF.</p><p>El progreso se guarda en este navegador. <button class="text-button" id="reset">Borrar progreso de esta aventura</button></p><p class="small muted" id="storageStatus">Puedes parar y continuar cuando quieras.</p></footer>
+    </div>
+
+    <section id="playScreen" hidden aria-labelledby="questionTitle">
+      <div class="play-top"><button class="outline compact" id="pause">← Guardar y salir</button><span class="eyebrow" id="modeLabel"></span></div>
+      <div class="session-progress"><span id="questionCount"></span><progress id="sessionBar" max="20" value="0" aria-label="Preguntas completadas de la sesión"></progress></div>
+      <div id="questionStage"></div>
+    </section>
+
+    <section id="resultScreen" hidden aria-labelledby="resultTitle"></section>
+
+    <section id="cardScreen" hidden aria-labelledby="cardsTitle">
+      <div class="play-top"><button class="outline compact" id="closeCards">← Volver al mapa</button><span class="eyebrow" id="cardCount"></span></div>
+      <h2 id="cardsTitle" tabindex="-1">Recuerda antes de girar</h2>
+      <p class="muted">Di la respuesta en voz alta. Después comprueba.</p>
+      <div class="flashcard"><span class="eyebrow">¿QUÉ RECUERDAS DE...?</span><h3 id="cardFront"></h3><p id="cardBack" hidden></p><button class="primary" id="flipCard">Ver respuesta</button></div>
+      <div class="card-controls"><button class="outline" id="prevCard">← Anterior</button><button class="outline" id="nextCard">Siguiente →</button></div>
+    </section>
+  </main>
+  <noscript><p class="parent-note">Activa JavaScript para jugar. Los resúmenes y actividades también están en el material de estudio preparado por Papá.</p></noscript>
+</div>
+<dialog id="confirmDialog" aria-labelledby="dialogTitle"><h2 id="dialogTitle"></h2><p id="dialogText"></p><div class="dialog-actions"><button class="outline" id="cancelDialog">Cancelar</button><button class="primary" id="acceptDialog">Continuar</button></div></dialog>
+</body>
+</html>
