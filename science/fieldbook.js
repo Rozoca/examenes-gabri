@@ -167,7 +167,7 @@
       exercise.attempts++;
       const i=items.findIndex((x,i)=>x!==selections[i]);
       if(i>=0){byId('s-status').textContent=fail+' Look again at '+labelFor(i).toLowerCase()+'.';byId('s-hint').disabled=false;return;}
-      byId('s-status').textContent=(exercise.attempts>1?improved+' ':'')+(build?'You ordered the changes from start to finish.':'You used both process words in context.')+' Now tell the journey in your own words.';
+      byId('s-status').textContent=(exercise.attempts>1?improved+' ':'')+(build?'You ordered the changes from start to finish.':'You chose the two science words that complete the explanation.')+' Now tell the journey in your own words.';
       byId('w-check').disabled=true;byId('s-hint').disabled=true;items.forEach((_,i)=>byId('step-'+i).disabled=true);
       const proceed=document.createElement('button');proceed.type='button';proceed.textContent='Write it myself';proceed.onclick=()=>{writeMode='write';exercise=null;renderLab();byId('rock-text').focus();};byId('s-status').after(proceed);
     });
