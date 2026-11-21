@@ -135,6 +135,8 @@ footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);
 footer a{color:var(--ice);text-decoration:none}
 footer a:hover{text-decoration:underline}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+.science-feature .science-art{padding:16px;align-self:stretch;display:flex;align-items:center}
+.science-art img{display:block;width:100%;height:auto;border-radius:12px;border:1px solid rgba(255,255,255,.18)}
 </style>
 </head>
 <body>
@@ -149,9 +151,9 @@ footer a:hover{text-decoration:underline}
 
   <header class="hero">
     <h1>Estudiar también<br>se puede <em>jugar</em>.</h1>
-    <p class="lead">Aventuras hechas a medida: cada una convierte un tema del cole en una misión con niveles, retos y explicaciones. Elige una, súbete el listón y demuéstrate de lo que eres capaz.</p>
+    <p class="lead">Aventuras hechas a medida: cada una convierte un tema del cole en una misión con niveles, retos y explicaciones. Elige una, prueba una idea y vuelve a intentarlo. <span lang="en">Practise to learn. Learn to improve. Be proud of your effort.</span></p>
     <div class="stats">
-      <div class="stat"><b id="nAdv">12</b><span>Aventuras</span></div>
+      <div class="stat"><b id="nAdv">14</b><span>Aventuras</span></div>
       <div class="stat"><b>240+</b><span>Retos</span></div>
       <div class="stat"><b>5</b><span>Asignaturas</span></div>
       <div class="stat"><b>∞</b><span>Intentos</span></div>
@@ -159,27 +161,15 @@ footer a:hover{text-decoration:underline}
   </header>
 
   <!-- ============ DESTACADO ============ -->
-  <section class="feature">
+  <section class="feature science-feature" aria-labelledby="science-title">
     <div class="feature-txt">
-      <span class="tagline">🗝️ Nuevo · Prueba de Sociales</span>
-      <h2>El portal del tiempo</h2>
-      <p>Cinco puertas a la Edad Media: Toledo, al-Ándalus, la ciudad, los reinos cristianos y el arte. Una pregunta cada vez, con pistas y explicaciones basadas en tu cuaderno.</p>
-      <div class="camp-row"><span>🏰 5 misiones</span><span>🧠 20 retos</span><span>◇ Simulacro</span><span>↺ Repaso de errores</span></div>
-      <a class="cta" href="sociales-edad-media.html">Abrir el portal del tiempo →</a>
+      <span class="tagline">Science · 5º de Primaria</span>
+      <h2 id="science-title" lang="en">The Travelling Grain</h2>
+      <p>¿Cómo acaba una montaña en un castillo de arena? Sigue un grano, escribe los pasos del ciclo de las rocas en inglés y vuelve a la parte que te costó explicar.</p>
+      <div class="camp-row"><span>6 transformaciones</span><span>Simulacro</span><span>Cuaderno imprimible</span></div>
+      <a class="cta" href="science-geology.html">Entrar al laboratorio de rocas</a>
     </div>
-    <div class="feature-art" aria-hidden="true">
-      <svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="150" cy="123" r="102" fill="#252d59" stroke="#6FE0F2" stroke-width="2" stroke-dasharray="3 10"/>
-        <path d="M75 224V98a75 75 0 0 1 150 0v126" fill="#141b3d" stroke="#6FE0F2" stroke-width="6"/>
-        <path d="M98 224v-97h23v-22h20v22h20V91h17v-18h17v18h13v133Z" fill="#6779a9"/>
-        <path d="M100 224v-49h25v-17h20v17h25v-17h20v17h20v49Z" fill="#9ba9cc"/>
-        <path d="M143 224v-30a13 13 0 0 1 26 0v30" fill="#FFC85C"/>
-        <path d="M178 88V52m0 0 24 8-24 8" fill="#FF7A59" stroke="#FF7A59" stroke-width="3"/>
-        <path d="M65 225h170M53 237h194" stroke="#6FE0F2" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="236" cy="52" r="17" fill="#FFC85C"/>
-        <g transform="translate(230 183) rotate(-25)"><circle r="10" fill="#141b3d" stroke="#FFC85C" stroke-width="5"/><path d="M0 10v33m0-7h9m-9-9h7" stroke="#FFC85C" stroke-width="5"/></g>
-      </svg>
-    </div>
+    <div class="feature-art science-art"><img src="science/river-journey.webp" width="1245" height="645" alt="Una montaña se desgasta, el río transporta los granos y los sedimentos se depositan aguas abajo."></div>
   </section>
 
   <!-- ============ FILTROS ============ -->
@@ -195,6 +185,13 @@ footer a:hover{text-decoration:underline}
   </div>
 
   <div class="grid" id="grid">
+    <a class="item" href="science-geology.html" data-cat="naturales english" style="--accent:var(--moss)">
+      <span class="new">NUEVO</span><div class="ico">🪨</div><div class="kicker">Science · 5º · Geología</div>
+      <h3 lang="en">The Travelling Grain</h3>
+      <p>Rocas, minerales y paisajes. Ordena los procesos, explica seis transformaciones con tus palabras y anota qué quieres practicar mañana.</p>
+      <div class="tags"><span class="q">6 rutas</span><span>Escritura en inglés</span><span>Pistas</span></div><div class="arrow">Explorar geología →</div>
+    </a>
+
     <a class="item" href="sociales-edad-media.html" data-cat="sociales" style="--accent:var(--ice)">
       <span class="new">NUEVO</span><div class="ico">🏰</div><div class="kicker">Sociales · 5º · Primer trimestre</div>
       <h3>El portal del tiempo</h3>
