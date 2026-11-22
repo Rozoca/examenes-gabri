@@ -1,49 +1,32 @@
 <!doctype html>
-<html lang="en-GB">
+<html lang="es">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#203d37">
-  <title>The Travelling Grain · El Rincón de Gabri</title>
-  <meta name="description" content="A Year 5 geology fieldbook. Follow a grain of sand, write the six rock-cycle journeys and practise explaining the science in English.">
-  <link rel="stylesheet" href="science/fieldbook.css">
-  <script src="science/content.js" defer></script><script src="science/fieldbook.js" defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#28483e">
+  <title>Mi cuaderno de rocas · El Rincón de Gabri</title>
+  <meta name="description" content="Science de 5.º paso a paso. Sigue los apartados de tu cuaderno y aprende a explicar en inglés cómo cambia una roca.">
+  <link rel="stylesheet" href="science/fieldbook.css?v=cuaderno2">
+  <script defer src="science/content.js"></script>
+  <script defer src="science/lessons.js?v=cuaderno2"></script>
+  <script defer src="science/fieldbook.js?v=cuaderno2"></script>
 </head>
 <body>
-<a class="skip" href="#main">Skip to activity</a>
-<header class="top"><div class="bar"><a class="home" href="index.html" lang="es">‹ El Rincón de Gabri</a><span>Science · Year 5</span></div></header>
-<main id="main" tabindex="-1">
-  <div class="mast"><a href="#start">The Travelling Grain</a><span>Geology fieldbook</span></div>
-  <nav id="nav" aria-label="Fieldbook">
-    <a href="#start">Start</a><a href="#guide">Field guide</a><a href="#practice">Practise</a><a href="#write">Writing lab</a><a href="#mock">Mock exam</a><a href="#challenge">My challenge</a>
-  </nav>
-  <section id="start" class="panel landing" aria-labelledby="start-title">
-    <div class="herogrid"><div class="hero-copy"><p class="eyebrow">A rock-cycle adventure</p><h1 id="start-title">The travelling <em>grain.</em></h1>
-      <p class="lead">How does a piece of a mountain end up in your sandcastle?</p>
-      <p>Your brain gets stronger when you practise. Ready to learn?</p>
-      <a class="button" href="#write">Write a rock journey</a></div>
-      <figure class="landscape"><img src="science/river-journey.webp" alt="A mountainside weathers, a river carries the grains, and sediments settle downstream above older layers." width="1245" height="645"><figcaption>From a mountainside to a river mouth. Follow one grain.</figcaption></figure>
-    </div>
-    <div class="launch-grid">
-      <a href="#guide"><span class="tile-mark" aria-hidden="true">◉</span><strong>Look closer</strong><span>Meet the rock families and the minerals inside them.</span></a>
-      <a href="#practice"><span class="tile-mark" aria-hidden="true">≈</span><strong>Test an idea</strong><span>Use a clue, revisit a mistake or try a question on your own.</span></a>
-      <a href="#mock"><span class="tile-mark" aria-hidden="true">✎</span><strong>Try the mock exam</strong><span>Four short questions and one rock journey to explain.</span></a>
-    </div>
-    <p class="statement">Success comes from learning, practising and never giving up.</p>
-  </section>
-  <section id="guide" class="panel" hidden aria-labelledby="guide-title"><p class="eyebrow">Class notes · Sections 1.1–1.5</p><h2 id="guide-title">Field guide</h2><p>Open a question. Read the clues, close the note and explain one idea aloud.</p><div id="guide-notes"></div><p><a class="button" href="#practice">Try a field question</a></p></section>
-  <section id="practice" class="panel" hidden aria-labelledby="practice-title"><p class="eyebrow">Questions with feedback</p><h2 id="practice-title">Test an idea</h2><div id="practice-app"></div></section>
-  <section id="write" class="panel" hidden aria-labelledby="write-title"><p class="eyebrow">Section 1.3 · Rock cycle</p><h2 id="write-title">The writing lab</h2><p>Any rock type can become another through one or more processes. Pick a route and explain what happens along the way.</p>
-    <div class="picker"><label for="route">My rock journey</label><select id="route"></select></div>
-    <div class="switcher" id="write-modes" aria-label="Ways to practise"><button data-mode="write" type="button">Write it myself</button><button data-mode="build" type="button">Order the stages</button><button data-mode="cloze" type="button">Complete a sentence</button></div><div id="writing-app"></div>
-  </section>
-  <section id="mock" class="panel" hidden aria-labelledby="mock-title"><p class="eyebrow">Independent practice</p><h2 id="mock-title">Mock exam</h2><div id="mock-app"></div></section>
-  <section id="challenge" class="panel" hidden aria-labelledby="challenge-title"><p class="eyebrow">My field notes</p><h2 id="challenge-title">MY LEARNING CHALLENGE</h2><p>Think of one thing you can explain more clearly now. A small change counts.</p>
-    <div class="card reflection-form"><div class="picker"><label for="reflection-day">Practice date</label><select id="reflection-day"></select></div>
-      <label for="learned">What did I learn today?</label><textarea id="learned" rows="2" placeholder="Today I can explain…"></textarea>
-      <label for="difficult">What was difficult?</label><textarea id="difficult" rows="2" placeholder="I had to think again about…"></textarea>
-      <label for="tomorrow">What will I practise tomorrow?</label><textarea id="tomorrow" rows="2" placeholder="Next time I will try…"></textarea>
-      <p class="quiet" id="reflection-status" role="status"></p></div>
-  </section>
-  <noscript><p>This fieldbook uses JavaScript for activities. The printable workbook includes the same six rock journeys and a five-day practice log.</p></noscript>
-  <footer><div><strong>Practise to learn. Learn to improve. Be proud of your effort.</strong><p><a href="science/Science_Fieldbook.pdf">Printable workbook (PDF)</a></p></div><p id="save-note">Your writing and practice notes stay in this browser.</p></footer>
-</main></body></html>
+<a href="#current" class="skip">Saltar al ejercicio</a>
+<header><div class="topline"><a href="index.html">‹ El Rincón de Gabri</a><span>Science · 5.º</span></div></header>
+<main class="book">
+  <article class="sheet" aria-labelledby="heading">
+    <div id="status-line"></div>
+    <div id="current" tabindex="-1"><h1 id="heading">Mi cuaderno de rocas</h1></div>
+    <noscript><p>Para practicar en papel, abre el <a href="science/Science_Fieldbook.pdf">cuaderno de Science en PDF</a>.</p></noscript>
+  </article>
+  <div class="book-tools">
+    <button type="button" class="quiet-link" id="previous" hidden>Paso anterior</button>
+    <details id="contents"><summary>Índice del cuaderno</summary>
+      <nav id="contents-links" aria-label="Apartados del cuaderno"></nav>
+    </details>
+  </div>
+  <p id="storage-note" role="status"></p>
+</main>
+</body>
+</html>

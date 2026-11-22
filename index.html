@@ -136,7 +136,7 @@ footer a{color:var(--ice);text-decoration:none}
 footer a:hover{text-decoration:underline}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 .science-feature .science-art{padding:16px;align-self:stretch;display:flex;align-items:center}
-.science-art img{display:block;width:100%;height:auto;border-radius:12px;border:1px solid rgba(255,255,255,.18)}
+.science-art .specimen{width:100%;aspect-ratio:900/244;border-radius:12px;background:#f4f1e5 url('science/specimens.webp') left top/200% 200% no-repeat}
 </style>
 </head>
 <body>
@@ -164,12 +164,12 @@ footer a:hover{text-decoration:underline}
   <section class="feature science-feature" aria-labelledby="science-title">
     <div class="feature-txt">
       <span class="tagline">Science · 5º de Primaria</span>
-      <h2 id="science-title" lang="en">The Travelling Grain</h2>
-      <p>¿Cómo acaba una montaña en un castillo de arena? Sigue un grano, escribe los pasos del ciclo de las rocas en inglés y vuelve a la parte que te costó explicar.</p>
-      <div class="camp-row"><span>6 transformaciones</span><span>Simulacro</span><span>Cuaderno imprimible</span></div>
-      <a class="cta" href="science-geology.html">Entrar al laboratorio de rocas</a>
+      <h2 id="science-title">Mi cuaderno de rocas</h2>
+      <p>Abre tu cuaderno por el granito. Sigue los apartados del cole, una pregunta cada vez, hasta poder contar en inglés cómo cambia una roca.</p>
+      <div class="camp-row"><span>Science en inglés</span><span>1.3 · Rock Cycle</span></div>
+      <a class="cta" href="science-geology.html">Abrir mi cuaderno de rocas</a>
     </div>
-    <div class="feature-art science-art"><img src="science/river-journey.webp" width="1245" height="645" alt="Una montaña se desgasta, el río transporta los granos y los sedimentos se depositan aguas abajo."></div>
+    <div class="feature-art science-art"><div class="specimen" role="img" aria-label="Una muestra de granito con tres minerales señalados: cuarzo, feldespato y mica."></div></div>
   </section>
 
   <!-- ============ FILTROS ============ -->
@@ -187,8 +187,8 @@ footer a:hover{text-decoration:underline}
   <div class="grid" id="grid">
     <a class="item" href="science-geology.html" data-cat="naturales english" style="--accent:var(--moss)">
       <span class="new">NUEVO</span><div class="ico">🪨</div><div class="kicker">Science · 5º · Geología</div>
-      <h3 lang="en">The Travelling Grain</h3>
-      <p>Rocas, minerales y paisajes. Ordena los procesos, explica seis transformaciones con tus palabras y anota qué quieres practicar mañana.</p>
+      <h3>Mi cuaderno de rocas</h3>
+      <p>Del 1.1 al 1.5, como en clase. Mira un ejemplo, prueba una pregunta y cuenta el ciclo de las rocas con tus palabras.</p>
       <div class="tags"><span class="q">6 rutas</span><span>Escritura en inglés</span><span>Pistas</span></div><div class="arrow">Explorar geología →</div>
     </a>
 

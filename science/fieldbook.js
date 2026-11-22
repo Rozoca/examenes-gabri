@@ -1,251 +1,364 @@
 'use strict';
 (() => {
+  const {chapters, lessons, reflections} = classBook;
   const {questions, routes, guide} = scienceContent;
-  const byId = id => document.getElementById(id);
-  const qById = new Map(questions.map(q => [q.id, q]));
-  const rById = new Map(routes.map(r => [r.id, r]));
-  const storeKey = 'gabri.science.geology.v1';
-  const fail = 'Mistakes help you learn. Think again, use a hint and try once more!';
-  const improved = 'Great progress! Your practice is paying off.';
-  const escape = value => String(value ?? '').replace(/[&<>"']/g, char =>
-    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-  const button = (id, label, primary=false) =>
-    '<button type="button" id="'+id+'" class="'+(primary?'primary':'secondary')+'">'+label+'</button>';
-  const on = (id, action) => byId(id)?.addEventListener('click', action);
-  const initial = {record:{}, drafts:{}, reflections:{}, lastRoute:routes[0].id, mock:null};
-  let state = {...initial};
-  try {
-    const data = JSON.parse(localStorage.getItem(storeKey) || '{}');
-    state = {...initial, ...data};
-    for (const key of ['record','drafts','reflections']) {
-      if (!state[key] || typeof state[key] !== 'object' || Array.isArray(state[key])) state[key]={};
-    }
-  } catch { /* A fresh session also works without browser storage. */ }
-  let canSave = true;
-  function save() {
-    try { localStorage.setItem(storeKey, JSON.stringify(state)); }
-    catch { canSave=false; byId('save-note').textContent='This browser can keep your work only until you close the page. You can also use the printable workbook.'; }
+  const routeMap = new Map(routes.map(r => [r.id, r]));
+  const questionMap = new Map(questions.map(q => [q.id, q]));
+  const sections = new Map(chapters.map(ch => [ch.id, ch]));
+  const nodes = new Map();
+  const mainPath = [];
+  const bookKeys = {work:'gabri.science.geology.v1', walk:'gabri.science.geology.guided.v2'};
+  const blank = {work:{record:{},drafts:{},reflections:{},mock:null},walk:{place:'',mainPlace:'',attempts:{},helpers:{},revisited:{}}};
+  let storageOK = true;
+  function readBook(kind, fallback = blank[kind]) {
+    if (!storageOK) return fallback;
+    try {
+      const parsed = JSON.parse(localStorage.getItem(bookKeys[kind]) || 'null');
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return fallback;
+      const result = {...blank[kind], ...parsed};
+      const maps = kind === 'work' ? ['record','drafts','reflections'] : ['attempts','helpers','revisited'];
+      for (const key of maps) if (!result[key] || typeof result[key] !== 'object' || Array.isArray(result[key])) result[key]={};
+      return result;
+    } catch { return fallback; }
   }
-  const shuffled = items => {
-    const out=[...items];
-    for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]];}
-    return out;
+  const state = {work:readBook('work'), walk:readBook('walk')};
+  const $ = id => document.getElementById(id);
+  function update(kind, change) {
+    const current = readBook(kind, state[kind]);
+    change(current);
+    state[kind] = current;
+    try { localStorage.setItem(bookKeys[kind], JSON.stringify(current)); }
+    catch { storageOK=false; $('storage-note').textContent='Este navegador conserva el trabajo solo mientras esta página esté abierta.'; }
+  }
+  const esc = text => String(text??'').replace(/[&<>"']/g,k=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[k]));
+  const en = text => '<span lang="en">'+esc(text)+'</span>';
+  const link = (key,label) => '<a href="#'+esc(key)+'">'+esc(label)+'</a>';
+  const action = (key,label) => '<div class="actions"><a class="primary-link" href="#'+esc(key)+'">'+esc(label)+'</a></div>';
+  const primary = (id,label) => '<div class="actions"><button type="button" class="primary" id="'+id+'">'+esc(label)+'</button></div>';
+  const heading = (text, lang='en') => '<h1 id="heading" tabindex="-1" lang="'+lang+'">'+esc(text)+'</h1>';
+  const today = () => {const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');};
+  const randomItem = list => list[Math.floor(Math.random()*list.length)];
+  const routeTitle = r => r.start+' → '+r.end;
+  const dateLabel = d => /^\d{4}-\d{2}-\d{2}$/.test(d) ? d.split('-').reverse().join('/') : d;
+  const mainRoutes = ['ig-sed','sed-ig'];
+  const extras = routes.filter(r=>!mainRoutes.includes(r.id)).map(r=>r.id);
+  const mistake = 'Mistakes help you learn. Think again, use a hint and try once more!';
+  const progressMessage = 'Great progress! Your practice is paying off.';
+  const motto = 'Practise to learn. Learn to improve. Be proud of your effort.';
+  let place='', reviewSession=null;
+  function group(items, chapter, core) {
+    items.forEach((item,i)=>{
+      const node={...item, chapter, pos:i+1, count:items.length, prev:items[i-1]?.id, next:items[i+1]?.id};
+      nodes.set(node.id,node);
+      if(core)mainPath.push(node.id);
+    });
+  }
+  function addRoute(id,core){
+    const route=classBook.routes[id];
+    const steps=route.clues.map((clue,i)=>({...clue,id:id+'-'+(i+1),type:'choice',title:route.title,route:id}));
+    steps.push({id:id+'-write',type:'write',route:id,title:route.title},{id:id+'-check',type:'check',route:id,title:route.title});
+    group(steps,'1.3',core);
+  }
+  for(const ch of chapters){
+    if(ch.id==='1.3')mainRoutes.forEach(id=>addRoute(id,true));
+    else group(lessons.filter(l=>l.chapter===ch.id).map(l=>({...l,type:'choice'})),ch.id,true);
+  }
+  extras.forEach(id=>addRoute(id,false));
+  group(reflections.map(r=>({...r,id:'reflect-'+r.id,type:'reflection',key:r.id})),'reflect',false);
+  mainPath.push('mock',...reflections.map(r=>'reflect-'+r.id),'finish');
+  const special=new Set(['cover','mock','finish','archive','review','routes']);
+  const aliases={start:'cover',main:'cover',guide:'rocks',practice:'rocks',write:'ig-sed-1',challenge:'reflect-learned'};
+  function validPlace(key) {
+    return typeof key==='string' && (nodes.has(key)||special.has(key)||(key.startsWith('help-') && routeMap.has(key.slice(5))));
+  }
+  function resolveHash(){
+    const raw=location.hash.slice(1);
+    if(raw==='current')return place||'cover';
+    const key=Object.prototype.hasOwnProperty.call(aliases,raw)?aliases[raw]:raw;
+    return validPlace(key)?key:'cover';
+  }
+  function go(key){if(resolveHash()===key){render(false);return;} location.hash=key;}
+  function remember(key){
+    if(key==='cover'||key==='archive'||key==='routes'||key==='review')return;
+    if(state.walk.place===key)return;
+    update('walk',w=>{w.place=key;if(mainPath.includes(key))w.mainPlace=key;});
+  }
+  function onward(node){
+    if(node.next)return node.next;
+    const i=mainPath.indexOf(node.id);
+    if(i>=0)return mainPath[i+1]||'finish';
+    return validPlace(state.walk.mainPlace||'')?state.walk.mainPlace:'rocks';
+  }
+  function back(node){
+    if(place==='cover')return null;
+    if(place==='mock' && validMock(state.work.mock) && !state.work.mock.finished && state.work.mock.pos>0)return 'mock-back';
+    if(place.startsWith('help-'))return place.slice(5)+'-write';
+    if(node?.prev)return node.prev;
+    const i=mainPath.indexOf(place);
+    if(i>=0)return mainPath[i-1]||'cover';
+    if(node?.route)return 'routes';
+    return 'cover';
+  }
+  const introFor = key => {
+    const n=nodes.get(key);
+    if(n?.chapter==='reflect')return 'My Learning Challenge';
+    if(n)return n.chapter+' '+sections.get(n.chapter).name;
+    if(key.startsWith('help-'))return '1.3 Rock Cycle';
+    return key==='mock'?'el simulacro':key==='finish'?'mi cierre':'mi cuaderno';
   };
-  const dateKey = () => { const d=new Date(); return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-'); };
-  function focusFresh(id) { const h=byId(id); if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});} }
-  function guideNotes() {
-    byId('guide-notes').innerHTML=guide.map(g=>'<details class="note"><summary>'+escape(g.hook)+'<small>'+escape(g.name)+'</small></summary><dl>'+g.notes.map(([term,def])=>'<dt>'+escape(term)+'</dt><dd>'+escape(def)+'</dd>').join('')+'</dl></details>').join('');
+  function setStatus(chapter,pos,count,custom){
+    const ch=sections.get(chapter);
+    const label=ch?'<b>'+esc(ch.id)+'</b> · '+en(ch.name):esc(custom||'');
+    const stepLabel=(chapter==='1.3'?'Esta ruta · ':'')+'Paso '+pos+' de '+count;
+    $('status-line').innerHTML=label?'<div class="progress"><span>'+label+'</span>'+(count?'<span>'+stepLabel+'</span>':'')+'</div>'+(count?'<progress value="'+pos+'" max="'+count+'" aria-label="'+stepLabel+'"></progress>':''):'';
   }
-  function choiceList(q, group, selected=null) {
-    return '<div class="choices">'+q.choices.map((text,i)=>'<label class="choice"><input type="radio" name="'+group+'" value="'+i+'" '+(selected===i?'checked':'')+'><span>'+escape(text)+'</span></label>').join('')+'</div>';
+  function art(name){
+    return name?'<div class="art '+name+'" role="img" aria-label="'+esc(classBook.art[name])+'"></div>':'';
   }
-  const checkedValue = name => { const el=document.querySelector('input[name="'+name+'"]:checked'); return el ? Number(el.value) : null; };
-  const statusBox = id => '<div class="message" id="'+id+'" role="status" aria-live="polite"></div>';
-
-  let practice=null;
-  function practiceMenu() {
-    const review = questions.filter(q=>state.record[q.id]?.review);
-    const independent = questions.filter(q=>state.record[q.id]?.independent).length;
-    byId('practice-app').innerHTML='<p>Choose a topic. Take your time and name the clue behind your answer.</p><div class="card"><h3>Choose a set</h3><div class="links">'+guide.map(g=>'<button type="button" data-topic="'+escape(g.name)+'">'+escape(g.name)+' <span>'+questions.filter(q=>q.area===g.name).length+' questions</span></button>').join('')+'</div><div class="actions">'+button('p-review','Revisit my questions ('+review.length+')')+'</div><p class="quiet">Your review set keeps questions you missed or used a hint for. A fresh answer without help clears the question.</p></div><p class="quiet" style="margin-top:12px">Answered on your own at least once: '+independent+' of '+questions.length+'.</p>';
-    byId('practice-app').querySelectorAll('[data-topic]').forEach(b=>b.onclick=()=>startPractice(questions.filter(q=>q.area===b.dataset.topic)));
-    byId('p-review').disabled=!review.length; on('p-review',()=>startPractice(review));
+  function trail(id, full=false){
+    const steps=classBook.routes[id].terms;
+    const visible=full?steps:[steps[0],steps[steps.length-1]];
+    return '<div class="route-line" lang="en" aria-label="'+esc(visible.join(' to '))+'">'+visible.map((v,i)=>(i?'<span aria-hidden="true">›</span>':'')+'<b>'+esc(v)+'</b>').join('')+'</div>';
   }
-  function startPractice(list) {
-    if(!list.length)return;
-    practice={list:list.map(q=>q.id),pos:0, tries:0,hint:false,done:false,feedback:'',selected:null};
-    renderPractice(); focusFresh('p-title');
+  function pageRef(ch){const s=sections.get(ch);return s?'<p class="panel-foot">Cuaderno del colegio · '+(s.pages.includes('–')?'págs. ':'pág. ')+s.pages+' del PDF</p>':'';}
+  function pending(){
+    return Object.keys(state.work.record).filter(k=>state.work.record[k]?.review && (questionMap.has(k) || nodes.get(k)?.type==='choice'));
   }
-  function renderPractice() {
-    if(!practice){practiceMenu();return;}
-    const p=practice;
-    if(p.pos>=p.list.length){
-      byId('practice-app').innerHTML='<div class="card"><h3 id="p-title">Pause and explain</h3><p>Choose one answer from this set. What clue helped you decide?</p><div class="actions">'+button('p-back','Choose a set',true)+'<a class="button" href="#challenge">Write my reflection</a></div></div>';
-      on('p-back',()=>{practice=null;practiceMenu();});return;
-    }
-    const q=qById.get(p.list[p.pos]);
-    byId('practice-app').innerHTML='<div class="card"><p class="progress-line">'+escape(q.area)+' · '+(p.pos+1)+' of '+p.list.length+'</p><fieldset id="p-field"><legend id="p-title" class="question-title">'+escape(q.prompt)+'</legend>'+choiceList(q,'practice-choice',p.selected)+'</fieldset><div class="actions">'+(p.done?button('p-next','Continue',true):button('p-check','Check my answer',true)+button('p-hint','Use a hint')+button('p-later','Keep for later'))+'</div><div class="hint" id="p-clue">'+(p.hint?escape(q.hint):'')+'</div>'+statusBox('p-status')+'</div><div class="actions">'+button('p-menu','Choose another set')+'</div>';
-    byId('p-status').textContent=p.feedback;
-    byId('p-field').disabled=p.done;
-    if(!p.done){
-      byId('p-hint').disabled=p.tries===0 || p.hint;
-      on('p-hint',()=>{p.hint=true;byId('p-clue').textContent=q.hint;byId('p-hint').disabled=true;});
-      on('p-check',()=>checkPractice(q));
-      on('p-later',()=>{const rec=state.record[q.id]||{};rec.review=true;state.record[q.id]=rec;save();nextPractice();});
-    }
-    on('p-next',nextPractice);on('p-menu',()=>{practice=null;practiceMenu();});
+  function contents(){
+    const p=pending().length;
+    $('contents-links').innerHTML=chapters.map(c=>link(c.first,c.id+' '+c.name+' · '+c.es)).join('')+
+      '<details><summary>Las seis transformaciones del 1.3</summary>'+routes.map(r=>link(r.id+'-1',routeTitle(r))).join('')+'</details>'+
+      link('mock','Simulacro')+link('reflect-learned','My Learning Challenge')+(p?link('review','Repasar mis dudas ('+p+')'):'')+
+      link('archive','Mis escritos y reflexiones')+
+      '<details><summary>Consultar definiciones del tema</summary>'+guide.map(g=>'<details><summary>'+en(g.name)+'</summary>'+g.notes.map(([name,text])=>'<p lang="en"><strong>'+esc(name)+'</strong><br>'+esc(text)+'</p>').join('')+'</details>').join('')+'</details>'+
+      '<a href="science/Science_Fieldbook.pdf">Cuaderno para imprimir (PDF)</a>';
   }
-  function checkPractice(q) {
-    const p=practice, selected=checkedValue('practice-choice');
-    if(selected===null){byId('p-status').textContent='Choose an answer after reading the clue in the question.';return;}
-    p.selected=selected;p.tries++;
-    const rec=state.record[q.id]||{};
-    if(selected!==q.answer){
-      p.feedback=fail;rec.review=true;rec.missed=true;
-      byId('p-status').textContent=fail;byId('p-hint').disabled=p.hint;
-    }else{
-      const first=p.tries===1 && !p.hint;
-      const prior=rec.review;
-      if(first)rec.independent=true;
-      rec.review=!first;
-      const praise=first?(prior?improved+' You answered a review question without a hint.':'You chose the answer independently.'):(improved+' You went back to your answer and corrected it.');
-      p.done=true;p.feedback=praise+' '+q.why;renderPractice();
-    }
-    state.record[q.id]=rec;save();
+  function renderCover(){
+    const saved=state.walk.place, resume=Boolean(saved&&validPlace(saved));
+    $('current').innerHTML='<div class="cover"><p class="kicker">Science · Unit 1 · Geology</p>'+heading('Mi cuaderno de rocas','es')+
+      '<p class="intro">'+(resume?'Tu marcapáginas está en <strong>'+esc(introFor(saved))+'</strong>.':'Empieza con el granito de tu cuaderno. Mira sus tres minerales.')+'</p>'+
+      art('granite')+action(resume?saved:'rocks',resume?'Continuar donde lo dejé':'Empezar')+
+      '<p class="fine">Puedes cerrar y volver a este paso en el mismo navegador.</p>'+
+      '<p class="en-quote" lang="en">Your brain gets stronger when you practise. Ready to learn?</p></div>';
   }
-  function nextPractice(){
-    Object.assign(practice,{pos:practice.pos+1,tries:0,hint:false,done:false,feedback:'',selected:null});
-    renderPractice();focusFresh('p-title');
+  function renderChoice(item, review=false){
+    const attempt=review?reviewSession.attempt:state.walk.attempts[item.id]||{};
+    const complete=!!attempt.done, wasWrong=Number.isInteger(attempt.last)&&!complete;
+    let text='';
+    if(complete){
+      let feedback=review?'You solved this review question without a hint.':'You worked it out on your own.';
+      if(attempt.help)feedback='You used a hint to work this out.';
+      if(attempt.attempts>1)feedback=progressMessage;
+      text=feedback+' '+item.why;
+    }else if(wasWrong)text=mistake;
+    const target=review?'review':onward(item);
+    const choiceButtons=item.choices.map((c,i)=>{
+      const tone=complete&&i===item.answer?' chosen':wasWrong&&i===attempt.last?' bad':'';
+      return '<button type="button" class="option'+tone+'" data-answer="'+i+'" '+(complete?'disabled':'')+' lang="en">'+esc(c)+'</button>';
+    }).join('');
+    $('current').innerHTML=heading(review?'Repaso de una duda':item.title,review?'es':'en')+
+      (item.idea&&!review?'<p class="core-idea" lang="en">'+esc(item.idea)+'</p>':'')+
+      (!review?art(item.art):'')+'<p class="task">Elige una respuesta.</p><fieldset><legend lang="en">'+esc(item.prompt)+'</legend><div class="options">'+choiceButtons+'</div></fieldset>'+
+      '<p class="msg '+(!complete?'try':'')+'" role="status" id="feedback" lang="en">'+esc(text)+'</p>'+
+      (!complete?'<details class="hint" id="clue" '+(attempt.open?'open':'')+'><summary>Ver una pista</summary><p '+(review&&questionMap.has(item.id)?'lang="en"':'')+'>'+esc(item.hint)+'</p></details>':'')+
+      (complete?(review?primary('review-next','Continuar'):action(target,'Siguiente')+'<button type="button" class="quiet-link" id="retry-choice">Volver a practicar esta pregunta</button>'):'')+pageRef(item.chapter);
+    $('current').querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>submitChoice(item,Number(b.dataset.answer),review));
+    const hint=$('clue');
+    if(hint)hint.ontoggle=()=>{
+      if(!hint.open || !hint.isConnected)return;
+      if(review)reviewSession.attempt.help=true;
+      else update('walk',w=>{const a=w.attempts[item.id]||{};w.attempts[item.id]={...a,help:true};});
+    };
+    if(review&&complete)$('review-next').onclick=()=>{reviewSession.index++;reviewSession.attempt={};render(true);};
+    if(complete&&!review)$('retry-choice').onclick=()=>{update('walk',w=>{delete w.attempts[item.id];});render(true);};
   }
-
-  let routeId=rById.has(state.lastRoute)?state.lastRoute:routes[0].id;
-  let writeMode='write', exercise=null;
-  function draftFor(id){
-    state.drafts[id]??={text:'',first:'',last:'',checked:[],model:false,usedSupport:false};
-    return state.drafts[id];
+  function submitChoice(item,selection,review){
+    const last=review?reviewSession.attempt:state.walk.attempts[item.id]||{};
+    if(last.done)return;
+    const correct=selection===item.answer;
+    const a={...last,last:selection,attempts:(last.attempts||0)+1,open:!!$('clue')?.open,done:correct};
+    a.help=!!(last.help||a.open);
+    const independent=correct&&a.attempts===1&&!a.help;
+    if(review)reviewSession.attempt=a;
+    else update('walk',w=>{w.attempts[item.id]=a;});
+    update('work',w=>{
+      const rec=w.record[item.id]||{};
+      w.record[item.id]={...rec,review:!independent,missed:rec.missed||!correct,independent:!!(rec.independent||independent)};
+    });
+    renderChoice(item,review);contents();
+    const msg=$('feedback');msg.tabIndex=-1;msg.focus({preventScroll:true});
   }
-  const routeName = r => r.start+' → '+r.end;
-  function initLab(){
-    byId('route').innerHTML=routes.map(r=>'<option value="'+r.id+'">'+escape(routeName(r))+'</option>').join('');
-    byId('route').value=routeId;
-    byId('route').onchange=e=>{routeId=e.target.value;state.lastRoute=routeId;exercise=null;save();renderLab();};
-    byId('write-modes').querySelectorAll('button').forEach(b=>b.onclick=()=>{
-      writeMode=b.dataset.mode;exercise=null;
-      renderLab();
+  function draft(id){
+    return {text:'',first:'',last:'',checked:[],...(state.work.drafts[id]||{})};
+  }
+  function updateDraft(id, fn){
+    update('work',w=>{
+      w.drafts[id]??={text:'',first:'',last:'',checked:[],model:false,usedSupport:false};
+      fn(w.drafts[id]);w.lastRoute=id;
     });
   }
-  function checkList(r, picks){
-    return '<fieldset><legend class="question-title">Check the science in your own answer</legend>'+r.checks.map((t,i)=>'<label class="check"><input type="checkbox" value="'+i+'" '+(picks.includes(i)?'checked':'')+'><span>'+escape(t)+'</span></label>').join('')+'</fieldset>';
-  }
-  function renderLab(){
-    const r=rById.get(routeId), d=draftFor(routeId);
-    byId('write-modes').querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===writeMode)));
-    if(writeMode!=='write'){renderSupport(r);return;}
-    const reviewed=Boolean(d.first);
-    byId('writing-app').innerHTML='<div class="card"><h3>'+escape(r.challenge)+'</h3><label class="block-label" for="rock-text">My explanation in English</label><textarea id="rock-text" rows="4" placeholder="Start with the rock. Tell its story in your own words."></textarea><div class="actions">'+button('w-review',reviewed?'Save my revision':'Review my first attempt',true)+button('w-hint','Think with a hint')+'</div><div id="w-clue" class="hint" role="status"></div>'+statusBox('w-status')+'</div><div id="w-compare"></div>';
-    byId('rock-text').value=d.text;
-    byId('rock-text').oninput=e=>{d.text=e.target.value;save();};
-    on('w-hint',()=>{if(!d.text.trim()){byId('w-clue').textContent='Try a few words first. Which rock do you start with?';return;}d.usedSupport=true;save();byId('w-clue').textContent=r.hint;});
-    on('w-review',()=>{
-      const answer=d.text.trim();
-      if(answer.split(/\s+/).length<3){byId('w-status').textContent='Write a sentence of your own first. What changes the starting rock?';byId('rock-text').focus();return;}
-      let msg;
-      if(!d.first){d.first=answer;d.last=answer;msg=d.usedSupport?'You used support and wrote your own explanation. Now check each stage.':'You wrote your first explanation independently. Now check each stage.';}
-      else if(answer!==d.last){d.last=answer;msg='You revised your explanation. Read the changed sentence aloud and check the science again.';d.checked=[];}
-      else {msg='Your draft is saved. Choose a stage below and check that your sentence explains it.';}
-      save();renderLab();byId('w-status').textContent=msg;
-    });
-    if(reviewed){
-      const div=byId('w-compare');
-      div.innerHTML='<div class="card">'+checkList(r,d.checked)+'<p id="w-self" class="quiet" role="status"></p><div class="actions">'+button('w-model',d.model?'Hide model answer':'Compare with a model answer')+'</div><div id="w-modeltext"></div><details class="note"><summary>Read my first draft</summary><p id="first-draft"></p></details></div>';
-      byId('first-draft').textContent=d.first;
-      const self=()=>{byId('w-self').textContent=d.checked.length===r.checks.length?'You checked every stage yourself. Could you explain the route with the model closed?':'Tick only the stages you can point to in your own writing.';};
-      self();
-      div.querySelectorAll('input[type=checkbox]').forEach(box=>box.onchange=()=>{d.checked=Array.from(div.querySelectorAll('input:checked'),x=>Number(x.value));save();self();});
-      const model=()=>{byId('w-modeltext').innerHTML=d.model?'<div class="model"><strong>One possible explanation</strong><p>'+escape(r.model)+'</p><p class="quiet">Find one idea you explained differently. Then close the model and revise your own sentence.</p></div>':'';byId('w-model').textContent=d.model?'Hide model answer':'Compare with a model answer';byId('w-model').setAttribute('aria-expanded',String(d.model));};
-      model();on('w-model',()=>{d.model=!d.model;if(d.model)d.usedSupport=true;save();model();});
+  function hasText(text){return typeof text==='string' && text.trim().length>0;}
+  function renderWriting(node){
+    const id=node.route,r=classBook.routes[id],d=draft(id);
+    const checking=node.type==='check';
+    if(checking && !hasText(d.first)){location.replace('#'+id+'-write');return;}
+    if(!checking){
+      $('current').innerHTML=heading(r.title)+trail(id)+'<p class="task">Explica la transformación en inglés con tus palabras.</p>'+
+        '<label class="ask" for="draft" lang="en">'+esc(r.task)+'</label><textarea id="draft" lang="en" rows="3"></textarea>'+
+        '<details class="hint" id="write-help"><summary>Necesito una pista</summary>'+trail(id,true)+'<p>Puedes empezar así: '+en(r.starter)+'</p>'+link('help-'+id,'Ordenar las fases y completar una frase')+'</details>'+
+        '<p class="msg" id="feedback" role="status"></p>'+primary('review-writing','Revisar mi explicación')+pageRef('1.3');
+      const field=$('draft');field.value=d.text;
+      field.oninput=()=>updateDraft(id,t=>{t.text=field.value;});
+      $('write-help').ontoggle=e=>{if(e.target.open&&e.target.isConnected)updateDraft(id,t=>{t.usedSupport=true;});};
+      $('review-writing').onclick=()=>{
+        const answer=field.value.trim();
+        if(!answer){$('feedback').textContent='Empieza por el nombre de la roca o abre la pista.';field.focus();return;}
+        updateDraft(id,t=>{if(!t.first)t.first=answer;t.text=field.value;t.last=answer;});
+        go(id+'-check');
+      };
+      return;
     }
+    $('current').innerHTML=heading('Revisa una idea','es')+'<p class="core-idea">'+esc(r.focus)+'</p>'+
+      '<label class="task" for="revision">Relee tu frase. Puedes cambiar una palabra o añadir un paso.</label><textarea id="revision" lang="en" rows="3"></textarea>'+
+      '<details class="hint" id="model"><summary>Comparar con el ejemplo</summary><p class="model" lang="en">'+esc(routeMap.get(id).model)+'</p></details>'+
+      '<p class="msg" id="feedback" role="status"></p>'+primary('finish-writing','Guardar y continuar')+pageRef('1.3');
+    const field=$('revision');field.value=d.text;
+    field.oninput=()=>{updateDraft(id,t=>{t.text=field.value;});$('feedback').textContent=field.value.trim()&&field.value.trim()!==d.first?'Has vuelto sobre tu primera explicación. Lee el cambio en voz alta.':'';};
+    $('model').ontoggle=e=>{if(e.target.open&&e.target.isConnected)updateDraft(id,t=>{t.usedSupport=true;});};
+    $('finish-writing').onclick=()=>{
+      const answer=field.value.trim();
+      if(!answer){$('feedback').textContent='Escribe una frase antes de continuar. Tu primer intento está en Mis escritos.';field.focus();return;}
+      updateDraft(id,t=>{const revised=answer!==t.last;t.text=field.value;t.last=answer;if(revised)t.checked=[];});
+      update('walk',w=>{w.revisited[id]=true;});go(onward(node));
+    };
   }
-  function renderSupport(r){
-    const draft=draftFor(r.id);
-    if(!draft.usedSupport){draft.usedSupport=true;save();}
-    const build=writeMode==='build';
-    const key=r.id+writeMode;
-    if(!exercise || exercise.key!==key){
-      const words=build?r.steps:[...r.words,'lava','wind'];
-      exercise={key,options:shuffled([...new Set(words)]),attempts:0};
+  function helper(id){
+    const r=routeMap.get(id), total=r.steps.length+2;
+    const step=state.walk.helpers[id]||{i:0};
+    const i=Number.isInteger(step.i)?Math.min(step.i,total):0;
+    setStatus('1.3',Math.min(i+1,total),total);
+    if(i===total){
+      $('current').innerHTML=heading('Tu frase, ahora','es')+'<p>Ya has ordenado los pasos y completado las dos palabras. Prueba a contarlo a tu manera.</p>'+action(id+'-write','Volver a mi explicación')+'<button type="button" class="quiet-link" id="repeat-helper">Repetir los pasos</button>'+pageRef('1.3');
+      $('repeat-helper').onclick=()=>{update('walk',w=>{delete w.helpers[id];});helper(id);focusHeading();};return;
     }
-    const items=build?r.steps:r.words;
-    const opt='<option value="">Choose…</option>'+exercise.options.map(x=>'<option value="'+escape(x)+'">'+escape(x)+'</option>').join('');
-    const labelFor=i=>(build?'Stage ':'Gap ')+(i+1);
-    let gap=0;
-    byId('writing-app').innerHTML='<div class="card"><p class="subhead">'+escape(routeName(r))+'</p><h3>'+(build?'Put the stages in order':'Fill the two gaps')+'</h3><p>'+(build?'Build the journey from the starting rock to the final rock.':escape(r.cloze).replace(/\[ \]/g,()=>'<strong>('+ ++gap +')</strong>'))+'</p>'+items.map((_,i)=>'<div class="select-row"><label for="step-'+i+'">'+labelFor(i)+'</label><select id="step-'+i+'">'+opt+'</select></div>').join('')+'<div class="actions">'+button('w-check','Check my work',true)+button('s-hint','Use a hint')+'</div><div class="hint" id="s-clue" role="status"></div>'+statusBox('s-status')+'</div>';
-    byId('s-hint').disabled=true;
-    on('s-hint',()=>{byId('s-clue').textContent=r.hint;byId('s-hint').disabled=true;});
-    on('w-check',()=>{
-      const selections=items.map((_,i)=>byId('step-'+i).value);
-      if(selections.some(x=>!x)){byId('s-status').textContent='Choose an answer in each space first.';return;}
-      exercise.attempts++;
-      const i=items.findIndex((x,i)=>x!==selections[i]);
-      if(i>=0){byId('s-status').textContent=fail+' Look again at '+labelFor(i).toLowerCase()+'.';byId('s-hint').disabled=false;return;}
-      byId('s-status').textContent=(exercise.attempts>1?improved+' ':'')+(build?'You ordered the changes from start to finish.':'You chose the two science words that complete the explanation.')+' Now tell the journey in your own words.';
-      byId('w-check').disabled=true;byId('s-hint').disabled=true;items.forEach((_,i)=>byId('step-'+i).disabled=true);
-      const proceed=document.createElement('button');proceed.type='button';proceed.textContent='Write it myself';proceed.onclick=()=>{writeMode='write';exercise=null;renderLab();byId('rock-text').focus();};byId('s-status').after(proceed);
+    const sorting=i<r.steps.length;
+    const index=sorting?i:i-r.steps.length;
+    const answer=sorting?r.steps[i]:r.words[index];
+    const alternative={Sedimentary:'Magma cools into igneous rock.',Metamorphic:'The rock melts into magma.',Igneous:'Weathering breaks the rock into loose grains.'};
+    const other=sorting?(r.steps[i+1]||alternative[r.end]):r.words[1-index];
+    const opts=i%2===0?[other,answer]:[answer,other];
+    const before=sorting&&i?'<p class="sub">Paso anterior: '+en(r.steps[i-1])+'</p>':'';
+    let blank=0;
+    const exercise=sorting?(i===0?'¿Qué ocurre primero?':'¿Qué ocurre ahora?'):r.cloze.replace(/\[ \]/g,()=>{const n=blank++;return n===index?'_____':n<index?r.words[n]:'[…]';});
+    $('current').innerHTML=heading(classBook.routes[id].title)+before+'<p class="task">'+(sorting?'Ordena la ruta, un paso cada vez.':'Elige la palabra que completa el hueco.')+'</p><fieldset><legend '+(sorting?'':'lang="en"')+'>'+esc(exercise)+'</legend><div class="options">'+opts.map((s,n)=>'<button type="button" class="option" data-part="'+n+'" lang="en">'+esc(s)+'</button>').join('')+'</div></fieldset><p class="msg" id="feedback" role="status"></p><div id="helper-next"></div>'+pageRef('1.3');
+    $('current').querySelectorAll('[data-part]').forEach(b=>b.onclick=()=>{
+      if(opts[Number(b.dataset.part)]!==answer){$('feedback').textContent='Piensa en el material que tienes en este paso y vuelve a intentarlo.';return;}
+      $('feedback').textContent=sorting?'Has colocado este paso en su sitio.':'La palabra encaja en esta frase.';
+      $('current').querySelectorAll('[data-part]').forEach(o=>o.disabled=true);
+      $('helper-next').innerHTML=primary('helper-next-button','Siguiente');
+      $('helper-next-button').onclick=()=>{update('walk',w=>{w.helpers[id]={i:i+1};});helper(id);focusHeading();};
     });
-  }
-
-  function newMock() {
-    const ids=guide.map(g=>shuffled(questions.filter(q=>q.area===g.name))[0].id);
-    const others=routes.filter(r=>r.id!==state.mock?.route);
-    state.mock={ids, route:shuffled(others)[0].id, answers:{},text:'',pos:0,finished:false,self:[]};
-    save();renderMock();focusFresh('m-title');
   }
   function validMock(m){
-    return m && Array.isArray(m.ids) && m.ids.length===4 && m.ids.every(x=>qById.has(x)) && rById.has(m.route) && Number.isInteger(m.pos) && m.pos>=0 && m.pos<=4 && m.answers && typeof m.answers==='object' && typeof m.text==='string' && Array.isArray(m.self);
+    return m&&Array.isArray(m.ids)&&m.ids.length===4&&m.ids.every(id=>questionMap.has(id))&&routeMap.has(m.route)&&m.answers&&typeof m.answers==='object'&&Number.isInteger(m.pos)&&m.pos>=0&&m.pos<=4&&typeof m.text==='string';
   }
-  function renderMock() {
-    const app=byId('mock-app'), m=state.mock;
+  function newMock(){
+    const ids=guide.map(g=>randomItem(questions.filter(q=>q.area===g.name)).id);
+    const previous=state.work.mock?.route;
+    const pick=mainRoutes.includes(previous)?mainRoutes.find(id=>id!==previous):'ig-sed';
+    update('work',w=>{w.mock={ids,route:pick,answers:{},text:'',pos:0,finished:false,self:[]};});render(true);
+  }
+  function renderMock(){
+    const m=state.work.mock;
     if(!validMock(m)){
-      app.innerHTML='<div class="card"><h3>Try it on your own</h3><p>Answer four questions and write one rock journey in English. You can go back and change your answers. The explanations appear when you finish.</p><div class="actions">'+button('m-start','Start mock exam',true)+'</div></div>';on('m-start',newMock);return;
+      setStatus(null,0,0,'Simulacro');
+      $('current').innerHTML=heading('Prueba tú solo','es')+'<p>Cuatro preguntas cortas y una explicación escrita. Verás las soluciones al terminar.</p>'+primary('start-exam','Empezar simulacro');
+      $('start-exam').onclick=newMock;return;
     }
-    if(m.finished){mockResults(m);return;}
-    const writing=m.pos===4, q=writing?null:qById.get(m.ids[m.pos]), r=rById.get(m.route);
-    app.innerHTML='<div class="card"><p class="progress-line">Mock exam · '+(m.pos+1)+' of 5</p>'+(writing?'<h3 id="m-title">'+escape(r.challenge)+'</h3><label for="m-text" class="block-label">Explain the changes in English.</label><textarea id="m-text" rows="5"></textarea>':'<fieldset><legend id="m-title" class="question-title">'+escape(q.prompt)+'</legend>'+choiceList(q,'mock-choice',m.answers[q.id])+'</fieldset>')+'<div class="actions">'+(m.pos>0?button('m-prev','Go back'):'')+button('m-next',writing?'Finish and review':'Continue',true)+'</div>'+statusBox('m-status')+'</div>';
-    if(writing){byId('m-text').value=m.text;byId('m-text').oninput=e=>{m.text=e.target.value;save();};}
-    else {app.querySelectorAll('input').forEach(el=>el.onchange=()=>{m.answers[q.id]=Number(el.value);save();});}
-    on('m-prev',()=>{m.pos--;save();renderMock();focusFresh('m-title');});
-    on('m-next',()=>{
-      if(!writing && !Number.isInteger(m.answers[q.id])){byId('m-status').textContent='Choose your answer first.';return;}
-      if(writing && m.text.trim().split(/\s+/).length<3){byId('m-status').textContent='Write a sentence about the journey before you finish.';return;}
-      if(writing){
-        m.finished=true;
-        m.ids.forEach(id=>{
-          const qq=qById.get(id),rec=state.record[id]||{};
-          if(m.answers[id]!==qq.answer){rec.review=true;rec.missed=true;}
-          else {rec.independent=true;rec.review=false;}
-          state.record[id]=rec;
-        });
-      }else m.pos++;
-      save();renderMock();focusFresh('m-title');
-    });
-  }
-  function mockResults(m){
-    const r=rById.get(m.route), missed=m.ids.filter(id=>m.answers[id]!==qById.get(id).answer);
-    const items=m.ids.map(id=>{
-      const q=qById.get(id),correct=m.answers[id]===q.answer;
-      return '<section class="entry"><strong>'+escape(q.prompt)+'</strong><p>Your answer: '+escape(q.choices[m.answers[id]])+'. '+(correct?'You worked this out independently.':'Revisit this idea. The answer is '+escape(q.choices[q.answer])+'.')+'</p><p class="quiet">'+escape(q.why)+'</p></section>';
-    }).join('');
-    byId('mock-app').innerHTML='<div class="result-box"><h3 id="m-title">What you can explain today</h3><p>Your score shows what you know today. Keep practising to improve tomorrow.</p><p><strong>'+(4-missed.length)+' of 4</strong> independent short answers. Review your writing separately below.</p></div><div class="card"><h3>My written explanation</h3><p>'+escape(r.challenge)+'</p><p class="model" id="m-original"></p>'+checkList(r,m.self)+'<details class="note"><summary>Compare with one possible explanation</summary><p>'+escape(r.model)+'</p></details><p id="m-self-status" class="quiet" role="status"></p></div><details class="note"><summary>Review the four short answers</summary>'+items+'</details><div class="actions">'+(missed.length?button('m-missed','Practise my missed questions'):'')+'<a href="#challenge" class="button">My learning challenge</a>'+button('m-new','Try a new mock exam')+'</div>';
-    byId('m-original').textContent=m.text;
-    const boxes=byId('mock-app').querySelectorAll('input[type=checkbox]');
-    const selfNote=()=>byId('m-self-status').textContent=m.self.length===r.checks.length?'You reviewed all three parts of your explanation. What will you practise next?':'Point to the words in your own draft before you tick each statement.';
-    selfNote();boxes.forEach(b=>b.onchange=()=>{m.self=Array.from(boxes).filter(x=>x.checked).map(x=>Number(x.value));save();selfNote();});
-    on('m-missed',()=>{startPractice(missed.map(id=>qById.get(id)));location.hash='practice';});on('m-new',newMock);
-  }
-
-  function reflections(){
-    const today=dateKey(), selector=byId('reflection-day');
-    const days=[...new Set([today,...Object.keys(state.reflections)])].sort().reverse();
-    selector.innerHTML=days.map(k=>'<option value="'+escape(k)+'">'+escape(k)+(k===today?' · Today':'')+'</option>').join('');
-    selector.value=today;
-    const show=()=>{
-      const entry=state.reflections[selector.value]||{};
-      ['learned','difficult','tomorrow'].forEach(k=>{
-        const field=byId(k);field.value=entry[k]||'';
-        field.oninput=()=>{state.reflections[selector.value]??={};state.reflections[selector.value][k]=field.value;save();byId('reflection-status').textContent=canSave?'Saved in this browser.':'Kept for this session.';};
-      });
-      byId('reflection-status').textContent=Object.values(entry).some(Boolean)?'Your reflection for this day.':'Write a few words in any language to get started.';
+    if(m.finished){renderResults(m);return;}
+    setStatus(null,m.pos+1,5,'Simulacro');
+    const writing=m.pos===4,q=questionMap.get(m.ids[m.pos]);
+    $('current').innerHTML=heading(writing?'Una explicación escrita':'Elige una respuesta','es')+
+      (writing?'<label for="mock-draft" class="ask" lang="en">'+esc(classBook.routes[m.route].task)+'</label><textarea id="mock-draft" lang="en" rows="4"></textarea>':
+        '<fieldset><legend lang="en">'+esc(q.prompt)+'</legend><div class="options">'+q.choices.map((a,i)=>'<label class="option"><input name="mock-answer" type="radio" value="'+i+'" '+(m.answers[q.id]===i?'checked':'')+'> '+en(a)+'</label>').join('')+'</div></fieldset>')+
+      '<p class="msg" id="feedback" role="status"></p>'+primary('next-exam',writing?'Terminar el simulacro':'Siguiente');
+    if(writing){const field=$('mock-draft');field.value=m.text;field.oninput=()=>update('work',w=>{w.mock.text=field.value;});}
+    else $('current').querySelectorAll('input').forEach(o=>o.onchange=()=>update('work',w=>{w.mock.answers[q.id]=Number(o.value);}));
+    $('next-exam').onclick=()=>{
+      const current=state.work.mock;
+      if(writing?!hasText(current.text):!Number.isInteger(current.answers[q.id])){$('feedback').textContent=writing?'Escribe tu idea en una frase.':'Elige una opción primero.';return;}
+      update('work',w=>{
+        if(!writing){w.mock.pos++;return;}
+        w.mock.finished=true;
+        for(const id of w.mock.ids){const ok=w.mock.answers[id]===questionMap.get(id).answer;const rec=w.record[id]||{};w.record[id]={...rec,review:!ok,missed:!!(rec.missed||!ok),independent:!!(rec.independent||ok)};}
+      });render(true);
     };
-    selector.onchange=show;show();
   }
-  const sectionNames=['start','guide','practice','write','mock','challenge'];
-  function showPage(scroll=false){
-    const hash=location.hash.slice(1), name=sectionNames.includes(hash)?hash:'start';
-    sectionNames.forEach(n=>byId(n).hidden=n!==name);
-    byId('nav').querySelectorAll('a').forEach(a=>{
-      if(a.hash==='#'+name)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
-    });
-    if(name==='practice')renderPractice(); if(name==='write')renderLab(); if(name==='mock')renderMock(); if(name==='challenge')reflections();
-    if(scroll){focusFresh(name+'-title');window.scrollTo({top:0,behavior:'instant'});}
+  function renderResults(m){
+    setStatus(null,0,0,'Simulacro');
+    const score=m.ids.filter(id=>m.answers[id]===questionMap.get(id).answer).length;
+    const r=routeMap.get(m.route);
+    $('current').innerHTML=heading('Mi revisión','es')+'<p><strong>'+score+' de 4</strong> preguntas cortas.</p><p class="en-quote" lang="en">Your score shows what you know today. Keep practising to improve tomorrow.</p>'+
+      '<details class="extra"><summary>Revisar mis respuestas cortas</summary>'+m.ids.map(id=>{const q=questionMap.get(id);return '<div class="review-line"><strong lang="en">'+esc(q.prompt)+'</strong><p>Mi respuesta: '+en(q.choices[m.answers[id]])+'</p><p lang="en">'+esc(q.why)+'</p></div>';}).join('')+'</details>'+
+      '<details class="extra"><summary>Revisar mi explicación escrita</summary><p class="saved-text" lang="en">'+esc(m.text)+'</p><p>'+esc(classBook.routes[m.route].focus)+'</p><details class="hint"><summary>Ver el ejemplo</summary><p lang="en">'+esc(r.model)+'</p></details>'+r.checks.map((c,i)=>'<label class="check"><input type="checkbox" value="'+i+'" '+((m.self||[]).includes(i)?'checked':'')+'>'+en(c)+'</label>').join('')+'</details>'+
+      action('reflect-learned','Ir a mi reflexión')+'<button class="quiet-link" id="new-exam" type="button">Practicar con otro simulacro</button>';
+    $('new-exam').onclick=newMock;
+    $('current').querySelectorAll('input[type=checkbox]').forEach(el=>el.onchange=()=>{const values=Array.from($('current').querySelectorAll('input:checked'),n=>Number(n.value));update('work',w=>{w.mock.self=values;});});
   }
-  guideNotes();initLab();showPage();window.addEventListener('hashchange',()=>showPage(true));
+  function renderReflection(node){
+    const day=today();setStatus(null,node.pos,node.count,'MY LEARNING CHALLENGE');
+    $('current').innerHTML=heading(node.question)+'<label for="note" class="block-label">'+esc(node.support)+'</label><textarea id="note" rows="2" placeholder="Puedes escribir unas palabras en español o en inglés."></textarea>'+action(onward(node),node.pos===3?'Terminar por hoy':'Siguiente');
+    const field=$('note');field.value=state.work.reflections[day]?.[node.key]||'';
+    field.oninput=()=>update('work',w=>{w.reflections[day]??={};w.reflections[day][node.key]=field.value;});
+  }
+  function renderFinish(){
+    setStatus(null,0,0,'MY LEARNING CHALLENGE');
+    const entry=state.work.reflections[today()]||{};
+    const next=routes.find(r=>!state.walk.revisited[r.id])?.id||'ig-sed';
+    $('current').innerHTML=heading('Por hoy, terminado','es')+(hasText(entry.tomorrow)?'<p>Mañana quieres practicar:</p><p class="core-idea saved-text">'+esc(entry.tomorrow)+'</p>':'<p>La próxima vez puedes elegir otra transformación.</p>')+
+      '<p class="en-quote" lang="en">'+motto+'</p><p class="fine" lang="en">Success comes from learning, practising and never giving up.</p>'+action(next+'-1','Practicar otra transformación');
+  }
+  function renderArchive(){
+    setStatus(null,0,0,'Mi cuaderno');
+    const writings=routes.filter(r=>{const d=draft(r.id);return hasText(d.text)||hasText(d.first);});
+    const days=Object.keys(state.work.reflections).filter(k=>Object.values(state.work.reflections[k]||{}).some(hasText)).sort().reverse();
+    $('current').innerHTML=heading('Mis escritos y reflexiones','es')+(writings.length||days.length?'':'<p>Aquí aparecerán tus frases cuando empieces a escribir.</p>')+
+      writings.map(r=>{const d=draft(r.id);return '<details class="extra"><summary>'+esc(routeTitle(r))+'</summary><p class="saved-text" lang="en">'+esc(d.text||d.first)+'</p>'+(d.first&&d.first!==d.text?'<p class="fine">Mi primer intento</p><p class="saved-text" lang="en">'+esc(d.first)+'</p>':'')+link(r.id+'-write','Seguir escribiendo')+'</details>';}).join('')+
+      days.map(day=>'<details class="extra"><summary>'+esc(dateLabel(day))+'</summary>'+reflections.filter(r=>hasText(state.work.reflections[day][r.id])).map(r=>'<p><strong lang="en">'+esc(r.question)+'</strong></p><p class="saved-text">'+esc(state.work.reflections[day][r.id])+'</p>').join('')+'</details>').join('')+action('cover','Volver a mi cuaderno');
+  }
+  function renderReview(){
+    const ids=pending();
+    if(!reviewSession)reviewSession={ids,index:0,attempt:{}};
+    const key=reviewSession.ids[reviewSession.index],item=nodes.get(key)||questionMap.get(key);
+    if(!item){setStatus(null,0,0,'Repaso');$('current').innerHTML=heading('Has terminado este repaso','es')+'<p>Piensa en una pista que ahora puedas explicar con tus palabras.</p>'+action('cover','Volver a mi cuaderno');return;}
+    setStatus(null,reviewSession.index+1,reviewSession.ids.length,'Repaso de dudas');renderChoice(item,true);
+  }
+  function focusHeading(){const h=$('heading');if(h){h.focus({preventScroll:true});window.scrollTo(0,0);}}
+  function render(focus=true){
+    const last=place;place=resolveHash();
+    if(last!==place){if(place!=='review')reviewSession=null;$('contents').open=false;}
+    state.work=readBook('work',state.work);state.walk=readBook('walk',state.walk);
+    remember(place);contents();setStatus(null,0,0,'');
+    const node=nodes.get(place);
+    if(node&&sections.has(node.chapter))setStatus(node.chapter,node.pos,node.count);
+    if(node?.type==='choice')renderChoice(node);
+    else if(node?.type==='write'||node?.type==='check')renderWriting(node);
+    else if(node?.type==='reflection')renderReflection(node);
+    else if(place==='mock')renderMock();
+    else if(place.startsWith('help-'))helper(place.slice(5));
+    else if(place==='finish')renderFinish();
+    else if(place==='archive')renderArchive();
+    else if(place==='review')renderReview();
+    else if(place==='routes'){
+      setStatus(null,0,0,'1.3 · Rock Cycle');
+      $('current').innerHTML=heading('Elige una transformación','es')+'<div class="route-list">'+routes.map(r=>link(r.id+'-1',routeTitle(r))).join('')+'</div>';
+    }else renderCover();
+    const prev=back(node),prevButton=$('previous');
+    prevButton.hidden=!prev;prevButton.onclick=()=>{if(prev==='mock-back'){update('work',w=>w.mock.pos--);render(true);}else go(prev);};
+    if(focus)focusHeading();
+  }
+  document.querySelector('.skip').onclick=e=>{e.preventDefault();$('current').focus();};
+  $('contents-links').addEventListener('click',e=>{if(e.target.closest('a'))$('contents').open=false;});
+  window.addEventListener('hashchange',()=>render());
+  render(false);
 })();
